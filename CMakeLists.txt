@@ -11,9 +11,15 @@ find_package(fmt CONFIG REQUIRED)
 # set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
 # set(cpp_rutils_INSTALL_CMAKE_DIR "share" CACHE STRING "The installation cmake directory")
 
+FILE(GLOB_RECURSE root CONFIGURE_DEPENDS include/*.hpp include/*.h)
+
 # define a header-only library
 add_library(cpp_rutils INTERFACE)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
+
+source_group(headers FILES ${root})
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 
 target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only)
 
@@ -52,6 +58,5 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
               "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-FILE(GLOB_RECURSE root CONFIGURE_DEPENDS include/*.hpp include/*.h)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
