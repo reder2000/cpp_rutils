@@ -3,6 +3,9 @@ project("cpp_rutils" VERSION 1.0.1
              DESCRIPTION "some basic cpp framework"
              HOMEPAGE_URL "https://github.com/reder2000/cpp_rutils")
 
+add_subdirectory(tests)
+enable_testing()
+
 include(GNUInstallDirs)
 
 find_package(fmt CONFIG REQUIRED)

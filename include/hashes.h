@@ -11,13 +11,3 @@ struct hash_pair {
 	}
 };
 
-struct hash_datetime {
-	size_t operator()(const DateTime& d) const
-	{
-		const auto& dd = d.rawValue();
-		std::string_view sv(reinterpret_cast<const char
-			*>(&dd), sizeof(dd));
-		return std::hash<decltype(sv)>()(sv);
-	}
-};
-
