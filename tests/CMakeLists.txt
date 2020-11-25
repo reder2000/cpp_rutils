@@ -7,15 +7,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Catch2 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 
-file(GLOB headers ../include/*.h )
+#file(GLOB headers ../include/*.h )
 file (GLOB srcs CONFIGURE_DEPENDS *.cpp)
 
 include_directories(../include)
+include_directories(..)
 
 #include(CTest)
 #enable_testing()
 
-add_executable(cpp_rutils_tests ${srcs} ${headers})
+add_executable(cpp_rutils_tests ${srcs}) # ${headers})
 
 target_link_libraries(cpp_rutils_tests Catch2::Catch2 fmt::fmt)
 

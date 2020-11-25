@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.19)
 project("cpp_rutils" VERSION 1.0.1
              DESCRIPTION "some basic cpp framework"
              HOMEPAGE_URL "https://github.com/reder2000/cpp_rutils")
@@ -14,13 +14,15 @@ find_package(fmt CONFIG REQUIRED)
 # set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
 # set(cpp_rutils_INSTALL_CMAKE_DIR "share" CACHE STRING "The installation cmake directory")
 
-FILE(GLOB_RECURSE root CONFIGURE_DEPENDS include/*.hpp include/*.h)
+FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS include/*.hpp include/*.h)
+FILE(GLOB_RECURSE roost CONFIGURE_DEPENDS roost/*.hpp roost/*.h)
+source_group("Header Files/roost" FILES ${roost})
+
 
 # define a header-only library
-add_library(cpp_rutils INTERFACE)
+add_library(cpp_rutils INTERFACE  ${headers} ${roost})
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
-source_group(headers FILES ${root})
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 
@@ -63,3 +65,4 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
+install(DIRECTORY roost/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/roost)
