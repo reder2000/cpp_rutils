@@ -48,7 +48,7 @@ write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
                                  COMPATIBILITY SameMajorVersion)
 
 configure_package_config_file(
-  "${PROJECT_SOURCE_DIR}/cmake/dummy-config.cmake.in "
+  "${PROJECT_SOURCE_DIR}/cmake/dummy-config.cmake.in"
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION
   ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
