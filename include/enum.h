@@ -11,6 +11,7 @@
 #include "roost/preprocessor/seq/elem.hpp"
 #include <string_view>
 #include <fmt/format.h>
+#include "to_string.h"
 
 template <class T>
 const char* enum_to_string(T);
@@ -52,7 +53,10 @@ template <> \
 inline name string_to_enum(std::string_view s) { \
 	ROOST_PP_LIST_FOR_EACH( EMIT_STRING_TO_ENUM , (s)(name) , ROOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)) )  \
 	throw std::runtime_error(fmt::format("did not find {}", s)); \
-}
+} \
+template <> \
+inline std::string to_string<name>(const name &value)\
+{ return std::string(enum_to_string(value)) ; }
 
 
 #define EMIT_ENUM_CLASS(name) \
