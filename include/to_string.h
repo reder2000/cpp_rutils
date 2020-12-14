@@ -40,7 +40,8 @@ inline constexpr bool is_streamable = detect<T, is_streamable_t>::value;
 
 
 template <typename T>
-std::string to_string(const T& v) {
+std::string to_string(const T& v) 
+{
 
     bool constexpr is_pointer_to_non_void = std::is_pointer_v<T> && !std::is_void_v< std::decay_t<std::remove_pointer_t<T>>>;
 
@@ -50,16 +51,15 @@ std::string to_string(const T& v) {
 
     static_assert(has_to_string, "must be implemented");
 
-    if constexpr (is_stdstring_convertible<T>) { return std::string(v); }
-    else {
-        if constexpr (is_fmt_formattable<T>) { return fmt::format("{}", v).c_str(); }
-        else {
-            if constexpr (is_streamable<T>) { std::ostringstream  ss; ss << v; return ss.str().c_str(); }
+    if constexpr (is_stdstring_convertible<T>) 
+        { return std::string(v); }
+    else if constexpr (is_fmt_formattable<T>) 
+        { return fmt::format("{}", v).c_str(); }
+    else if constexpr (is_streamable<T>) 
+        { std::ostringstream  ss; ss << v; return ss.str().c_str(); }
             else {
-                static_assert(false, "must be implemented");
+                // ??
             }
-        }
-    }
 }
 
 template <class... T>
