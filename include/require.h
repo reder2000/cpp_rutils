@@ -4,6 +4,7 @@
 #include <roost/preprocessor/variadic/size.hpp>
 #include <roost/preprocessor/if.hpp>
 #include <roost/preprocessor/dec.hpp>
+#include <roost/preprocessor/stringize.hpp>
 
 #define MREQUIRE1(success,...) \
 	if (!(success)) throw std::runtime_error( \
@@ -17,11 +18,20 @@
 	ROOST_PP_IF(ROOST_PP_DEC(ROOST_PP_VARIADIC_SIZE(__VA_ARGS__)) , \
 			MREQUIRE1(__VA_ARGS__) , MREQUIRE0(__VA_ARGS__))
 
+#define _MREQUIRE_OP(op,a,b) \
+	MREQUIRE( (a) op (b) , ROOST_PP_STRINGIZE(a) ":({}) not "  ROOST_PP_STRINGIZE(op) " " ROOST_PP_STRINGIZE(b) ":({})" , (a) , (b) )
+
 #define MREQUIRE_EQUAL(a,b) \
-	MREQUIRE(a==b)
+	_MREQUIRE_OP(==,a,b)
+
+#define MREQUIRE_LESS(a,b) \
+	_MREQUIRE_OP(<,a,b)
+
+#define MREQUIRE_GREATER(a,b) \
+	_MREQUIRE_OP(>,a,b)
 
 #define MREQUIRE_LESS_EQUAL(a,b) \
-	MREQUIRE(a<=b)
+	_MREQUIRE_OP(<=,a,b)
 
 #define MREQUIRE_GREATER_EQUAL(a,b) \
-		MREQUIRE(a>=b)
+	_MREQUIRE_OP(>=,a,b)
