@@ -39,4 +39,3 @@ TEST_CASE("to_string", "[to_string][hide]")
     CHECK(to_string(toto::red) == "red");
     CHECK(to_string(A()) == "A");
 }
-

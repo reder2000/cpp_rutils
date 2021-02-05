@@ -2,6 +2,7 @@
 #include <require.h>
 #include <vector>
 
+
 TEST_CASE("require", "[require][hide]")
 {
     auto f = []() { MREQUIRE(true); };
@@ -12,4 +13,6 @@ TEST_CASE("require", "[require][hide]")
     CHECK_THROWS(h());
     auto i = []() { MREQUIRE_EQUAL(1, 1); };
     CHECK_NOTHROW(i());
+    auto j = []() { MREQUIRE_EQUAL(1, 2, "some {}" , "comment"); };
+    CHECK_THROWS(j());
 }

@@ -14,6 +14,12 @@ find_package(fmt CONFIG REQUIRED)
 # set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
 # set(cpp_rutils_INSTALL_CMAKE_DIR "share" CACHE STRING "The installation cmake directory")
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if (MSVC)
+add_compile_options(/Zc:preprocessor)
+endif ()
+
 FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS include/*.hpp include/*.h)
 FILE(GLOB_RECURSE roost CONFIGURE_DEPENDS roost/*.hpp roost/*.h)
 source_group("Header Files/roost" FILES ${roost})
