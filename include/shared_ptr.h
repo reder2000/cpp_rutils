@@ -5,6 +5,11 @@
 template <class _Ty>
 using sp = std::shared_ptr<_Ty>;
 
+template <class _Ty>
+sp<_Ty> new_sp() {
+    return sp<_Ty>(new _Ty);
+}
+
 template <class _Ty, class _OTy>
 inline
 sp<_Ty> make_sp_copy(const _OTy& t) {
