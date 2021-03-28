@@ -7,8 +7,10 @@ add_subdirectory(tests)
 enable_testing()
 
 include(GNUInstallDirs)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(FindVcpkInstall)
 
-find_package(fmt CONFIG REQUIRED)
+find_vcpkg_install_missing(fmt)
 
 # installation directories
 # set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
@@ -26,7 +28,7 @@ source_group("Header Files/roost" FILES ${roost})
 
 
 # define a header-only library
-add_library(cpp_rutils INTERFACE  ${headers} ${roost})
+add_library(cpp_rutils INTERFACE  ${headers} ${roost} cmake/FindVcpkInstall.cmake)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -54,11 +56,13 @@ write_basic_package_version_file("${PROJECT_NAME}ConfigVersion.cmake"
                                  COMPATIBILITY SameMajorVersion
                                  ARCH_INDEPENDENT)
 
+set(INCLUDE_INSTALL_DIR include/ ... CACHE PATH "include cpputils")
 configure_package_config_file(
   "${PROJECT_SOURCE_DIR}/cmake/dummy-config.cmake.in"
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION
-  ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+  ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake
+  PATH_VARS INCLUDE_INSTALL_DIR )
 
 install(EXPORT ${PROJECT_NAME}_Targets
         FILE ${PROJECT_NAME}Targets.cmake
@@ -73,3 +77,4 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
 install(DIRECTORY roost/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/roost)
+install(FILES cmake/FindVcpkInstall.cmake DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils/cmake)
