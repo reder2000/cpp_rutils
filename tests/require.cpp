@@ -2,7 +2,11 @@
 #include <require.h>
 #include <vector>
 #include <iostream>
+#include <enum.h>
 
+
+#define EnumFail_tuple (good,bad)
+EMIT_ENUM_CLASS(EnumFail);
 
 TEST_CASE("require", "[require][hide]")
 {
@@ -16,7 +20,14 @@ TEST_CASE("require", "[require][hide]")
     CHECK_NOTHROW(i());
     auto j = []() { MREQUIRE_EQUAL(1, 2, "some {}" , "comment"); };
     CHECK_THROWS(j());
-
+    auto k = [](EnumFail ef) {
+        switch (ef) {
+        case EnumFail::good:
+            break;
+        default_fail_enum_string(ef);
+        } };
+    CHECK_NOTHROW(k(EnumFail::good));
+    CHECK_THROWS(k(EnumFail::bad));
 
 }
 

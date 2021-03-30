@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fmt/format.h>
+#include "name.h"
 #include <roost/preprocessor/variadic/size.hpp>
 #include <roost/preprocessor/if.hpp>
 #include <roost/preprocessor/dec.hpp>
@@ -53,3 +54,11 @@
 
 #define MREQUIRE_GREATER_EQUAL(a,b,...) \
 	_MREQUIRE_OP(>=,a,b,__VA_ARGS__)
+
+#define default_fail(arg) \
+	default: MREQUIRE(false,"unhandled case {}",arg); \
+	break
+
+#define default_fail_enum_string(arg) \
+	default: MREQUIRE(false,"unhandled case {}::{}",type_name<decltype(arg)>(), to_string(arg)); \
+	break
