@@ -3,9 +3,6 @@ project("cpp_rutils" VERSION 1.0.1
              DESCRIPTION "some basic cpp framework"
              HOMEPAGE_URL "https://github.com/reder2000/cpp_rutils")
 
-add_subdirectory(tests)
-enable_testing()
-
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(FindVcpkInstall)
@@ -76,3 +73,9 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
 install(DIRECTORY roost/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/roost)
 install(FILES cmake/FindVcpkInstall.cmake DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils/cmake)
+
+
+if (NOT "${cpp_rutils_BUILD_TESTS}" STREQUAL "OFF")
+    add_subdirectory(tests)
+    enable_testing()
+endif()
