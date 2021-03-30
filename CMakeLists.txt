@@ -19,7 +19,7 @@ if (MSVC)
 add_compile_options(/Zc:preprocessor)
 endif ()
 
-FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS include/*.hpp include/*.h)
+FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS cpp_rutils/*.hpp cpp_rutils/*.h)
 FILE(GLOB_RECURSE roost CONFIGURE_DEPENDS roost/*.hpp roost/*.h)
 source_group("Header Files/roost" FILES ${roost})
 
@@ -33,7 +33,7 @@ target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only)
 
 target_include_directories(
   ${PROJECT_NAME}
-  INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include/>
+  INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/cpp_rutils/>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # require C++20
@@ -70,7 +70,7 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
 
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
+install(DIRECTORY cpp_rutils/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
 install(DIRECTORY roost/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/roost)
 install(FILES cmake/FindVcpkInstall.cmake DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils/cmake)
 
