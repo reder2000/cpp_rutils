@@ -7,6 +7,8 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
+# /* Revised by Edward Diener (2020) */
+#
 # /* See http://www.roost.org for most recent version. */
 #
 # ifndef ROOST_PREPROCESSOR_SEQ_ENUM_HPP
@@ -27,6 +29,8 @@
 # else
 #    define ROOST_PP_SEQ_ENUM(seq) ROOST_PP_CAT(ROOST_PP_SEQ_ENUM_, ROOST_PP_SEQ_SIZE(seq)) seq
 # endif
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # define ROOST_PP_SEQ_ENUM_1(x) x
 # define ROOST_PP_SEQ_ENUM_2(x) x, ROOST_PP_SEQ_ENUM_1
@@ -284,5 +288,24 @@
 # define ROOST_PP_SEQ_ENUM_254(x) x, ROOST_PP_SEQ_ENUM_253
 # define ROOST_PP_SEQ_ENUM_255(x) x, ROOST_PP_SEQ_ENUM_254
 # define ROOST_PP_SEQ_ENUM_256(x) x, ROOST_PP_SEQ_ENUM_255
+#
+# else
+#
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_SEQ == 256
+# include <roost/preprocessor/seq/limits/enum_256.hpp>
+# elif ROOST_PP_LIMIT_SEQ == 512
+# include <roost/preprocessor/seq/limits/enum_256.hpp>
+# include <roost/preprocessor/seq/limits/enum_512.hpp>
+# elif ROOST_PP_LIMIT_SEQ == 1024
+# include <roost/preprocessor/seq/limits/enum_256.hpp>
+# include <roost/preprocessor/seq/limits/enum_512.hpp>
+# include <roost/preprocessor/seq/limits/enum_1024.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_SEQ limit
+# endif
+#
+# endif
 #
 # endif

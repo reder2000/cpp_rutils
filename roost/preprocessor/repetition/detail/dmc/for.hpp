@@ -8,11 +8,12 @@
 #  */
 #
 # /* Revised by Paul Mensonides (2002) */
+# /* Revised by Edward Diener (2020) */
 #
 # /* See http://www.roost.org for most recent version. */
 #
-# ifndef ROOST_PREPROCESSOR_REPETITION_DETAIL_FOR_HPP
-# define ROOST_PREPROCESSOR_REPETITION_DETAIL_FOR_HPP
+# ifndef ROOST_PREPROCESSOR_REPETITION_DETAIL_DMC_FOR_HPP
+# define ROOST_PREPROCESSOR_REPETITION_DETAIL_DMC_FOR_HPP
 #
 # include <roost/preprocessor/control/expr_iif.hpp>
 # include <roost/preprocessor/control/iif.hpp>

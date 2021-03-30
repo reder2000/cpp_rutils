@@ -17,8 +17,6 @@
 #
 # /* ROOST_PP_VARIADIC_TO_TUPLE */
 #
-# if ROOST_PP_VARIADICS
-#    define ROOST_PP_VARIADIC_TO_TUPLE(...) (__VA_ARGS__)
-# endif
+# define ROOST_PP_VARIADIC_TO_TUPLE(...) (__VA_ARGS__)
 #
 # endif

@@ -13,9 +13,6 @@
 # define ROOST_PREPROCESSOR_FACILITIES_IS_EMPTY_VARIADIC_HPP
 #
 # include <roost/preprocessor/config/config.hpp>
-#
-# if ROOST_PP_VARIADICS
-#
 # include <roost/preprocessor/punctuation/is_begin_parens.hpp>
 # include <roost/preprocessor/facilities/detail/is_empty.hpp>
 #
@@ -80,5 +77,4 @@
 /**/
 #define ROOST_PP_IS_EMPTY_ZERO(...) 0
 # endif /* ROOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400 */
-# endif /* ROOST_PP_VARIADICS */
 # endif /* ROOST_PREPROCESSOR_FACILITIES_IS_EMPTY_VARIADIC_HPP */

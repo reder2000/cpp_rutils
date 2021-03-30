@@ -8,6 +8,7 @@
 #  */
 #
 # /* Revised by Paul Mensonides (2002) */
+# /* Revised by Edward Diener (2020) */
 #
 # /* See http://www.roost.org for most recent version. */
 #
@@ -26,6 +27,8 @@
 # endif
 #
 # define ROOST_PP_BOOL_I(x) ROOST_PP_BOOL_ ## x
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # define ROOST_PP_BOOL_0 0
 # define ROOST_PP_BOOL_1 1
@@ -284,5 +287,24 @@
 # define ROOST_PP_BOOL_254 1
 # define ROOST_PP_BOOL_255 1
 # define ROOST_PP_BOOL_256 1
+#
+# else
+#
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_MAG == 256
+# include <roost/preprocessor/logical/limits/bool_256.hpp>
+# elif ROOST_PP_LIMIT_MAG == 512
+# include <roost/preprocessor/logical/limits/bool_256.hpp>
+# include <roost/preprocessor/logical/limits/bool_512.hpp>
+# elif ROOST_PP_LIMIT_MAG == 1024
+# include <roost/preprocessor/logical/limits/bool_256.hpp>
+# include <roost/preprocessor/logical/limits/bool_512.hpp>
+# include <roost/preprocessor/logical/limits/bool_1024.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_MAG limit
+# endif
+#
+# endif
 #
 # endif

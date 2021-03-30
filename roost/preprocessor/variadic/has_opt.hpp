@@ -16,7 +16,7 @@
 #
 # /* ROOST_PP_VARIADIC_HAS_OPT */
 #
-# if ROOST_PP_VARIADICS && defined(__cplusplus) && __cplusplus > 201703L
+# if defined(__cplusplus) && __cplusplus > 201703L
 # include <roost/preprocessor/variadic/detail/has_opt.hpp>
 # define ROOST_PP_VARIADIC_HAS_OPT() \
   ROOST_PP_VARIADIC_HAS_OPT_ELEM2(ROOST_PP_VARIADIC_HAS_OPT_FUNCTION(?),) \

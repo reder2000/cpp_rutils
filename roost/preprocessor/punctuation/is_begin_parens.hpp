@@ -12,10 +12,7 @@
 # ifndef ROOST_PREPROCESSOR_IS_BEGIN_PARENS_HPP
 # define ROOST_PREPROCESSOR_IS_BEGIN_PARENS_HPP
 
-# include <roost/preprocessor/config/config.hpp>
-
-#if ROOST_PP_VARIADICS
-
+#include <roost/preprocessor/config/config.hpp>
 #include <roost/preprocessor/punctuation/detail/is_begin_parens.hpp>
 
 #if ROOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400
@@ -47,5 +44,4 @@
 /**/
 
 #endif /* ROOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400 */
-#endif /* ROOST_PP_VARIADICS */
 #endif /* ROOST_PREPROCESSOR_IS_BEGIN_PARENS_HPP */

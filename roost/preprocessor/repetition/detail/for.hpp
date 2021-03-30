@@ -8,11 +8,16 @@
 #  */
 #
 # /* Revised by Paul Mensonides (2002) */
+# /* Revised by Edward Diener (2020) */
 #
 # /* See http://www.roost.org for most recent version. */
 #
 # ifndef ROOST_PREPROCESSOR_REPETITION_DETAIL_FOR_HPP
 # define ROOST_PREPROCESSOR_REPETITION_DETAIL_FOR_HPP
+#
+# include <roost/preprocessor/config/config.hpp>
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # include <roost/preprocessor/control/expr_iif.hpp>
 # include <roost/preprocessor/control/iif.hpp>
@@ -532,5 +537,28 @@
 # define ROOST_PP_FOR_254_C(c, s, p, o, m) ROOST_PP_IIF(c, m, ROOST_PP_TUPLE_EAT_2)(255, s) ROOST_PP_IIF(c, ROOST_PP_FOR_255, ROOST_PP_TUPLE_EAT_4)(ROOST_PP_EXPR_IIF(c, o)(255, s), p, o, m)
 # define ROOST_PP_FOR_255_C(c, s, p, o, m) ROOST_PP_IIF(c, m, ROOST_PP_TUPLE_EAT_2)(256, s) ROOST_PP_IIF(c, ROOST_PP_FOR_256, ROOST_PP_TUPLE_EAT_4)(ROOST_PP_EXPR_IIF(c, o)(256, s), p, o, m)
 # define ROOST_PP_FOR_256_C(c, s, p, o, m) ROOST_PP_IIF(c, m, ROOST_PP_TUPLE_EAT_2)(257, s) ROOST_PP_IIF(c, ROOST_PP_FOR_257, ROOST_PP_TUPLE_EAT_4)(ROOST_PP_EXPR_IIF(c, o)(257, s), p, o, m)
+#
+# else
+#
+# include <roost/preprocessor/control/expr_iif.hpp>
+# include <roost/preprocessor/control/iif.hpp>
+# include <roost/preprocessor/logical/bool.hpp>
+# include <roost/preprocessor/tuple/eat.hpp>
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_FOR == 256
+# include <roost/preprocessor/repetition/detail/limits/for_256.hpp>
+# elif ROOST_PP_LIMIT_FOR == 512
+# include <roost/preprocessor/repetition/detail/limits/for_256.hpp>
+# include <roost/preprocessor/repetition/detail/limits/for_512.hpp>
+# elif ROOST_PP_LIMIT_FOR == 1024
+# include <roost/preprocessor/repetition/detail/limits/for_256.hpp>
+# include <roost/preprocessor/repetition/detail/limits/for_512.hpp>
+# include <roost/preprocessor/repetition/detail/limits/for_1024.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_FOR limit
+# endif
+#
+# endif
 #
 # endif

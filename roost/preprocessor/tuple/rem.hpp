@@ -8,6 +8,8 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
+# /* Revised by Edward Diener (2020) */
+#
 # /* See http://www.roost.org for most recent version. */
 #
 # ifndef ROOST_PREPROCESSOR_TUPLE_REM_HPP
@@ -21,36 +23,28 @@
 #
 # /* ROOST_PP_REM */
 #
-# if ROOST_PP_VARIADICS
-#    if ROOST_PP_VARIADICS_MSVC
-        /* To be used internally when __VA_ARGS__ could be empty ( or is a single element ) */
-#       define ROOST_PP_REM_CAT(...) ROOST_PP_CAT(__VA_ARGS__,)
-#    endif
-#    define ROOST_PP_REM(...) __VA_ARGS__
-# else
-#    define ROOST_PP_REM(x) x
+# if ROOST_PP_VARIADICS_MSVC
+     /* To be used internally when __VA_ARGS__ could be empty ( or is a single element ) */
+#    define ROOST_PP_REM_CAT(...) ROOST_PP_CAT(__VA_ARGS__,)
 # endif
+# define ROOST_PP_REM(...) __VA_ARGS__
 #
 # /* ROOST_PP_TUPLE_REM */
 #
 /*
   VC++8.0 cannot handle the variadic version of ROOST_PP_TUPLE_REM(size)
 */
-# if ROOST_PP_VARIADICS && !(ROOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400)
+# if !(ROOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400)
 #    if ROOST_PP_VARIADICS_MSVC
         /* To be used internally when the size could be 0 ( or 1 ) */
 #       define ROOST_PP_TUPLE_REM_CAT(size) ROOST_PP_REM_CAT
 #    endif
 #    define ROOST_PP_TUPLE_REM(size) ROOST_PP_REM
 # else
-#    if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_MWCC()
-#        define ROOST_PP_TUPLE_REM(size) ROOST_PP_TUPLE_REM_I(size)
-#    else
-#        define ROOST_PP_TUPLE_REM(size) ROOST_PP_TUPLE_REM_OO((size))
-#        define ROOST_PP_TUPLE_REM_OO(par) ROOST_PP_TUPLE_REM_I ## par
-#    endif
+#    define ROOST_PP_TUPLE_REM(size) ROOST_PP_TUPLE_REM_I(size)
 #    define ROOST_PP_TUPLE_REM_I(size) ROOST_PP_TUPLE_REM_ ## size
 # endif
+#
 # define ROOST_PP_TUPLE_REM_0()
 # define ROOST_PP_TUPLE_REM_1(e0) e0
 # define ROOST_PP_TUPLE_REM_2(e0, e1) e0, e1
@@ -119,31 +113,15 @@
 #
 # /* ROOST_PP_TUPLE_REM_CTOR */
 #
-# if ROOST_PP_VARIADICS
-#    if ROOST_PP_VARIADICS_MSVC
-#        define ROOST_PP_TUPLE_REM_CTOR(...) ROOST_PP_TUPLE_REM_CTOR_I(ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_REM_CTOR_O_, __VA_ARGS__), (__VA_ARGS__))
-#        define ROOST_PP_TUPLE_REM_CTOR_I(m, args) ROOST_PP_TUPLE_REM_CTOR_II(m, args)
-#        define ROOST_PP_TUPLE_REM_CTOR_II(m, args) ROOST_PP_CAT(m ## args,)
-#        define ROOST_PP_TUPLE_REM_CTOR_O_1(tuple) ROOST_PP_EXPAND(ROOST_PP_TUPLE_IS_SINGLE_RETURN(ROOST_PP_REM_CAT,ROOST_PP_REM,tuple) tuple)
-#    else
-#        define ROOST_PP_TUPLE_REM_CTOR(...) ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_REM_CTOR_O_, __VA_ARGS__)(__VA_ARGS__)
-#        define ROOST_PP_TUPLE_REM_CTOR_O_1(tuple) ROOST_PP_REM tuple
-#    endif
-#    define ROOST_PP_TUPLE_REM_CTOR_O_2(size, tuple) ROOST_PP_TUPLE_REM_CTOR_O_1(tuple)
+# if ROOST_PP_VARIADICS_MSVC
+#     define ROOST_PP_TUPLE_REM_CTOR(...) ROOST_PP_TUPLE_REM_CTOR_I(ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_REM_CTOR_O_, __VA_ARGS__), (__VA_ARGS__))
+#     define ROOST_PP_TUPLE_REM_CTOR_I(m, args) ROOST_PP_TUPLE_REM_CTOR_II(m, args)
+#     define ROOST_PP_TUPLE_REM_CTOR_II(m, args) ROOST_PP_CAT(m ## args,)
+#     define ROOST_PP_TUPLE_REM_CTOR_O_1(tuple) ROOST_PP_EXPAND(ROOST_PP_TUPLE_IS_SINGLE_RETURN(ROOST_PP_REM_CAT,ROOST_PP_REM,tuple) tuple)
 # else
-#    if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_EDG()
-#        define ROOST_PP_TUPLE_REM_CTOR(size, tuple) ROOST_PP_TUPLE_REM_CTOR_I(ROOST_PP_TUPLE_REM(size), tuple)
-#    else
-#        define ROOST_PP_TUPLE_REM_CTOR(size, tuple) ROOST_PP_TUPLE_REM_CTOR_D(size, tuple)
-#        define ROOST_PP_TUPLE_REM_CTOR_D(size, tuple) ROOST_PP_TUPLE_REM_CTOR_I(ROOST_PP_TUPLE_REM(size), tuple)
-#    endif
-#    if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_MWCC()
-#        define ROOST_PP_TUPLE_REM_CTOR_I(ext, tuple) ext tuple
-#    else
-#        define ROOST_PP_TUPLE_REM_CTOR_I(ext, tuple) ROOST_PP_TUPLE_REM_CTOR_OO((ext, tuple))
-#        define ROOST_PP_TUPLE_REM_CTOR_OO(par) ROOST_PP_TUPLE_REM_CTOR_II ## par
-#        define ROOST_PP_TUPLE_REM_CTOR_II(ext, tuple) ext ## tuple
-#    endif
+#     define ROOST_PP_TUPLE_REM_CTOR(...) ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_REM_CTOR_O_, __VA_ARGS__)(__VA_ARGS__)
+#     define ROOST_PP_TUPLE_REM_CTOR_O_1(tuple) ROOST_PP_REM tuple
 # endif
+# define ROOST_PP_TUPLE_REM_CTOR_O_2(size, tuple) ROOST_PP_TUPLE_REM_CTOR_O_1(tuple)
 #
 # endif

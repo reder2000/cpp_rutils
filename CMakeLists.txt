@@ -26,13 +26,11 @@ FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS include/*.hpp include/*.h)
 FILE(GLOB_RECURSE roost CONFIGURE_DEPENDS roost/*.hpp roost/*.h)
 source_group("Header Files/roost" FILES ${roost})
 
-
 # define a header-only library
-add_library(cpp_rutils INTERFACE  ${headers} ${roost} cmake/FindVcpkInstall.cmake)
+add_library(cpp_rutils INTERFACE  ${headers} ${roost} cmake/FindVcpkInstall.cmake README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 
 target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only)
 

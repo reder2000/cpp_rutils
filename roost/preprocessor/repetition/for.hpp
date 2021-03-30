@@ -8,11 +8,16 @@
 #  */
 #
 # /* Revised by Paul Mensonides (2002) */
+# /* Revised by Edward Diener (2020) */
 #
 # /* See http://www.roost.org for most recent version. */
 #
 # ifndef ROOST_PREPROCESSOR_REPETITION_FOR_HPP
 # define ROOST_PREPROCESSOR_REPETITION_FOR_HPP
+#
+# include <roost/preprocessor/config/config.hpp>
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # include <roost/preprocessor/cat.hpp>
 # include <roost/preprocessor/debug/error.hpp>
@@ -320,5 +325,114 @@
 # define ROOST_PP_FOR_CHECK_ROOST_PP_FOR_254(s, p, o, m) 0
 # define ROOST_PP_FOR_CHECK_ROOST_PP_FOR_255(s, p, o, m) 0
 # define ROOST_PP_FOR_CHECK_ROOST_PP_FOR_256(s, p, o, m) 0
+#
+# else
+#
+# include <roost/preprocessor/arithmetic/dec.hpp>
+# include <roost/preprocessor/cat.hpp>
+# include <roost/preprocessor/debug/error.hpp>
+# include <roost/preprocessor/facilities/empty.hpp>
+# include <roost/preprocessor/logical/bool.hpp>
+# include <roost/preprocessor/detail/auto_rec.hpp>
+# include <roost/preprocessor/config/limits.hpp>
+#
+# /* ROOST_PP_FOR */
+#
+# if 0
+#    define ROOST_PP_FOR(state, pred, op, macro)
+# endif
+#
+# if ROOST_PP_LIMIT_FOR == 256
+# define ROOST_PP_FOR ROOST_PP_CAT(ROOST_PP_FOR_, ROOST_PP_DEC(ROOST_PP_AUTO_REC(ROOST_PP_FOR_P, 256)))
+# elif ROOST_PP_LIMIT_FOR == 512
+# define ROOST_PP_FOR ROOST_PP_CAT(ROOST_PP_FOR_, ROOST_PP_DEC(ROOST_PP_AUTO_REC(ROOST_PP_FOR_P, 512)))
+# elif ROOST_PP_LIMIT_FOR == 1024
+# define ROOST_PP_FOR ROOST_PP_CAT(ROOST_PP_FOR_, ROOST_PP_DEC(ROOST_PP_AUTO_REC(ROOST_PP_FOR_P, 1024)))
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_FOR limit
+# endif
+#
+# define ROOST_PP_FOR_P(n) ROOST_PP_FOR_P_DEC(ROOST_PP_DEC(n))
+# define ROOST_PP_FOR_P_DEC(n) ROOST_PP_CAT(ROOST_PP_FOR_CHECK_, ROOST_PP_CAT(ROOST_PP_FOR_ , n)(1, ROOST_PP_FOR_SR_P, ROOST_PP_FOR_SR_O, ROOST_PP_FOR_SR_M))
+#
+# define ROOST_PP_FOR_SR_P(r, s) s
+# define ROOST_PP_FOR_SR_O(r, s) 0
+# define ROOST_PP_FOR_SR_M(r, s) ROOST_PP_NIL
+#
+# if ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_EDG()
+#    include <roost/preprocessor/repetition/detail/edg/for.hpp>
+# elif ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_MSVC()
+#    include <roost/preprocessor/repetition/detail/msvc/for.hpp>
+# elif ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_DMC()
+#    include <roost/preprocessor/repetition/detail/dmc/for.hpp>
+# else
+#    include <roost/preprocessor/repetition/detail/for.hpp>
+# endif
+#
+# if ROOST_PP_LIMIT_FOR == 256
+#
+# if ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_DMC()
+# define ROOST_PP_FOR_257_PR(s, p) ROOST_PP_BOOL(p##(257, s))
+# else
+# define ROOST_PP_FOR_257_PR(s, p) ROOST_PP_BOOL(p(257, s))
+# endif
+
+# define ROOST_PP_FOR_257_ERROR() ROOST_PP_ERROR(0x0002)
+# define ROOST_PP_FOR_257(s, p, o, m) \
+    ROOST_PP_IIF \
+        ( \
+        ROOST_PP_FOR_257_PR(s,p), \
+        ROOST_PP_FOR_257_ERROR, \
+        ROOST_PP_EMPTY \
+        ) \
+    () \
+/**/
+#
+# elif ROOST_PP_LIMIT_FOR == 512
+#
+# define ROOST_PP_FOR_513_PR(s, p) ROOST_PP_BOOL(p(513, s))
+
+# define ROOST_PP_FOR_513_ERROR() ROOST_PP_ERROR(0x0002)
+# define ROOST_PP_FOR_513(s, p, o, m) \
+    ROOST_PP_IIF \
+        ( \
+        ROOST_PP_FOR_513_PR(s,p), \
+        ROOST_PP_FOR_513_ERROR, \
+        ROOST_PP_EMPTY \
+        ) \
+    () \
+/**/
+#
+# elif ROOST_PP_LIMIT_FOR == 1024
+#
+# define ROOST_PP_FOR_1025_PR(s, p) ROOST_PP_BOOL(p(1025, s))
+
+# define ROOST_PP_FOR_1025_ERROR() ROOST_PP_ERROR(0x0002)
+# define ROOST_PP_FOR_1025(s, p, o, m) \
+    ROOST_PP_IIF \
+        ( \
+        ROOST_PP_FOR_1025_PR(s,p), \
+        ROOST_PP_FOR_1025_ERROR, \
+        ROOST_PP_EMPTY \
+        ) \
+    () \
+/**/
+#
+# endif
+#
+# define ROOST_PP_FOR_CHECK_ROOST_PP_NIL 1
+#
+# if ROOST_PP_LIMIT_FOR == 256
+# include <roost/preprocessor/repetition/limits/for_256.hpp>
+# elif ROOST_PP_LIMIT_FOR == 512
+# include <roost/preprocessor/repetition/limits/for_256.hpp>
+# include <roost/preprocessor/repetition/limits/for_512.hpp>
+# elif ROOST_PP_LIMIT_FOR == 1024
+# include <roost/preprocessor/repetition/limits/for_256.hpp>
+# include <roost/preprocessor/repetition/limits/for_512.hpp>
+# include <roost/preprocessor/repetition/limits/for_1024.hpp>
+# endif
+#
+# endif
 #
 # endif

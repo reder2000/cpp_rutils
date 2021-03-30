@@ -15,14 +15,21 @@
 #
 # include <roost/preprocessor/cat.hpp>
 # include <roost/preprocessor/config/config.hpp>
+# include <roost/preprocessor/control/if.hpp>
+# include <roost/preprocessor/variadic/has_opt.hpp>
 # include <roost/preprocessor/variadic/size.hpp>
 #
-# if ROOST_PP_VARIADICS
-#    if ROOST_PP_VARIADICS_MSVC
-#        define ROOST_PP_TUPLE_SIZE(tuple) ROOST_PP_CAT(ROOST_PP_VARIADIC_SIZE tuple,)
-#    else
-#        define ROOST_PP_TUPLE_SIZE(tuple) ROOST_PP_VARIADIC_SIZE tuple
-#    endif
+# if ROOST_PP_VARIADIC_HAS_OPT()
+#     if ROOST_PP_VARIADICS_MSVC
+#         define ROOST_PP_TUPLE_SIZE(tuple) ROOST_PP_TUPLE_SIZE_CHECK(ROOST_PP_CAT(ROOST_PP_VARIADIC_SIZE tuple,))
+#     else
+#         define ROOST_PP_TUPLE_SIZE(tuple) ROOST_PP_TUPLE_SIZE_CHECK(ROOST_PP_VARIADIC_SIZE tuple)
+#     endif
+#     define ROOST_PP_TUPLE_SIZE_CHECK(size) ROOST_PP_IF(size,size,1)
+# elif ROOST_PP_VARIADICS_MSVC
+#     define ROOST_PP_TUPLE_SIZE(tuple) ROOST_PP_CAT(ROOST_PP_VARIADIC_SIZE tuple,)
+# else
+#     define ROOST_PP_TUPLE_SIZE(tuple) ROOST_PP_VARIADIC_SIZE tuple
 # endif
 #
 # endif

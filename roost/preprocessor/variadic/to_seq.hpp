@@ -18,8 +18,6 @@
 #
 # /* ROOST_PP_VARIADIC_TO_SEQ */
 #
-# if ROOST_PP_VARIADICS
-#    define ROOST_PP_VARIADIC_TO_SEQ(...) ROOST_PP_TUPLE_TO_SEQ((__VA_ARGS__))
-# endif
+# define ROOST_PP_VARIADIC_TO_SEQ(...) ROOST_PP_TUPLE_TO_SEQ((__VA_ARGS__))
 #
 # endif

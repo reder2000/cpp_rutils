@@ -16,13 +16,13 @@
 #
 # /* ROOST_PP_TUPLE_IS_SINGLE_RETURN */
 #
-# if ROOST_PP_VARIADICS && ROOST_PP_VARIADICS_MSVC
+# if ROOST_PP_VARIADICS_MSVC
 # include <roost/preprocessor/control/iif.hpp>
 # include <roost/preprocessor/facilities/is_1.hpp>
 # include <roost/preprocessor/tuple/size.hpp>
 # define ROOST_PP_TUPLE_IS_SINGLE_RETURN(sr,nsr,tuple)  \
     ROOST_PP_IIF(ROOST_PP_IS_1(ROOST_PP_TUPLE_SIZE(tuple)),sr,nsr) \
     /**/
-# endif /* ROOST_PP_VARIADICS && ROOST_PP_VARIADICS_MSVC */
+# endif /* ROOST_PP_VARIADICS_MSVC */
 #
 # endif /* ROOST_PREPROCESSOR_TUPLE_DETAIL_IS_SINGLE_RETURN_HPP */

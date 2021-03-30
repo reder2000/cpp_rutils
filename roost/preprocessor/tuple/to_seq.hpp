@@ -8,6 +8,8 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
+# /* Revised by Edward Diener (2020) */
+#
 # /* See http://www.roost.org for most recent version. */
 #
 # ifndef ROOST_PREPROCESSOR_TUPLE_TO_SEQ_HPP
@@ -15,38 +17,31 @@
 #
 # include <roost/preprocessor/cat.hpp>
 # include <roost/preprocessor/config/config.hpp>
+# include <roost/preprocessor/control/if.hpp>
 # include <roost/preprocessor/facilities/overload.hpp>
 # include <roost/preprocessor/tuple/size.hpp>
 # include <roost/preprocessor/variadic/size.hpp>
+# include <roost/preprocessor/variadic/has_opt.hpp>
 #
 # /* ROOST_PP_TUPLE_TO_SEQ */
 #
-# if ROOST_PP_VARIADICS
-#    if ROOST_PP_VARIADICS_MSVC
-#        define ROOST_PP_TUPLE_TO_SEQ(...) ROOST_PP_TUPLE_TO_SEQ_I(ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_TO_SEQ_O_, __VA_ARGS__), (__VA_ARGS__))
-#        define ROOST_PP_TUPLE_TO_SEQ_I(m, args) ROOST_PP_TUPLE_TO_SEQ_II(m, args)
-#        define ROOST_PP_TUPLE_TO_SEQ_II(m, args) ROOST_PP_CAT(m ## args,)
-#        define ROOST_PP_TUPLE_TO_SEQ_O_1(tuple) ROOST_PP_CAT(ROOST_PP_TUPLE_TO_SEQ_, ROOST_PP_TUPLE_SIZE(tuple)) tuple
-#    else
-#        define ROOST_PP_TUPLE_TO_SEQ(...) ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_TO_SEQ_O_, __VA_ARGS__)(__VA_ARGS__)
-#        define ROOST_PP_TUPLE_TO_SEQ_O_1(tuple) ROOST_PP_CAT(ROOST_PP_TUPLE_TO_SEQ_, ROOST_PP_VARIADIC_SIZE tuple) tuple
-#    endif
-#    define ROOST_PP_TUPLE_TO_SEQ_O_2(size, tuple) ROOST_PP_TUPLE_TO_SEQ_O_1(tuple)
+# if ROOST_PP_VARIADICS_MSVC
+#     define ROOST_PP_TUPLE_TO_SEQ(...) ROOST_PP_TUPLE_TO_SEQ_I(ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_TO_SEQ_O_, __VA_ARGS__), (__VA_ARGS__))
+#     define ROOST_PP_TUPLE_TO_SEQ_I(m, args) ROOST_PP_TUPLE_TO_SEQ_II(m, args)
+#     define ROOST_PP_TUPLE_TO_SEQ_II(m, args) ROOST_PP_CAT(m ## args,)
+#     define ROOST_PP_TUPLE_TO_SEQ_O_1(tuple) ROOST_PP_CAT(ROOST_PP_TUPLE_TO_SEQ_, ROOST_PP_TUPLE_SIZE(tuple)) tuple
 # else
-#    if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_MWCC()
-#        define ROOST_PP_TUPLE_TO_SEQ(size, tuple) ROOST_PP_TUPLE_TO_SEQ_I(size, tuple)
-#        if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_MSVC()
-#            define ROOST_PP_TUPLE_TO_SEQ_I(s, t) ROOST_PP_TUPLE_TO_SEQ_ ## s t
-#        else
-#            define ROOST_PP_TUPLE_TO_SEQ_I(s, t) ROOST_PP_TUPLE_TO_SEQ_II(ROOST_PP_TUPLE_TO_SEQ_ ## s t)
-#            define ROOST_PP_TUPLE_TO_SEQ_II(res) res
-#        endif
-#    else
-#        define ROOST_PP_TUPLE_TO_SEQ(size, tuple) ROOST_PP_TUPLE_TO_SEQ_OO((size, tuple))
-#        define ROOST_PP_TUPLE_TO_SEQ_OO(par) ROOST_PP_TUPLE_TO_SEQ_I ## par
-#        define ROOST_PP_TUPLE_TO_SEQ_I(s, t) ROOST_PP_TUPLE_TO_SEQ_ ## s ## t
-#    endif
+#     define ROOST_PP_TUPLE_TO_SEQ(...) ROOST_PP_OVERLOAD(ROOST_PP_TUPLE_TO_SEQ_O_, __VA_ARGS__)(__VA_ARGS__)
+#     if ROOST_PP_VARIADIC_HAS_OPT()
+#         define ROOST_PP_TUPLE_TO_SEQ_O_1(tuple) ROOST_PP_TUPLE_TO_SEQ_O_1_SIZE(ROOST_PP_VARIADIC_SIZE tuple, tuple)
+#         define ROOST_PP_TUPLE_TO_SEQ_O_1_SIZE(size,tuple) ROOST_PP_CAT(ROOST_PP_TUPLE_TO_SEQ_, ROOST_PP_IF(size,size,1)) tuple
+#     else
+#         define ROOST_PP_TUPLE_TO_SEQ_O_1(tuple) ROOST_PP_CAT(ROOST_PP_TUPLE_TO_SEQ_, ROOST_PP_VARIADIC_SIZE tuple) tuple
+#     endif
 # endif
+# define ROOST_PP_TUPLE_TO_SEQ_O_2(size, tuple) ROOST_PP_TUPLE_TO_SEQ_O_1(tuple)
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 /* An empty array can be passed */
 # define ROOST_PP_TUPLE_TO_SEQ_0() ()
@@ -115,5 +110,24 @@
 # define ROOST_PP_TUPLE_TO_SEQ_62(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, e33, e34, e35, e36, e37, e38, e39, e40, e41, e42, e43, e44, e45, e46, e47, e48, e49, e50, e51, e52, e53, e54, e55, e56, e57, e58, e59, e60, e61) (e0)(e1)(e2)(e3)(e4)(e5)(e6)(e7)(e8)(e9)(e10)(e11)(e12)(e13)(e14)(e15)(e16)(e17)(e18)(e19)(e20)(e21)(e22)(e23)(e24)(e25)(e26)(e27)(e28)(e29)(e30)(e31)(e32)(e33)(e34)(e35)(e36)(e37)(e38)(e39)(e40)(e41)(e42)(e43)(e44)(e45)(e46)(e47)(e48)(e49)(e50)(e51)(e52)(e53)(e54)(e55)(e56)(e57)(e58)(e59)(e60)(e61)
 # define ROOST_PP_TUPLE_TO_SEQ_63(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, e33, e34, e35, e36, e37, e38, e39, e40, e41, e42, e43, e44, e45, e46, e47, e48, e49, e50, e51, e52, e53, e54, e55, e56, e57, e58, e59, e60, e61, e62) (e0)(e1)(e2)(e3)(e4)(e5)(e6)(e7)(e8)(e9)(e10)(e11)(e12)(e13)(e14)(e15)(e16)(e17)(e18)(e19)(e20)(e21)(e22)(e23)(e24)(e25)(e26)(e27)(e28)(e29)(e30)(e31)(e32)(e33)(e34)(e35)(e36)(e37)(e38)(e39)(e40)(e41)(e42)(e43)(e44)(e45)(e46)(e47)(e48)(e49)(e50)(e51)(e52)(e53)(e54)(e55)(e56)(e57)(e58)(e59)(e60)(e61)(e62)
 # define ROOST_PP_TUPLE_TO_SEQ_64(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30, e31, e32, e33, e34, e35, e36, e37, e38, e39, e40, e41, e42, e43, e44, e45, e46, e47, e48, e49, e50, e51, e52, e53, e54, e55, e56, e57, e58, e59, e60, e61, e62, e63) (e0)(e1)(e2)(e3)(e4)(e5)(e6)(e7)(e8)(e9)(e10)(e11)(e12)(e13)(e14)(e15)(e16)(e17)(e18)(e19)(e20)(e21)(e22)(e23)(e24)(e25)(e26)(e27)(e28)(e29)(e30)(e31)(e32)(e33)(e34)(e35)(e36)(e37)(e38)(e39)(e40)(e41)(e42)(e43)(e44)(e45)(e46)(e47)(e48)(e49)(e50)(e51)(e52)(e53)(e54)(e55)(e56)(e57)(e58)(e59)(e60)(e61)(e62)(e63)
+#
+# else
+#
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_TUPLE == 64
+# include <roost/preprocessor/tuple/limits/to_seq_64.hpp>
+# elif ROOST_PP_LIMIT_TUPLE == 128
+# include <roost/preprocessor/tuple/limits/to_seq_64.hpp>
+# include <roost/preprocessor/tuple/limits/to_seq_128.hpp>
+# elif ROOST_PP_LIMIT_TUPLE == 256
+# include <roost/preprocessor/tuple/limits/to_seq_64.hpp>
+# include <roost/preprocessor/tuple/limits/to_seq_128.hpp>
+# include <roost/preprocessor/tuple/limits/to_seq_256.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_TUPLE limit
+# endif
+#
+# endif
 #
 # endif

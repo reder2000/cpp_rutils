@@ -14,7 +14,7 @@
 #
 # include <roost/preprocessor/config/config.hpp>
 #
-# if ROOST_PP_VARIADICS && defined(__cplusplus) && __cplusplus > 201703L
+# if defined(__cplusplus) && __cplusplus > 201703L
 #
 # if ROOST_PP_VARIADICS_MSVC
 # include <roost/preprocessor/cat.hpp>

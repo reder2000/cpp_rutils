@@ -7,9 +7,13 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
+# /* Revised by Edward Diener (2020) */
+#
 # /* See http://www.roost.org for most recent version. */
 #
 # include <roost/preprocessor/config/config.hpp>
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # if ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_DMC()
 #     include <roost/preprocessor/detail/dmc/auto_rec.hpp>
@@ -290,4 +294,41 @@
 #                            define ROOST_PP_NODE_255(p) ROOST_PP_IIF(p(255), 255, 256)
 #
 # endif
+#
+# endif
+#
+# else
+#
+# if ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_DMC()
+#     include <roost/preprocessor/detail/dmc/auto_rec.hpp>
+# else
+#
+# ifndef ROOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
+# define ROOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
+#
+# /* ROOST_PP_AUTO_REC */
+#
+# include <roost/preprocessor/control/iif.hpp>
+#
+# define ROOST_PP_AUTO_REC(pred, n) ROOST_PP_NODE_ENTRY_ ## n(pred)
+#
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_MAG == 256
+# include <roost/preprocessor/detail/limits/auto_rec_256.hpp>
+# elif ROOST_PP_LIMIT_MAG == 512
+# include <roost/preprocessor/detail/limits/auto_rec_256.hpp>
+# include <roost/preprocessor/detail/limits/auto_rec_512.hpp>
+# elif ROOST_PP_LIMIT_MAG == 1024
+# include <roost/preprocessor/detail/limits/auto_rec_256.hpp>
+# include <roost/preprocessor/detail/limits/auto_rec_512.hpp>
+# include <roost/preprocessor/detail/limits/auto_rec_1024.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_MAG limit
+# endif
+#
+# endif
+#
+# endif
+#
 # endif

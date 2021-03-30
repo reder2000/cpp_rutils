@@ -18,8 +18,6 @@
 #
 # /* ROOST_PP_OVERLOAD */
 #
-# if ROOST_PP_VARIADICS
-#    define ROOST_PP_OVERLOAD(prefix, ...) ROOST_PP_CAT(prefix, ROOST_PP_VARIADIC_SIZE(__VA_ARGS__))
-# endif
+# define ROOST_PP_OVERLOAD(prefix, ...) ROOST_PP_CAT(prefix, ROOST_PP_VARIADIC_SIZE(__VA_ARGS__))
 #
 # endif

@@ -28,10 +28,6 @@
 #    define ROOST_PP_STRINGIZE(text) ROOST_PP_STRINGIZE_I(text)
 # endif
 #
-#if ROOST_PP_VARIADICS
 # define ROOST_PP_STRINGIZE_I(...) #__VA_ARGS__
-#else
-# define ROOST_PP_STRINGIZE_I(text) #text
-#endif
 #
 # endif

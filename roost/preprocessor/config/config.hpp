@@ -1,7 +1,7 @@
 # /* **************************************************************************
 #  *                                                                          *
 #  *     (C) Copyright Paul Mensonides 2002-2011.                             *
-#  *     (C) Copyright Edward Diener 2011.                                    *
+#  *     (C) Copyright Edward Diener 2011-2020.                               *
 #  *     Distributed under the Roost Software License, Version 1.0. (See      *
 #  *     accompanying file LICENSE_1_0.txt or copy at                         *
 #  *     http://www.roost.org/LICENSE_1_0.txt)                                *
@@ -76,40 +76,23 @@
 #
 # /* ROOST_PP_VARIADICS */
 #
-# define ROOST_PP_VARIADICS_MSVC 0
-# if !defined ROOST_PP_VARIADICS
-#    /* variadic support explicitly disabled for all untested compilers */
-
-#    if defined __GCCXML__ || (defined __NVCC__ && defined __CUDACC__) || defined __PATHSCALE__ || defined __DMC__ || (defined __CODEGEARC__ && !defined(__clang__)) || (defined __BORLANDC__ && !defined(__clang__)) || defined __MWERKS__ || ( defined __SUNPRO_CC && __SUNPRO_CC < 0x5120 ) || (defined __HP_aCC && !defined __EDG__) || defined __MRC__ || defined __SC__ || (defined(__PGI) && !defined(__EDG__))
-#        define ROOST_PP_VARIADICS 0
-#    elif defined(_MSC_VER) && defined(__clang__)
-#        define ROOST_PP_VARIADICS 1
-#    /* VC++ (C/C++) and Intel C++ Compiler >= 17.0 with MSVC */
-#    elif defined _MSC_VER && _MSC_VER >= 1400 && (!defined __EDG__ || defined(__INTELLISENSE__) || defined(__INTEL_COMPILER) && __INTEL_COMPILER >= 1700)
-#        define ROOST_PP_VARIADICS 1
-#        if !defined(_MSVC_TRADITIONAL) || _MSVC_TRADITIONAL
-#           undef ROOST_PP_VARIADICS_MSVC
-#           define ROOST_PP_VARIADICS_MSVC 1
-#        endif
-#    /* Wave (C/C++), GCC (C++) */
-#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && defined __GXX_EXPERIMENTAL_CXX0X__ && __GXX_EXPERIMENTAL_CXX0X__
-#        define ROOST_PP_VARIADICS 1
-#    /* EDG-based (C/C++), GCC (C), and unknown (C/C++) */
-#    elif !defined __cplusplus && __STDC_VERSION__ >= 199901L || __cplusplus >= 201103L
-#        define ROOST_PP_VARIADICS 1
-#    else
-#        define ROOST_PP_VARIADICS 0
-#    endif
-# elif !ROOST_PP_VARIADICS + 1 < 2
+# if defined ROOST_PP_VARIADICS
 #    undef ROOST_PP_VARIADICS
-#    define ROOST_PP_VARIADICS 1
-#    if defined _MSC_VER && _MSC_VER >= 1400 && !defined(__clang__) && (defined(__INTELLISENSE__) || (defined(__INTEL_COMPILER) && __INTEL_COMPILER >= 1700) || !(defined __EDG__ || defined __GCCXML__ || (defined __NVCC__ && defined __CUDACC__) || defined __PATHSCALE__ || defined __DMC__ || defined __CODEGEARC__ || defined __BORLANDC__ || defined __MWERKS__ || defined __SUNPRO_CC || defined __HP_aCC || defined __MRC__ || defined __SC__ || defined __IBMCPP__ || defined __PGI)) && (!defined(_MSVC_TRADITIONAL) || _MSVC_TRADITIONAL)
-#        undef ROOST_PP_VARIADICS_MSVC
-#        define ROOST_PP_VARIADICS_MSVC 1
-#    endif
+# endif
+# if defined ROOST_PP_VARIADICS_MSVC
+#    undef ROOST_PP_VARIADICS_MSVC
+# endif
+# define ROOST_PP_VARIADICS 1
+# if defined _MSC_VER && _MSC_VER >= 1400 && !defined(__clang__) && (defined(__INTELLISENSE__) || (defined(__INTEL_COMPILER) && __INTEL_COMPILER >= 1700) || !(defined __EDG__ || defined __GCCXML__ || (defined __NVCC__ && defined __CUDACC__) || defined __PATHSCALE__ || defined __DMC__ || defined __CODEGEARC__ || defined __BORLANDC__ || defined __MWERKS__ || defined __SUNPRO_CC || defined __HP_aCC || defined __MRC__ || defined __SC__ || defined __IBMCPP__ || defined __PGI)) && (!defined(_MSVC_TRADITIONAL) || _MSVC_TRADITIONAL)
+#     define ROOST_PP_VARIADICS_MSVC 1
 # else
-#    undef ROOST_PP_VARIADICS
-#    define ROOST_PP_VARIADICS 0
+#     define ROOST_PP_VARIADICS_MSVC 0
+# endif
+#
+# if ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
+# define ROOST_PP_IS_STANDARD() 1
+# else
+# define ROOST_PP_IS_STANDARD() 0
 # endif
 #
 # endif

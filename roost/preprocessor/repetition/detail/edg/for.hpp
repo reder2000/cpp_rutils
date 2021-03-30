@@ -8,11 +8,16 @@
 #  */
 #
 # /* Revised by Paul Mensonides (2002) */
+# /* Revised by Edward Diener (2020) */
 #
 # /* See http://www.roost.org for most recent version. */
 #
 # ifndef ROOST_PREPROCESSOR_REPETITION_DETAIL_EDG_FOR_HPP
 # define ROOST_PREPROCESSOR_REPETITION_DETAIL_EDG_FOR_HPP
+#
+# include <roost/preprocessor/config/config.hpp>
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # include <roost/preprocessor/control/if.hpp>
 # include <roost/preprocessor/tuple/eat.hpp>
@@ -530,5 +535,26 @@
 # define ROOST_PP_FOR_254_I(s, p, o, m) ROOST_PP_IF(p(255, s), m, ROOST_PP_TUPLE_EAT_2)(255, s) ROOST_PP_IF(p(255, s), ROOST_PP_FOR_255, ROOST_PP_TUPLE_EAT_4)(o(255, s), p, o, m)
 # define ROOST_PP_FOR_255_I(s, p, o, m) ROOST_PP_IF(p(256, s), m, ROOST_PP_TUPLE_EAT_2)(256, s) ROOST_PP_IF(p(256, s), ROOST_PP_FOR_256, ROOST_PP_TUPLE_EAT_4)(o(256, s), p, o, m)
 # define ROOST_PP_FOR_256_I(s, p, o, m) ROOST_PP_IF(p(257, s), m, ROOST_PP_TUPLE_EAT_2)(257, s) ROOST_PP_IF(p(257, s), ROOST_PP_FOR_257, ROOST_PP_TUPLE_EAT_4)(o(257, s), p, o, m)
+#
+# else
+#
+# include <roost/preprocessor/control/if.hpp>
+# include <roost/preprocessor/tuple/eat.hpp>
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_FOR == 256
+# include <roost/preprocessor/repetition/detail/edg/limits/for_256.hpp>
+# elif ROOST_PP_LIMIT_FOR == 512
+# include <roost/preprocessor/repetition/detail/edg/limits/for_256.hpp>
+# include <roost/preprocessor/repetition/detail/edg/limits/for_512.hpp>
+# elif ROOST_PP_LIMIT_FOR == 1024
+# include <roost/preprocessor/repetition/detail/edg/limits/for_256.hpp>
+# include <roost/preprocessor/repetition/detail/edg/limits/for_512.hpp>
+# include <roost/preprocessor/repetition/detail/edg/limits/for_1024.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_FOR limit
+# endif
+#
+# endif
 #
 # endif

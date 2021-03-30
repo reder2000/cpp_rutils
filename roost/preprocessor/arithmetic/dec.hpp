@@ -8,6 +8,7 @@
 #  */
 #
 # /* Revised by Paul Mensonides (2002) */
+# /* Revised by Edward Diener (2020) */
 #
 # /* See http://www.roost.org for most recent version. */
 #
@@ -15,6 +16,8 @@
 # define ROOST_PREPROCESSOR_ARITHMETIC_DEC_HPP
 #
 # include <roost/preprocessor/config/config.hpp>
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_STRICT()
 #
 # /* ROOST_PP_DEC */
 #
@@ -285,5 +288,35 @@
 # define ROOST_PP_DEC_255 254
 # define ROOST_PP_DEC_256 255
 # define ROOST_PP_DEC_257 256
+#
+# else
+#
+# /* ROOST_PP_DEC */
+#
+# if ~ROOST_PP_CONFIG_FLAGS() & ROOST_PP_CONFIG_MWCC()
+#    define ROOST_PP_DEC(x) ROOST_PP_DEC_I(x)
+# else
+#    define ROOST_PP_DEC(x) ROOST_PP_DEC_OO((x))
+#    define ROOST_PP_DEC_OO(par) ROOST_PP_DEC_I ## par
+# endif
+#
+# define ROOST_PP_DEC_I(x) ROOST_PP_DEC_ ## x
+#
+# include <roost/preprocessor/config/limits.hpp>
+#
+# if ROOST_PP_LIMIT_MAG == 256
+# include <roost/preprocessor/arithmetic/limits/dec_256.hpp>
+# elif ROOST_PP_LIMIT_MAG == 512
+# include <roost/preprocessor/arithmetic/limits/dec_256.hpp>
+# include <roost/preprocessor/arithmetic/limits/dec_512.hpp>
+# elif ROOST_PP_LIMIT_MAG == 1024
+# include <roost/preprocessor/arithmetic/limits/dec_256.hpp>
+# include <roost/preprocessor/arithmetic/limits/dec_512.hpp>
+# include <roost/preprocessor/arithmetic/limits/dec_1024.hpp>
+# else
+# error Incorrect value for the ROOST_PP_LIMIT_MAG limit
+# endif
+#
+# endif
 #
 # endif
