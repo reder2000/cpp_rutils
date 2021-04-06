@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 // compile time type name
 
 template <typename T>
