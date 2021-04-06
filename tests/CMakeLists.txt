@@ -17,7 +17,7 @@ find_vcpkg_install_missing(fmt)
 #file(GLOB headers ../include/*.h )
 file (GLOB srcs CONFIGURE_DEPENDS *.cpp)
 
-include_directories(../include)
+include_directories(../cpp_rutils)
 include_directories(..)
 
 #include(CTest)
