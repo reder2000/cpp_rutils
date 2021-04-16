@@ -44,7 +44,7 @@ target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only)
 
 target_include_directories(
   ${PROJECT_NAME}
-  INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/cpp_rutils/>
+  INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # require C++20
