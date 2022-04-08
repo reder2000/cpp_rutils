@@ -25,17 +25,28 @@ include(rr_cmake/FindVcpkInstall)
 include(rr_cmake/cxx20)
 
 find_vcpkg_install_missing(fmt)
+find_package(Boost)
+if(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  if (NOT EXISTS "${Boost_INCLUDE_DIRS}/boost/preprocessor.hpp")
+    message("${Boost_INCLUDE_DIRS}/boost/preprocessor.hpp")
+    vcpkg_install(boost-preprocessor)
+  endif()
+else()
+  message(STATUS "Boost NOT Found !")
+  vcpkg_install(boost-preprocessor)
+  find_package(Boost)
+  include_directories(${Boost_INCLUDE_DIRS})
+endif(Boost_FOUND)
 
 # installation directories
 # set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
 # set(cpp_rutils_INSTALL_CMAKE_DIR "share" CACHE STRING "The installation cmake directory")
 
 FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS cpp_rutils/*.hpp cpp_rutils/*.h)
-FILE(GLOB_RECURSE roost CONFIGURE_DEPENDS roost/*.hpp roost/*.h)
-source_group("Header Files/roost" FILES ${roost})
 
 # define a header-only library
-add_library(cpp_rutils INTERFACE  ${headers} ${roost} README.md)
+add_library(cpp_rutils INTERFACE  ${headers} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -82,8 +93,6 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 
 
 install(DIRECTORY cpp_rutils/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils)
-install(DIRECTORY roost/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/roost)
-
 
 if (NOT "${cpp_rutils_BUILD_TESTS}" STREQUAL "OFF")
     add_subdirectory(tests)
