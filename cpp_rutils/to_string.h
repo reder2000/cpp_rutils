@@ -38,6 +38,9 @@ using is_streamable_t = decltype(std::declval<std::ostream&>() << std::declval<T
 template <typename T>
 inline constexpr bool is_streamable = detect<T, is_streamable_t>::value;
 
+// Traits if type may be printed by one of the methods
+template <typename T>
+inline constexpr bool is_printable =  is_fmt_formattable<T>; // is_streamable<T>; // ||
 
 template <typename T>
 std::string to_string(const T& v) 

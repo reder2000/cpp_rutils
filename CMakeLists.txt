@@ -31,10 +31,13 @@ boost_header_only_package(preprocessor preprocessor.hpp)
 # set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
 # set(cpp_rutils_INSTALL_CMAKE_DIR "share" CACHE STRING "The installation cmake directory")
 
-FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS cpp_rutils/*.hpp cpp_rutils/*.h)
+FILE(GLOB headers CONFIGURE_DEPENDS cpp_rutils/*.hpp cpp_rutils/*.h)
+FILE(GLOB throwing_headers CONFIGURE_DEPENDS cpp_rutils/throwing/*.hpp cpp_rutils/throwing/*.h)
+source_group("Header Files/throwing" FILES ${throwing_headers})
+
 
 # define a header-only library
-add_library(cpp_rutils INTERFACE  ${headers} README.md)
+add_library(cpp_rutils INTERFACE  ${headers} ${throwing_headers} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
