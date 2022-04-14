@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <iterator>
-#include "to_string.h"
+#include "../to_string.h"
 
 namespace throwing {
 
@@ -25,7 +25,7 @@ namespace throwing {
     template <class _FwdIt, class _Pr>
         requires (! is_printable< typename std::iterator_traits<_FwdIt>::value_type >)
     bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
-		using value_type = std::iterator_traits<_FwdIt>::value_type;
+		using value_type = typename std::iterator_traits<_FwdIt>::value_type;
         auto tt = value_type();
 		auto aa = is_fmt_formattable<value_type>; 
         auto bb = is_streamable<value_type>; 
