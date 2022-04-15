@@ -4,7 +4,6 @@
 
 TEST_CASE("shared_ptr", "[enum][hide]")
 {
-    int i{ 2 };
     std::shared_ptr<int> sp1(new int{ 2 });
     auto sp2 = sp<int>(new int{ 2 });
     CHECK(*sp1 == *sp2);

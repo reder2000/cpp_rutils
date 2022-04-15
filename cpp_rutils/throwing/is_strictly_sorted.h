@@ -25,11 +25,6 @@ namespace throwing {
     template <class _FwdIt, class _Pr>
         requires (! is_printable< typename std::iterator_traits<_FwdIt>::value_type >)
     bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
-		using value_type = typename std::iterator_traits<_FwdIt>::value_type;
-        auto tt = value_type();
-		auto aa = is_fmt_formattable<value_type>; 
-        auto bb = is_streamable<value_type>; 
-        auto cc = is_printable<value_type>;
         if (_First != _Last) {
             for (auto _Next = _First; ++_Next != _Last; ++_First) {
                 if (!(_Pred(*_First, *_Next))) {

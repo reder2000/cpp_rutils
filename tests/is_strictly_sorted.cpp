@@ -28,6 +28,6 @@ TEST_CASE("throwing is strictly sorted", "[throwing_is_strictly_sorted][hide]")
     std::vector<double> w{ 1.,2.,2.,3. };
     CHECK(throwing::is_strictly_sorted(v.begin(), v.end()));
     CHECK_THROWS(throwing::is_strictly_sorted(w.begin(), w.end()));
-    std::vector<stupid> z{ 1.,2.,2.,3. };
+    std::vector<stupid> z{ 1,2,2,3 };
     CHECK_THROWS(throwing::is_strictly_sorted(z.begin(), z.end()));
 }
