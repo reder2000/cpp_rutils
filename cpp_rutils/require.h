@@ -53,7 +53,23 @@
 	_MREQUIRE_OP(<=,a,b,__VA_ARGS__)
 
 #define MREQUIRE_GREATER_EQUAL(a,b,...) \
-	_MREQUIRE_OP(>=,a,b,__VA_ARGS__)
+	_MREQUIRE_OP(>=, a, b, __VA_ARGS__)
+
+#define MREQUIRE_TRY(what_to_try)                                                                                                                      \
+  {                                                                                                                                                  \
+    bool success;                                                                                                                                    \
+    try                                                                                                                                              \
+    {                                                                                                                                                \
+      success = what_to_try;                                                                                                                                \
+    }                                                                                                                                                \
+    catch (std::exception & e)                                                                                                                       \
+    {                                                                                                                                                \
+      throw std::runtime_error(fmt::format("{} , {} , {} failed with exception {} ", __func__, __FILE__, __LINE__, e.what()   \
+                               ));                                                                                                            \
+    }                                                                                                                                                \
+    if (! success) {throw std::runtime_error(fmt::format("{} , {} , {} ", __func__, __FILE__, __LINE__)); }       \
+}
+
 
 #define default_fail(arg) \
 	default: MREQUIRE(false,"unhandled case {}",arg); \
