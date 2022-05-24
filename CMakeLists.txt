@@ -12,35 +12,22 @@ FetchContent_Declare(
   rr_cmake
   GIT_REPOSITORY "https://github.com/reder2000/rr_cmake.git"
   GIT_TAG origin/master
-  GIT_REMOTE_UPDATE_STRATEGY REBASE_CHECKOUT
-  GIT_PROGRESS TRUE
   GIT_SHALLOW TRUE
-  LOG_UPDATE TRUE
+  GIT_REMOTE_UPDATE_STRATEGY REBASE_CHECKOUT
 )
 FetchContent_MakeAvailable(rr_cmake)
-
-list(APPEND CMAKE_MODULE_PATH "${rr_cmake_SOURCE_DIR}") 
-
-include(rr_cmake/FindVcpkInstall)
-include(rr_cmake/cxx20)
+include(${rr_cmake_SOURCE_DIR}/rr_cmake/common.cmake)
 
 find_vcpkg_install_missing(fmt)
 boost_header_only_package(preprocessor preprocessor.hpp)
 
-# installation directories
-# set(cpp_rutils_INSTALL_INCLUDE_DIR "include" CACHE STRING "The installation include directory")
-# set(cpp_rutils_INSTALL_CMAKE_DIR "share" CACHE STRING "The installation cmake directory")
-
-FILE(GLOB headers CONFIGURE_DEPENDS cpp_rutils/*.hpp cpp_rutils/*.h)
-FILE(GLOB throwing_headers CONFIGURE_DEPENDS cpp_rutils/throwing/*.hpp cpp_rutils/throwing/*.h)
-source_group("Header Files/throwing" FILES ${throwing_headers})
-
+add_source_group(cpp_rutils)
+add_source_group(cpp_rutils/throwing)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # define a header-only library
-add_library(cpp_rutils INTERFACE  ${headers} ${throwing_headers} README.md)
+add_library(cpp_rutils INTERFACE ${all_sources} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
-
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only)
 
@@ -50,7 +37,7 @@ target_include_directories(
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # require C++20
-target_compile_features(cpp_rutils INTERFACE cxx_std_20)
+#target_compile_features(cpp_rutils INTERFACE cxx_std_20)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}_Targets

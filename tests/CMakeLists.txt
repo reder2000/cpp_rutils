@@ -5,6 +5,7 @@ message("Configuring cpp_rutils/tests ...")
 
 
 find_vcpkg_install_missing(Catch2 catch2)
+message("CATCH2_LIBRARIES: ${Catch2_Libs}")
 find_vcpkg_install_missing(fmt)
 
 #file(GLOB headers ../include/*.h )
