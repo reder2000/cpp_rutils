@@ -19,7 +19,7 @@ include_directories(..)
 
 add_executable(cpp_rutils_tests ${srcs}) # ${headers})
 
-target_link_libraries(cpp_rutils_tests Catch2::Catch2 fmt::fmt)
+target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt)
 
 target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)
 add_definitions(-DUSING_PCH)
