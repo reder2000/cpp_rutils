@@ -21,10 +21,10 @@ std::string m_strerror_s(int _ErrorMsg)
 	auto failed = strerror_s(buffer, 1024, _ErrorMsg);
 	if (failed)
 	{
-		char buffer[1024*64];
-		auto failed_again = strerror_s(buffer, _ErrorMsg);
+		char buffer2[1024*64];
+		auto failed_again = strerror_s(buffer2, _ErrorMsg);
 		MREQUIRE(!failed_again, "cannot allocate enough mem to strerror");
-		return buffer;
+		return buffer2;
 	}
 	return buffer;
 #endif
