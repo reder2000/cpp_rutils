@@ -20,6 +20,11 @@ include(${rr_cmake_SOURCE_DIR}/rr_cmake/common.cmake)
 
 find_vcpkg_install_missing(fmt)
 boost_header_only_package(preprocessor preprocessor.hpp)
+if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  find_vcpkg_install_missing(date)
+  set (additional_targets date::date date::date-tz)
+endif()
+
 
 add_source_group(cpp_rutils)
 add_source_group(cpp_rutils/throwing)
@@ -29,7 +34,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_library(cpp_rutils INTERFACE ${all_sources} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
-target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only)
+target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only ${additional_targets})
 
 target_include_directories(
   ${PROJECT_NAME}
