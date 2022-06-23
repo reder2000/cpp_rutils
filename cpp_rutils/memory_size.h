@@ -105,7 +105,7 @@ namespace memory {
 	}
 
     template <typename T>
-    size_t used_size(const T& t, record&) {
+    size_t used_size(const T& , record&) {
         return sizeof(T);
     }
 

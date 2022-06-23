@@ -5,6 +5,10 @@
 template <class _Ty>
 using sp = std::shared_ptr<_Ty>;
 
+template <class _Ty>
+using spc = std::shared_ptr<const _Ty>;
+
+
 template <class _Ty>  inline
 sp<_Ty> new_sp() {
     return sp<_Ty>(new _Ty);
