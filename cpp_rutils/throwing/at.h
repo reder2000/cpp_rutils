@@ -4,8 +4,7 @@
 // at that throw an error with the key when the key is not find
 
 template <typename Container, typename Key>
-inline
-typename const Container::mapped_type& at(const Container & c , const Key & k)
+inline const typename Container::mapped_type& at(const Container& c, const Key& k)
 {
 	auto w = c.find(k);
 	if (w!=c.end())
@@ -31,5 +30,5 @@ typename Container::mapped_type& at(Container& c, const Key& k)
 		auto w = c.find(k); \
 		if (w != c.end()) \
 			return w->second; \
-		[[no_return]] MFAIL("could not find key {} in {}", k, type_name<decltype(c)>()); } \
+		MFAIL("could not find key {} in {}", k, type_name<decltype(c)>()); } \
 		(cc,kk)
