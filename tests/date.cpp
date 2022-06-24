@@ -6,7 +6,7 @@
 
 #pragma warning(1: 4996)
 
-TEST_CASE("secure_deprecate_strerror", "[require][hide]")
+TEST_CASE("date", "[require][hide]")
 {
 	using duration = std__chrono::utc_clock::duration;
 }

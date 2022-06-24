@@ -10,6 +10,11 @@
 #include <boost/preprocessor/tuple/enum.hpp>
 #include <boost/preprocessor/facilities/is_empty.hpp>
 
+#define MFAIL(...) \
+	throw std::runtime_error( \
+		fmt::format("{} , {} , {} , {} " , __func__ , __FILE__ , __LINE__ ,\
+		  fmt::format(__VA_ARGS__)))
+
 #define MREQUIRE2(success,VA_ARGS1,VA_ARGS2) \
 	if (!(success)) throw std::runtime_error( \
 		fmt::format("{} , {} , {} , {} , {}" , __func__ , __FILE__ , __LINE__ ,\
