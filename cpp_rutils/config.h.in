@@ -1,2 +1,3 @@
 #cmakedefine HAVE_STRERROR_S
 #cmakedefine HAVE_LOCALTIME_S
+#cmakedefine HAVE_CXX20_CHRONO

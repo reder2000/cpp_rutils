@@ -20,17 +20,29 @@ include(${rr_cmake_SOURCE_DIR}/rr_cmake/common.cmake)
 
 find_vcpkg_install_missing(fmt)
 boost_header_only_package(preprocessor preprocessor.hpp)
-if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  find_vcpkg_install_missing(date)
-  set (additional_targets date::date date::date-tz)
-endif()
 
 include(CheckSymbolExists)
 check_symbol_exists(strerror_s "string.h" HAVE_STRERROR_S)
 check_symbol_exists(localtime_s "time.h" HAVE_LOCALTIME_S)
+include(CheckCXXSourceCompiles)
+#set(CMAKE_REQUIRED_LIBRARIES cstring)
+check_cxx_source_compiles(
+        "#include <chrono>
+         using test = std::chrono::duration;
+         int main(){ return 0; }"
+         HAVE_CXX20_CHRONO)
 configure_file(cpp_rutils/config.h.in "${CMAKE_CURRENT_SOURCE_DIR}/cpp_rutils/config.h")
 
+#if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+if (NOT HAVE_CXX20_CHRONO)
+  find_vcpkg_install_missing(date)
+  set (additional_targets date::date date::date-tz)
+endif()
+
+
+
 add_source_group(cpp_rutils)
+set(all_sources ${all_sources} cpp_rutils/config.h.in)
 add_source_group(cpp_rutils/throwing)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 

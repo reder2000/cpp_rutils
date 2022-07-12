@@ -1,16 +1,18 @@
 #pragma once
 
 // header for portable c++20 calendar 
+#include "config.h"
 
-#if defined(__GNUC__)
+#include <chrono>
+
+#if defined(HAVE_CXX20_CHRONO)
+#define std__chrono std::chrono
+#else
 #include <date/date.h>
 #include <date/tz.h>
 #define std__chrono date
-#else
-#define std__chrono std::chrono
 #endif
 
-#include <chrono>
 #include "secure_deprecate.h"
 #include "to_.h"
 
