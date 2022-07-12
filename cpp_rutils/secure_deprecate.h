@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
+#include <string.h>
 #include "require.h"
+#include "config.h"
 
 inline
 std::string m_strerror_s(int _ErrorMsg)
 {
-#if defined(__GNUC__)
+#if !defined(HAVE_STRERROR_S)
 	char buffer[1024];
 	const char* s = strerror_r( _ErrorMsg, buffer, 1024);
 	if (s==nullptr)
@@ -21,8 +23,9 @@ std::string m_strerror_s(int _ErrorMsg)
 	auto failed = strerror_s(buffer, 1024, _ErrorMsg);
 	if (failed)
 	{
-		char buffer2[1024*64];
-		auto failed_again = strerror_s(buffer2, _ErrorMsg);
+		constexpr size_t size = 1024*64;
+		char buffer2[size];
+		auto failed_again = strerror_s(buffer2, _ErrorMsg, size);
 		MREQUIRE(!failed_again, "cannot allocate enough mem to strerror");
 		return buffer2;
 	}
@@ -34,7 +37,7 @@ inline
 struct tm m_localtime_s(const time_t & tt)
 {
 	struct tm res;
-#if defined(__GNUC__)
+#if !defined(HAVE_LOCALTIME_S)
 	auto err = localtime_r(&tt, &res);
 	MREQUIRE(err!=nullptr, "localtime_r failed");
 #else

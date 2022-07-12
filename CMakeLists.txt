@@ -25,6 +25,10 @@ if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set (additional_targets date::date date::date-tz)
 endif()
 
+include(CheckSymbolExists)
+check_symbol_exists(strerror_s "string.h" HAVE_STRERROR_S)
+check_symbol_exists(localtime_s "time.h" HAVE_LOCALTIME_S)
+configure_file(cpp_rutils/config.h.in "${CMAKE_CURRENT_SOURCE_DIR}/cpp_rutils/config.h")
 
 add_source_group(cpp_rutils)
 add_source_group(cpp_rutils/throwing)

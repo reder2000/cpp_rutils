@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "shared_ptr.h"
+#include <algorithm>
 
 template <class _Ty>
 using vc = std::vector<_Ty>;

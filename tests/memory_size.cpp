@@ -41,7 +41,7 @@ TEST_CASE("mem_size", "[mem][hide]") {
         std::cout << type_name<T>() << " : " << sz << std::endl;
     };
     pr((int)1);
-    pr(nullptr_t{});
+    pr(std::nullptr_t{});
     std::vector<int> v;
     pr(v);
     v.resize(10);
