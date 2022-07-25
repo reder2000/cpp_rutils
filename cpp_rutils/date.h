@@ -15,9 +15,11 @@
 
 #include "secure_deprecate.h"
 #include "to_.h"
+#include <fmt/chrono.h>
 
 
 using Date = std__chrono::year_month_day;
+
 
 inline constexpr Date make_date(int _year, int _month, int _day)
 {
@@ -129,3 +131,14 @@ inline Date to_<Date>::_(const time_t& d)
   Date      res = Date(std__chrono::year(ttm.tm_year + 1900), std__chrono::month(ttm.tm_mon + 1), std__chrono::day(ttm.tm_mday));
   return res;
 }
+
+template <> struct fmt::formatter<Date> : formatter<std::string> {
+    // parse is inherited from formatter<string_view>.
+    template <typename FormatContext>
+    auto format(Date c, FormatContext& ctx) {
+        struct tm tm = to_<struct tm>::_(c);
+        auto s = fmt::format("{:%Y-%m-%d}", tm);
+        return formatter<std::string>::format(s, ctx);
+    }
+};
+
