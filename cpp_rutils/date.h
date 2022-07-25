@@ -132,13 +132,16 @@ inline Date to_<Date>::_(const time_t& d)
   return res;
 }
 
-template <> struct fmt::formatter<Date> : formatter<std::string> {
-    // parse is inherited from formatter<string_view>.
-    template <typename FormatContext>
-    auto format(Date c, FormatContext& ctx) {
-        struct tm tm = to_<struct tm>::_(c);
-        auto s = fmt::format("{:%Y-%m-%d}", tm);
-        return formatter<std::string>::format(s, ctx);
-    }
+template <>
+struct fmt::formatter<Date> : formatter<std::string>
+{
+  // parse is inherited from formatter<string_view>.
+  template <typename FormatContext>
+  auto format(Date c, FormatContext& ctx)
+  {
+    std::stringstream ss;
+    ss << c.year() << "/" << c.month() << "/" << c.day();
+    return formatter<std::string>::format(ss.str(), ctx);
+  }
 };
 
