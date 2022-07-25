@@ -31,3 +31,9 @@ inline
 sp<_Ty> make_sp_move(_OTy&& t) {
     return sp<_Ty>(new _Ty(std::move(t)));
 }
+
+template <class _Ty>
+using up = std::unique_ptr<_Ty>;
+
+template <class _Ty>
+using upc = std::unique_ptr<const _Ty>;
