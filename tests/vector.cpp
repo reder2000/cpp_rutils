@@ -11,7 +11,6 @@ TEST_CASE("sp_vector", "[enum][hide]")
     REQUIRE((*ev1)[1] == 2);
 }
 
-#include <iostream>
 
 TEST_CASE("vector_sp", "[enum][hide]")
 {
@@ -26,7 +25,6 @@ TEST_CASE("vector_sp", "[enum][hide]")
 }
 
 
-#include <iostream>
 #include <utility>
 #include <tuple>
 

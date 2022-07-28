@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <string.h>
 #include "require.h"
 #include "config.h"
 

@@ -16,7 +16,7 @@ sp<_Ty> new_sp() {
 
 template <class _Ty>  inline
 sp<_Ty> new_sp(_Ty && t) {
-    return sp<_Ty>(new _Ty(std::move(t)));
+    return sp<_Ty>(new _Ty(std::forward<_Ty>(t)));
 }
 
 

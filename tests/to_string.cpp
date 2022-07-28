@@ -9,7 +9,7 @@ enum class toto {
     red = 0
 }; 
 
-std::ostream& operator<<(std::ostream& os, toto v) {
+std::ostream& operator<<(std::ostream& os, toto /*v*/) {
     os << "red";
     return os;
 }
