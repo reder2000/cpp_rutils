@@ -35,7 +35,7 @@ std::string m_strerror_s(int _ErrorMsg)
 inline
 struct tm m_localtime_s(const time_t & tt)
 {
-	struct tm res;
+	struct tm res {};
 #if !defined(HAVE_LOCALTIME_S)
 	auto err = localtime_r(&tt, &res);
 	MREQUIRE(err!=nullptr, "localtime_r failed");
