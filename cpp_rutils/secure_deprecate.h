@@ -11,8 +11,8 @@ std::string m_strerror_s(int _ErrorMsg)
 	const char* s = strerror_r( _ErrorMsg, buffer, 1024);
 	if (s==nullptr)
 	{
-		char buffer[1024 * 64];
-		const char* s2 = strerror_r(_ErrorMsg, buffer, 1024);
+		char rebuffer[1024 * 16];
+		const char* s2 = strerror_r(_ErrorMsg, rebuffer, 1024);
 		MREQUIRE(s2 != nullptr, "cannot allocate enough mem to strerror");
 		return s;
 	}
