@@ -2,9 +2,11 @@
 
 #include <memory>
 
+// Shared Pointer
 template <class _Ty>
 using sp = std::shared_ptr<_Ty>;
 
+// Shared Pointer to Const
 template <class _Ty>
 using spc = std::shared_ptr<const _Ty>;
 
@@ -32,8 +34,10 @@ sp<_Ty> make_sp_move(_OTy&& t) {
     return sp<_Ty>(new _Ty(std::move(t)));
 }
 
+// Unique Pointer
 template <class _Ty>
 using up = std::unique_ptr<_Ty>;
 
+// Unique Pointer to Const
 template <class _Ty>
 using upc = std::unique_ptr<const _Ty>;
