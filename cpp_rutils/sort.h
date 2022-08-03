@@ -10,13 +10,13 @@ concept VectorConcept = requires(T a)
 };
 
 template <VectorConcept T>
-T& sort(T& v) {
+T&& sort(T&& v) {
     std::sort(v.begin(), v.end());
-    return v;
+    return std::forward<T>(v);
 }
 
 template <VectorConcept T, class Pred>
-T& sort(T& v, Pred pred) {
+T&& sort(T&& v, Pred pred) {
     std::sort(v.begin(), v.end(), pred);
     return v;
 }
