@@ -4,6 +4,7 @@
 #include <iostream>
 #include <enum.h>
 #include <set>
+#include <algorithm>
 
 #define EnumFail_tuple (good,bad)
 EMIT_ENUM_CLASS(EnumFail);

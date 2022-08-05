@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <concepts>
+#include <algorithm>
 
 template <class T>
 concept VectorConcept = requires(T a)
@@ -18,7 +19,7 @@ T&& sort(T&& v) {
 template <VectorConcept T, class Pred>
 T&& sort(T&& v, Pred pred) {
     std::sort(v.begin(), v.end(), pred);
-    return v;
+    return std::forward<T>(v);
 }
 
 
