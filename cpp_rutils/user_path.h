@@ -2,13 +2,14 @@
 
 #include <filesystem>
 #include <fmt/format.h>
+#include "secure_deprecate.h"
 
 inline
 std::filesystem::path get_home_path() {
 #if defined(_WIN32)
-	return std::filesystem::path(std::getenv("USERPROFILE"));
-#else // Linux
-	return std::filesystem::path(std::getenv("HOME"));
+	return std::filesystem::path(getenv("USERPROFILE"));
+#else
+    return std::filesystem::path(m_getenv_s("HOME"));
 #endif
 }
 

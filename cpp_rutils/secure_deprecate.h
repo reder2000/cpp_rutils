@@ -45,3 +45,18 @@ struct tm m_localtime_s(const time_t & tt)
 #endif
 	return res;
 }
+
+inline std::string  m_getenv_s(const std::string var) {
+#if defined(HAVE_GETENV_S)
+	size_t requiredSize;
+	getenv_s(&requiredSize, NULL, 0, var.c_str());
+	MREQUIRE(requiredSize != 0, "variable{} does not exist",var);
+	constexpr size_t buffer_size = 1024;
+	MREQUIRE_LESS_EQUAL(requiredSize, buffer_size);
+	char buffer[buffer_size];
+	getenv_s(&requiredSize, buffer, var.c_str());
+	return std::string(buffer, requiredSize);
+#else
+	return getenv(var.c_str());
+#endif
+}

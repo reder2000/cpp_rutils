@@ -23,6 +23,7 @@ boost_header_only_package(preprocessor preprocessor.hpp)
 
 include(CheckSymbolExists)
 check_symbol_exists(strerror_s "string.h" HAVE_STRERROR_S)
+check_symbol_exists(getenv_s "stdlib.h" HAVE_GETENV_S)
 check_symbol_exists(localtime_s "time.h" HAVE_LOCALTIME_S)
 include(CheckCXXSourceCompiles)
 #set(CMAKE_REQUIRED_LIBRARIES cstring)
