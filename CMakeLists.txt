@@ -19,6 +19,10 @@ FetchContent_MakeAvailable(rr_cmake)
 include(${rr_cmake_SOURCE_DIR}/rr_cmake/common.cmake)
 
 find_vcpkg_install_missing(fmt)
+if ("${fmt_VERSION}" VERSION_LESS "9.0.0")
+    message(FATAL_ERROR  "fmt version ${fmt_VERSION} must be >= 9.0.0.\n Please upgrade vcpkg")
+endif()
+message("fmt version ${fmt_VERSION} is >= 9.0.0. ok.")
 boost_header_only_package(preprocessor preprocessor.hpp)
 
 include(CheckSymbolExists)

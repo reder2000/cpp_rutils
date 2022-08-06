@@ -11,7 +11,7 @@ inline constexpr bool is_stdstring_convertible = std::is_convertible_v<T, std::s
 
 template<typename T>
 inline constexpr bool is_fmt_formattable_t() {
-    using Context = fmt::v8::basic_format_context<fmt::v8::detail::buffer_appender<char>, char>;
+    using Context = fmt::v9::basic_format_context<fmt::v9::detail::buffer_appender<char>, char>;
     return fmt::has_formatter<T, Context>::value;
 }
 
