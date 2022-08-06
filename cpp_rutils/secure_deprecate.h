@@ -55,7 +55,7 @@ inline std::string  m_getenv_s(const std::string var) {
 	MREQUIRE_LESS_EQUAL(requiredSize, buffer_size);
 	char buffer[buffer_size];
 	getenv_s(&requiredSize, buffer, var.c_str());
-	return std::string(buffer, requiredSize);
+	return std::string(buffer, requiredSize-1); // string must not be 0-terminated
 #else
 	return getenv(var.c_str());
 #endif
