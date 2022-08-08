@@ -6,7 +6,7 @@
 class ScopedTimer
 {
 public:
-	ScopedTimer() : _start_time(std::chrono::steady_clock::now())
+  ScopedTimer(const std::string& what) : _what(what) , _start_time(std::chrono::steady_clock::now())
 	{
 	}
 
@@ -14,17 +14,17 @@ public:
 	{
 		auto elapsed_time = std::chrono::steady_clock::now() - _start_time;
 		auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time).count();
-		std::cout << "The elapsed time was " << ms << " ms.\n";
+                std::cout << "The elapsed time for " << _what << " was " << ms << " ms.\n ";
 	}
 
 private:
 	std::chrono::time_point<std::chrono::steady_clock> _start_time;
-
+ std::string                                        _what;
 };
 
 struct TimeIt
 {
-	TimeIt() : _sc() {}
+	TimeIt(const std::string & what) : _sc(what) {}
 	auto        fun(auto&& t) { return std::forward<decltype(t)>(t); }
 	ScopedTimer _sc;
 };
@@ -32,12 +32,12 @@ struct TimeIt
 // macro to time a block of code
 // when using with template, encapsulate in double parentheseses
 // e.g. TIMEIT(( std::vector<int>(100) )) ;
-#define TIMEIT(a) TimeIt().fun(a)
+#define TIMEIT(what,a) TimeIt(what).fun(a)
 
 
-#define voidTIMEIT(a) \
+#define voidTIMEIT(what,a) \
   {                   \
-    ScopedTimer _sc;  \
+    ScopedTimer _sc{what};  \
     a;                \
   }
 
