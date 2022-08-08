@@ -18,8 +18,8 @@ public:
 	}
 
 private:
+	std::string                                        _what;
 	std::chrono::time_point<std::chrono::steady_clock> _start_time;
- std::string                                        _what;
 };
 
 struct TimeIt
