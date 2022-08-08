@@ -4,6 +4,8 @@
 #include <optional>
 #include "require.h"
 
+// vector result as ranges
+
 template <class I>
 std::vector<I> vector_range(I stop);
 

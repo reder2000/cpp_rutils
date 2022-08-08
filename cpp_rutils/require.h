@@ -1,5 +1,9 @@
 #pragma once
 
+// set of macro for checking requirements
+// usually in the form 
+// MACRO( condition , fmt_format_spec, args...)
+
 #include <fmt/format.h>
 #include "name.h"
 #include <boost/preprocessor/variadic/size.hpp>

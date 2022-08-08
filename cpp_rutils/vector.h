@@ -1,5 +1,7 @@
 #pragma once
 
+// make vector from tuples
+
 #include <vector>
 #include "shared_ptr.h"
 #include <algorithm>
@@ -80,22 +82,3 @@ vc_sp<T> vc_sp_from_tuple(const TU &t) {
     }, t);
     return res;
 }
-
-
-
-//template <class _Ty>
-//sp<_Ty> new_sp() {
-//    return sp<_Ty>(new _Ty);
-//}
-//
-//template <class _Ty, class _OTy>
-//inline
-//sp<_Ty> make_sp_copy(const _OTy& t) {
-//    return sp<_Ty>(new _Ty((_OTy(t))));
-//}
-//
-//template <class _Ty, class _OTy>
-//inline
-//sp<_Ty> make_sp_move(_OTy&& t) {
-//    return sp<_Ty>(new _Ty(std::move(t)));
-//}

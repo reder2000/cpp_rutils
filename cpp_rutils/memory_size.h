@@ -3,12 +3,19 @@
 // helper function to compute/deduce the used_size of an object
 // an object of type T may provide a computation by either
 // implementing a member function size_impl(memory::record &) const
-// of a free function size_impl(const T&, memory::record &)
+// or a free function size_impl(const T&, memory::record &)
 
 #include <concepts>
 #include <memory>
 #include <variant>
 #include <unordered_set>
+
+// --------------------
+
+template <typename T> inline
+size_t memory_size(const T& t);
+
+// details
 
 namespace memory {
 
@@ -91,40 +98,40 @@ namespace memory {
 		requires (T a) { a.capacity(); };
 
     // allocated size if only size
-    template <typename T>
+    template <typename T> inline
 	size_t allocated_size(const T& t)
     {
         return t.size();
     }
 
     // allocated size if capacity
-    template <has_capacity T>
+    template <has_capacity T> inline
     size_t allocated_size(const T& t)
 	{
 		return t.capacity();
 	}
 
-    template <typename T>
+    template <typename T> inline
     size_t used_size(const T& , record&) {
         return sizeof(T);
     }
 
-    template <has_internal_impl T>
+    template <has_internal_impl T> inline
     size_t used_size(const T& t, record& mc) {
         return t.size_impl(mc);
     }
 
-    template <has_external_impl T>
+    template <has_external_impl T> inline
     size_t used_size(const T& t, record& mc) {
         return size_impl(t,mc);
     }
 
-    template <no_needs_recursion T>
+    template <no_needs_recursion T> inline
     size_t used_size(const T& t, record&) {
         return sizeof(T) + sizeof(typename T::value_type) * allocated_size(t);
     }
 
-    template <needs_recursion T>
+    template <needs_recursion T> inline
     size_t used_size(const T& t, record& mc) {
         size_t res = sizeof(T);
         for (auto i : t)
@@ -132,17 +139,17 @@ namespace memory {
         return res;
     }
 
-    template <has_size_and_internal_impl T>
+    template <has_size_and_internal_impl T> inline
     size_t used_size(const T& t, record& mc) {
         return t.size_impl(mc);
     }
 
-    template <has_size_and_external_impl T>
+    template <has_size_and_external_impl T> inline
     size_t used_size(const T& t, record& mc) {
         return size_impl(t,mc);
     }
 
-    template <is_smart_ptr T>
+    template <is_smart_ptr T> inline
     size_t used_size(const T& t, record& mc) {
         size_t res = sizeof(std::shared_ptr<void>);
         if (t && mc.not_counted(t.get()))
@@ -150,7 +157,7 @@ namespace memory {
         return res;
     }
 
-    template <is_variant T>
+    template <is_variant T> inline
     size_t used_size(const T& t, record& mc) {
         size_t res = sizeof(t);
         res += std::visit([&](auto&& a) -> size_t {return used_size(a, mc); }, t);
@@ -161,17 +168,17 @@ namespace memory {
 
 // --------------------
 
-template <typename T>
+template <typename T> inline
 size_t memory_sizes(memory::record& mc, const T& t) {
     return memory::used_size(t,mc);
 }
 
-template <typename T, typename... Ts>
+template <typename T, typename... Ts> inline
 size_t memory_sizes(memory::record& mc, const T& t, const Ts&... args) {
     return memory::used_size(t,mc) + memory_sizes(mc,args...);
 }
 
-template <typename T>
+template <typename T> inline
 size_t memory_size(const T& t) {
     memory::record mc;
     return memory::used_size(t,mc);

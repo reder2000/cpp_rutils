@@ -1,5 +1,7 @@
 #pragma once 
 
+// check thath an input range is strictly sorted
+
 #include <algorithm>
 
 template <class _FwdIt, class _Pr>

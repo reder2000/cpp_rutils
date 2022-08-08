@@ -1,6 +1,10 @@
 #pragma once 
 
-//#include <boost/preprocessor/tuple.hpp>
+// smart tuple with conversion from/to string
+// just write
+// #define MyDataType_tuple (enum1,enum2,...);
+
+
 #include "boost/preprocessor/tuple/rem.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/punctuation/comma_if.hpp"

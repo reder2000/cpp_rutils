@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include <hashes.h>
+#include <pair.h>
 
 TEST_CASE("hash a pair", "[hashes][hide]")
 {

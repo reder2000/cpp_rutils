@@ -1,5 +1,8 @@
 #pragma once
 
+// try to convert anything to string
+// needs a rework
+
 #include <sstream>
 #include <string>
 #include <fmt/format.h>

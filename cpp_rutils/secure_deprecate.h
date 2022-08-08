@@ -3,6 +3,15 @@
 #include "require.h"
 #include "config.h"
 
+// use those functions instead of those that trigger
+// annoying messages about deprecation in msvc
+
+std::string m_strerror_s(int _ErrorMsg);
+struct tm m_localtime_s(const time_t& tt);
+std::string  m_getenv_s(const std::string var);
+
+// implementation
+	
 inline
 std::string m_strerror_s(int _ErrorMsg)
 {

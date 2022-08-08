@@ -35,8 +35,10 @@ check_cxx_source_compiles(
         "#include <chrono>
          using test = std::chrono::duration;
          int main(){ return 0; }"
-         HAVE_CXX20_CHRONO)
-configure_file(cpp_rutils/config.h.in "${CMAKE_CURRENT_SOURCE_DIR}/cpp_rutils/config.h")
+         HAVE_CXX20_CHRONO_DURATION)
+configure_file(cpp_rutils/config.h.in config.h)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+message("include_directories ${CMAKE_CURRENT_BINARY_DIR}")
 
 #if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 if (NOT HAVE_CXX20_CHRONO)

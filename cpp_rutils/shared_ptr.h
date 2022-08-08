@@ -1,5 +1,10 @@
 #pragma once 
 
+// shorten std::shared_ptr to sp
+// shorten std::shared_ptr<const ...> to spc
+// shorten std::unique_ptr to up
+// shorten std::unique_ptr<const ...> to upc
+
 #include <memory>
 
 // Shared Pointer

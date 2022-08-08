@@ -1,8 +1,9 @@
 #pragma once
 
+// compile time type name
+
 #include <string_view>
 
-// compile time type name
 
 template <typename T>
 constexpr auto type_name() noexcept {

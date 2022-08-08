@@ -1,5 +1,7 @@
 #pragma once
 
+// portable way to get home path
+
 #include <filesystem>
 #include <fmt/format.h>
 #include "secure_deprecate.h"
@@ -13,6 +15,7 @@ std::filesystem::path get_home_path() {
 #endif
 }
 
+// fmt interface to path
 
 template <>
 struct fmt::formatter<std::filesystem::path> : formatter<std::string>

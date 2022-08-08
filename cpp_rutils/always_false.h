@@ -1,5 +1,9 @@
 #pragma once
 
+// replaces static_assert(sizeof<T>==0)
+// with  static_assert(always_false_v<T>)
+// for unimplementation template failure
+
 template <class... T>
 struct always_false
 {
