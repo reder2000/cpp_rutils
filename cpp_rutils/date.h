@@ -2,7 +2,7 @@
 // tentative portable date 
 // will use either chrono or date
 
-#include "config.h"
+#include "cpp_rutils_config.h"
 
 #include <chrono>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "require.h"
-#include "config.h"
+#include "cpp_rutils_config.h"
 
 // use those functions instead of those that trigger
 // annoying messages about deprecation in msvc
