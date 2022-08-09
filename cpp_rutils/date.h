@@ -125,9 +125,29 @@ struct fmt::formatter<Date> : formatter<std::string>
   template <typename FormatContext>
   auto format(Date c, FormatContext& ctx)
   {
-    std::stringstream ss;
-    ss << c.year() << "/" << c.month() << "/" << c.day();
-    return formatter<std::string>::format(ss.str(), ctx);
+    auto res = fmt::format("{:04}-{:02}-{:02}", (int)c.year() , (unsigned int)(c.month()) , (unsigned int)c.day() );
+    return formatter<std::string>::format(res, ctx);
   }
 };
+
+// parser
+Date parse_date(std::string_view sv);
+
+
+inline
+Date parse_date(std::string_view sv)
+{
+    int  year, month, day;
+    auto s = sv.data();
+    auto f = [&s](int& res, int l, int sk)
+    {
+        std::from_chars(s, s + l, res);
+        s += (l + sk);
+    };
+    f(year, 4, 1);
+    f(month, 2, 1);
+    f(day, 2, 1);
+    auto ld = Date{ std__chrono::year(year) / std__chrono::month(month) / std__chrono::day(day) };
+    return ld;
+}
 
