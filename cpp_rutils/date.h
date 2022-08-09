@@ -18,6 +18,8 @@
 #include "to_.h"
 #include <fmt/chrono.h>
 
+#include <charconv>
+
 // date type
 using Date = std__chrono::year_month_day;
 
