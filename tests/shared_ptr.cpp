@@ -21,4 +21,5 @@ TEST_CASE("shared_ptr_v", "[enum][hide]")
     auto sp3 = make_sp_move<V>(v1);
     CHECK(*sp1 == *sp3);
     CHECK(v1.empty());
+    auto spc1 = new_spc(1);
 }
