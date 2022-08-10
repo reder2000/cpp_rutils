@@ -64,7 +64,7 @@
 #define MREQUIRE_GREATER_EQUAL(a,b,...) \
 	_MREQUIRE_OP(>=, a, b, __VA_ARGS__)
 
-#define MREQUIRE_TRY(what_to_try)                                                                                                                      \
+#define MREQUIRE_TRY1(what_to_try,...)                                                                                                                      \
   {                                                                                                                                                  \
     bool success;                                                                                                                                    \
     try                                                                                                                                              \
@@ -73,12 +73,23 @@
     }                                                                                                                                                \
     catch (std::exception & e)                                                                                                                       \
     {                                                                                                                                                \
-      throw std::runtime_error(fmt::format("{} , {} , {} failed with exception {} ", __func__, __FILE__, __LINE__, e.what()   \
-                               ));                                                                                                            \
+      throw std::runtime_error(fmt::format("{} , {} , {} failed with exception {} ({}) ", __func__, __FILE__, __LINE__, e.what()   \
+                   , fmt::format(__VA_ARGS__)        ));                                                                                                            \
     }                                                                                                                                                \
-    if (! success) {throw std::runtime_error(fmt::format("{} , {} , {} ", __func__, __FILE__, __LINE__)); }       \
-}
+    if (! success)                                                                             \
+    {                                                                                          \
+      throw std::runtime_error(fmt::format("{} , {} , {} , {} ", __func__, __FILE__, __LINE__, \
+                                           fmt::format(__VA_ARGS__)));                         \
+    }                                                                                          \
+  }
 
+#define MREQUIRE_TRY0(what_to_try) \
+  MREQUIRE_TRY1(what_to_try, "{}", # what_to_try )
+
+#define MREQUIRE_TRY(what_to_try,...)                                                                    \
+  BOOST_PP_IF(BOOST_PP_DEC(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__)), \
+              MREQUIRE_TRY1(what_to_try, __VA_ARGS__), \
+              MREQUIRE_TRY0(what_to_try))
 
 #define default_fail(arg) \
 	default: MREQUIRE(false,"unhandled case {}",arg); \

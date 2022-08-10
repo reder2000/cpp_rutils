@@ -29,6 +29,11 @@ TEST_CASE("require", "[require][hide]")
 		} };
 	CHECK_NOTHROW(k(EnumFail::good));
 	CHECK_THROWS(k(EnumFail::bad));
+	auto failure = []() {throw std::runtime_error("expected to fail"); return 1; };
+	try { MREQUIRE_TRY(failure()); }
+	catch (std::exception& e) { std::cout << e.what() <<  std::endl; }
+	try { MREQUIRE_TRY(failure() , "{}" , "failure"); }
+	catch (std::exception& e) { std::cout << e.what() << std::endl; }
 
 }
 
