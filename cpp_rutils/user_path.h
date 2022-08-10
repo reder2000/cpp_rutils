@@ -16,16 +16,17 @@ std::filesystem::path get_home_path() {
 }
 
 // fmt interface to path
+// should be in fmt/std
 
-template <>
-struct fmt::formatter<std::filesystem::path> : formatter<std::string>
-{
-    // parse is inherited from formatter<string_view>.
-    template <typename FormatContext>
-    auto format(std::filesystem::path c, FormatContext& ctx)
-    {
-        std::stringstream ss;
-        ss << c;
-        return formatter<std::string>::format(ss.str(), ctx);
-    }
-};
+//template <>
+//struct fmt::formatter<std::filesystem::path> : formatter<std::string>
+//{
+//    // parse is inherited from formatter<string_view>.
+//    template <typename FormatContext>
+//    auto format(std::filesystem::path c, FormatContext& ctx)
+//    {
+//        std::stringstream ss;
+//        ss << c;
+//        return formatter<std::string>::format(ss.str(), ctx);
+//    }
+//};
