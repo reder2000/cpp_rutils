@@ -5,9 +5,10 @@
 
 #include <utility>
 #include <algorithm>
+#include "transform.h"
 
-template <class In, class Compare > inline
-auto intersection_vc(const In& v1, const In& v2, Compare comp) {
+template <class In, class Compare >
+std::vector<typename In::value_type> intersection_vc(const In& v1, const In& v2, Compare comp) {
 	using result_type = typename In::value_type;
 	std::vector<result_type> res;
 	res.reserve(std::max(v1.size(), v2.size()));
@@ -17,7 +18,20 @@ auto intersection_vc(const In& v1, const In& v2, Compare comp) {
 	return res;
 }
 
-template <class In> inline
-auto intersection_vc(const In& v1, const In& v2) {
+template <class In>
+std::vector<typename In::value_type>  intersection_vc(const In& v1, const In& v2) {
 	return intersection_vc(v1, v2, std::less<>{});
+}
+
+template <class In, class Fun , class Compare>
+std::vector<typename std::invoke_result<Fun, typename In::value_type>::type> intersection_vc_fun(const In& v1, const In& v2, Fun fun, Compare comp) {
+	// fixme : uses intermediate storage
+	auto inter = intersection_vc(v1, v2, comp);
+	auto res = transform_vc(inter, fun);
+	return res;
+}
+
+template <class In, class Fun>
+std::vector<typename std::invoke_result<Fun, typename In::value_type>::type> intersection_vc_fun(const In& v1, const In& v2, Fun fun) {
+	return intersection_vc_fun(v1, v2, fun, std::less<>{});
 }
