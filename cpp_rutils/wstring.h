@@ -1,5 +1,8 @@
 #pragma once 
 
+#pragma warning(push)
+#pragma warning(disable: 4996)
+
 #include <codecvt>  // codecvt_utf8
 #include <locale>   // wstring_convert
 
@@ -28,3 +31,4 @@
   return unicode;
 }
 
+#pragma warning(pop)
