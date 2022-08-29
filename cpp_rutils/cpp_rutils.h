@@ -9,6 +9,7 @@
 #include "intersection.h"
 #include "is_one_of.h"
 #include "is_strictly_sorted.h"
+#include "linalg.h"
 #include "literals.h"
 #include "memory_size.h"
 #include "memstream.h"

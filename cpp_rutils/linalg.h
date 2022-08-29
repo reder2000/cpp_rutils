@@ -74,10 +74,12 @@ _Ty covariance(const std::vector<_Ty>& a, std::vector<_Ty>& b, size_t ddof)
     return res;
 }
 
+
+
 template <class _Ty>
-auto cov(const std::vector<_Ty>& a, std::vector<_Ty>& b,size_t ddof)
+std::array<std::array<_Ty,2>,2> cov(const std::vector<_Ty>& a, std::vector<_Ty>& b,size_t ddof)
 {
-_Ty res[2][2];
+std::array<std::array<_Ty,2>,2> res;
 	res[0][0] = variance(a,ddof);
     res[1][1] = variance(b,ddof);
     res[0][1] = covariance(a,b,ddof);
