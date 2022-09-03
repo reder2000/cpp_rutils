@@ -23,6 +23,7 @@ std::vector<typename In::value_type>  intersection_vc(const In& v1, const In& v2
 	return intersection_vc(v1, v2, std::less<>{});
 }
 
+
 template <class In, class Fun , class Compare>
 std::vector<typename std::invoke_result<Fun, typename In::value_type>::type> intersection_vc_fun(const In& v1, const In& v2, Fun fun, Compare comp) {
 	// fixme : uses intermediate storage
@@ -35,3 +36,17 @@ template <class In, class Fun>
 std::vector<typename std::invoke_result<Fun, typename In::value_type>::type> intersection_vc_fun(const In& v1, const In& v2, Fun fun) {
 	return intersection_vc_fun(v1, v2, fun, std::less<>{});
 }
+
+// many intersections (not completely efficient, though)
+
+template <class In, class ...Args>
+std::vector<typename In::value_type>  intersection_vcs(const In& v1, const In& v2) {
+	return intersection_vc(v1, v2);
+}
+
+template <class In, class ...Args>
+std::vector<typename In::value_type>  intersection_vcs(const In& v1, const In& v2, const Args... args) {
+	return intersection_vc(v1, intersection_vcs(v2,args...));
+}
+
+
