@@ -46,15 +46,15 @@ vc_sp<_Ty> new_vc_sp(std::initializer_list<_Ty> l) {
 template<class T, class TU>
 vc<T> vc_move_tuple(TU &&t) {
     vc<T> res;
-    res.reserve(std::tuple_size<typename std::decay_t<TU>>::value);
-    std::apply([&res](auto &&...x) { ((res.push_back(std::move(x))), ...); }, std::forward(t));
+    res.reserve(std::tuple_size_v<std::decay_t<TU>>);
+    std::apply([&res](auto &&...x) { ((res.push_back(std::move(x))), ...); }, std::forward<TU>(t));
     return res;
 }
 
 template<class T, class TU>
 vc_sp<T> vc_sp_move_tuple(TU &&t) {
     vc_sp<T> res;
-    res.reserve(std::tuple_size<typename std::decay_t<TU>>::value);
+    res.reserve(std::tuple_size_v<std::decay_t<TU>>);
     std::apply([&res](auto &&...x) {
         ((res.push_back(
                 sp<T>(new std::decay_t<decltype(x)>(std::move(x)))
@@ -66,7 +66,7 @@ vc_sp<T> vc_sp_move_tuple(TU &&t) {
 template<class T, class TU>
 vc<T> vc_from_tuple(const TU &t) {
     vc<T> res;
-    res.reserve(std::tuple_size<typename std::decay_t<TU>>::value);
+    res.reserve(std::tuple_size_v<std::decay_t<TU>>);
     std::apply([&res](auto const &...x) { ((res.push_back(x)), ...); }, t);
     return res;
 }
@@ -74,7 +74,7 @@ vc<T> vc_from_tuple(const TU &t) {
 template<class T, class TU>
 vc_sp<T> vc_sp_from_tuple(const TU &t) {
     vc_sp<T> res;
-    res.reserve(std::tuple_size<typename std::decay_t<TU>>::value);
+    res.reserve(std::tuple_size_v<std::decay_t<TU>>);
     std::apply([&res](auto &...x) {
         ((res.push_back(
                 sp<T>(new std::decay_t<decltype(x)>(x))

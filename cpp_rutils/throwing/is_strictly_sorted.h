@@ -1,6 +1,5 @@
 #pragma once 
 
-#include <algorithm>
 #include <iterator>
 #include "../to_string.h"
 

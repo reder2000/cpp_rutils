@@ -8,7 +8,7 @@
 
 std::string m_strerror_s(int _ErrorMsg);
 struct tm m_localtime_s(const time_t& tt);
-std::string  m_getenv_s(const std::string var);
+std::string  m_getenv_s(const std::string& var);
 
 // implementation
 	
@@ -28,8 +28,7 @@ std::string m_strerror_s(int _ErrorMsg)
 	return s;
 #else
 	char buffer[1024];
-	auto failed = strerror_s(buffer, 1024, _ErrorMsg);
-	if (failed)
+	if (auto failed = strerror_s(buffer, 1024, _ErrorMsg))
 	{
 		constexpr size_t size = 1024*64;
 		char buffer2[size];
@@ -55,16 +54,16 @@ struct tm m_localtime_s(const time_t & tt)
 	return res;
 }
 
-inline std::string  m_getenv_s(const std::string var) {
+inline std::string  m_getenv_s(const std::string &var) {
 #if defined(HAVE_GETENV_S)
 	size_t requiredSize;
-	getenv_s(&requiredSize, NULL, 0, var.c_str());
+	getenv_s(&requiredSize, nullptr, 0, var.c_str());
 	MREQUIRE(requiredSize != 0, "variable{} does not exist",var);
 	constexpr size_t buffer_size = 1024;
 	MREQUIRE_LESS_EQUAL(requiredSize, buffer_size);
 	char buffer[buffer_size];
 	getenv_s(&requiredSize, buffer, var.c_str());
-	return std::string(buffer, requiredSize-1); // string must not be 0-terminated
+	return std::string{buffer, requiredSize-1}; // string must not be 0-terminated
 #else
 	return getenv(var.c_str());
 #endif

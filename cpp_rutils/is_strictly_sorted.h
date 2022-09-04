@@ -2,7 +2,7 @@
 
 // check thath an input range is strictly sorted
 
-#include <algorithm>
+#include <functional>
 
 template <class _FwdIt, class _Pr>
 bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<

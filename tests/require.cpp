@@ -69,7 +69,7 @@ TEST_CASE("move", "[require][hide]")
 
 	mover mv2((VD(vv[0])));
 
-	REQUIRE(vv[0].size());
+	REQUIRE(!vv[0].empty());
 
 	std::set<double> s{ 1.,2. };
 	VD vs(s.begin(), s.end());

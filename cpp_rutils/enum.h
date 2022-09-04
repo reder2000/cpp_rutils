@@ -13,12 +13,14 @@
 #include "boost/preprocessor/tuple/to_list.hpp"
 #include "boost/preprocessor/list/for_each.hpp"
 #include "boost/preprocessor/seq/elem.hpp"
-#include <string_view>
-#include <fmt/format.h>
 #include "to_string.h"
+#include "always_false.h"
 
 template <class T>
-const char* enum_to_string(T);
+const char* enum_to_string(T)
+{
+	static_assert(always_false_v<T>);
+}
 
 template <class T>
 T string_to_enum(std::string_view s);

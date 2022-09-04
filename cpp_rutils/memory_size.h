@@ -5,7 +5,6 @@
 // implementing a member function size_impl(memory::record &) const
 // or a free function size_impl(const T&, memory::record &)
 
-#include <concepts>
 #include <memory>
 #include <variant>
 #include <unordered_set>

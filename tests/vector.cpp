@@ -84,6 +84,6 @@ TEST_CASE("apply", "[enum][hide]")
 
    auto vsm3 = vc_sp_move_tuple<vd>(f3);
    REQUIRE((*(vsm3[0]))[0] == 1.);
-   REQUIRE(std::get<0>(f3).size() == 0);
+   REQUIRE(std::get<0>(f3).empty());
 
 }

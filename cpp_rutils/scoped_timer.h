@@ -6,7 +6,8 @@
 class ScopedTimer
 {
 public:
-  ScopedTimer(const std::string& what) : _what(what) , _start_time(std::chrono::steady_clock::now())
+	ScopedTimer() = delete;
+	ScopedTimer(std::string what) : _what(std::move(what)) , _start_time(std::chrono::steady_clock::now())
 	{
 	  std::cout << _what << "[ ";
 	}

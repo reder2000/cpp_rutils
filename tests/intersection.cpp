@@ -8,7 +8,7 @@ TEST_CASE("intersection", "[intersection][hide]")
 	std::vector<int> v3 = { 1,3,4 };
 	auto res = intersection_vc(v1, v2);
 	CHECK(res == std::vector<int>{ 2, 3 });
-	auto res2= intersection_vc(v1, v2, std::less<int>());
+	auto res2= intersection_vc(v1, v2, std::less<>());
 	CHECK(res2 == std::vector<int>{ 2, 3 });
 	auto fun = [](int i) {return i*i;};
 	auto res3 = intersection_vc_fun(v1,v2,fun);

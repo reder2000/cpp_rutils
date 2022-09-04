@@ -1,7 +1,6 @@
 #pragma once 
 
 #include <vector>
-#include <optional>
 #include "require.h"
 
 // vector result as ranges
@@ -21,7 +20,7 @@ template<class I>
 inline std::vector<I> vector_range(I stop)
 {
     std::vector<I> res(stop);
-    for (I i = 0; i < stop; i++)
+    for (I i = 0; i < stop; ++i)
         res[i] = i;
     return res;
 }
@@ -31,7 +30,7 @@ inline std::vector<I> vector_range(I start, I stop)
 {
     std::vector<I> res(stop-start);
     size_t j = 0; 
-    for (I i = start; i < stop; i++,j++)
+    for (I i = start; i < stop; ++i,++j)
         res[j] = i;
     return res;
 }

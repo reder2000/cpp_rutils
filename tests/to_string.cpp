@@ -3,7 +3,6 @@
 
 #include <catch.hpp>
 #include <iostream>
-#include <name.h>
 
 enum class toto {
     red = 0

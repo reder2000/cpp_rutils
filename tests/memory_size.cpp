@@ -36,7 +36,7 @@ size_t size_impl(const D& d, memory::record& mc) { return memory_sizes(mc, d.val
 
 TEST_CASE("mem_size", "[mem][hide]") {
     auto pr = [](auto&& a) {
-        using T = typename std::decay_t<decltype(a)>;
+        using T = std::decay_t<decltype(a)>;
         auto sz = memory_size(a);
         std::cout << type_name<T>() << " : " << sz << std::endl;
     };

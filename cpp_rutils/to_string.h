@@ -7,7 +7,6 @@
 #include <string>
 #include <fmt/format.h>
 #include <variant>
-#include <iostream>
 
 template<typename T>
 inline constexpr bool is_stdstring_convertible = std::is_convertible_v<T, std::string>;
@@ -60,14 +59,14 @@ std::string to_string(const T &v) {
     static_assert(has_to_string, "must be implemented");
 
     if constexpr (is_stdstring_convertible<T>) { return std::string(v); }
-    else if constexpr (is_fmt_formattable<T>) { return fmt::format("{}", v).c_str(); }
+    else if constexpr (is_fmt_formattable<T>) { return fmt::format("{}", v); }
     else if constexpr (is_streamable<T>) {
         std::ostringstream ss;
         ss << v;
-        return ss.str().c_str();
+        return ss.str();
     }
     else {
-        // ??
+        throw std::runtime_error("I should not have been here");
     }
 }
 

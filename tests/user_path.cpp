@@ -4,6 +4,6 @@
 #include <fmt/std.h>
 
 TEST_CASE("user_path", "[mem][hide]") {
-	auto foo = get_home_path();
+		auto foo = get_home_path();
 	fmt::print("{}", foo);
 }
