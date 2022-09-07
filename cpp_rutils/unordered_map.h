@@ -2,6 +2,7 @@
 
 // shorten std::unordered_map to um
 
+#include <functional>
 #include <unordered_map>
 
 template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
@@ -25,8 +26,54 @@ template <typename Fn, typename ... Args>
 _Ty& um_cp<_Kty, _Ty, _Hasher, _Keyeq>::find_or_add(const _Kty& key, Fn fn, Args... args_to_fn)
 {
 	auto w = this->find(key);
-	if (w != this->end()) 
-		return w->second; 
+	if (w != this->end())
+		return w->second;
 	auto r = this->emplace(key, fn(args_to_fn...));
 	return r.first->second;
 }
+
+// not good enough solution to default dict
+//template <class _Kty, class _Ty, class _CreationFn, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
+//struct default_dict : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>
+//{
+//	default_dict(_CreationFn&& creation_fn) : _creation_fn(creation_fn) {}
+//
+//	_Ty& operator[](_Kty&& key) {
+//		auto w = this->find(key);
+//		if (w != this->end())
+//			return w->second;
+//		auto r = this->emplace(key, _creation_fn(*this));
+//		return r.first->second;
+//	}
+//
+//	_CreationFn _creation_fn;
+//};
+//
+//template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
+//struct make_default_dict
+//{
+//	template <class _CreationFn>
+//	static constexpr 	default_dict<_Kty, _Ty, _CreationFn, _Hasher, _Keyeq> make(_CreationFn&& creation_fn)
+//	{
+//		return default_dict<_Kty, _Ty, _CreationFn, _Hasher, _Keyeq>(std::forward<_CreationFn>(creation_fn));
+//	}
+//};
+
+template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
+struct default_dict : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>
+{
+	using unordered_map_type = std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>;
+	using creation_function_type = std::function<_Ty(const unordered_map_type&)>;
+
+	default_dict(creation_function_type&& creation_fn) : _creation_fn(creation_fn) {}
+
+	_Ty& operator[](_Kty&& key) {
+		auto w = this->find(key);
+		if (w != this->end())
+			return w->second;
+		auto r = this->emplace(key, _creation_fn(*this));
+		return r.first->second;
+	}
+
+	creation_function_type _creation_fn;
+};
