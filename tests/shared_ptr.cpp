@@ -22,4 +22,5 @@ TEST_CASE("shared_ptr_v", "[enum][hide]")
     CHECK(*sp1 == *sp3);
     CHECK(v1.empty());
     auto spc1 = new_spc(1);
+    auto spc2 = m_sp<V>(V{ 1, 2 , 3 });
 }

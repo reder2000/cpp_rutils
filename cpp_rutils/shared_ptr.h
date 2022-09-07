@@ -15,6 +15,8 @@ using sp = std::shared_ptr<_Ty>;
 template <class _Ty>
 using spc = std::shared_ptr<const _Ty>;
 
+// abbreviation for std::make_shared
+#define m_sp std::make_shared
 
 template <class _Ty>
 sp<_Ty> new_sp() {
