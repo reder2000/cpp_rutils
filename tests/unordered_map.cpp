@@ -30,3 +30,18 @@ TEST_CASE("default_dict", "[enum][hide]")
 	dd["2"];
 	bool res  = dd["2"] == 1;
 }
+
+TEST_CASE("ump", "[enum][hide]")
+{
+	um_p<int, int> m;
+	m[1] = 1;;
+	m[2] = 2;
+	CHECK_THROWS_AS(m.at(3),std::out_of_range);
+	try {
+		m.at(3);
+	}
+	catch (const std::exception& e)
+	{
+		fmt::print("exception {}\n", e.what());
+	}
+}

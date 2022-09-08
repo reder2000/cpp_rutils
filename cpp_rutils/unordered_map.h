@@ -3,10 +3,27 @@
 // shorten std::unordered_map to um
 
 #include <functional>
+#include <stdexcept>
 #include <unordered_map>
+#include <fmt/format.h>
+#include "name.h"
 
 template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
 using um = std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>;
+
+
+template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
+struct um_p : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq> {
+	using std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>::unordered_map;
+
+	const _Ty& at(const _Kty& key) const
+	{
+		auto w = this->find(key);
+		if (w != this->end())
+			return w->second;
+		throw std::out_of_range(fmt::format("({}) {} not found in map", type_name<_Kty>(), key));
+	}
+};
 
 // unordered map with a callback function
 // rather than writing value = map.contains(key) ? map[key] , new_value
