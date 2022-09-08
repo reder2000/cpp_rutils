@@ -106,8 +106,8 @@
 		else { MREQUIRE(success, __VA_ARGS__); } ; }
 
 
-#define MREQUIRE_EQUAL_RET(success,must_throw,return_value,a,b,...) \
-	if (!(success)) { \
+#define MREQUIRE_EQUAL_RET(must_throw,return_value,a,b,...) \
+	if (!(a==b)) { \
 		if (!must_throw) return return_value; \
 		else { MREQUIRE_EQUAL(a,b, __VA_ARGS__); } ; }
 
