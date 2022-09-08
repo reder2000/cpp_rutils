@@ -103,7 +103,9 @@
 #define MREQUIRE_RET(must_throw,return_value,success,...) \
 	if (!(success)) { \
 		if (!must_throw) return return_value; \
-		else { MREQUIRE(success, __VA_ARGS__); } ; }
+		else { \
+			BOOST_PP_IF(BOOST_PP_DEC(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__)) , \
+			MREQUIRE1(success,__VA_ARGS__) , MREQUIRE0(success)); } ; }
 
 
 #define MREQUIRE_EQUAL_RET(must_throw,return_value,a,b,...) \
