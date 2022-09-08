@@ -76,3 +76,16 @@ TEST_CASE("move", "[require][hide]")
 	std::sort(vs.begin(), vs.end());
 	REQUIRE(vs[0] < vs[1]);
 }
+
+int test_MREQUIRE_RET(bool must_throw, bool success) {
+	int res = 1;
+	MREQUIRE_RET(success, must_throw, res);
+	return 2;
+}
+
+TEST_CASE("MREQUIRE_RET", "[require][hide]")
+{
+	CHECK(test_MREQUIRE_RET(true, true) == 2);
+	CHECK(test_MREQUIRE_RET(false, false) == 1);
+	CHECK_THROWS(test_MREQUIRE_RET(true, false));
+}

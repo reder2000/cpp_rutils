@@ -98,3 +98,16 @@
 #define default_fail_enum_string(arg) \
 	default: MREQUIRE(false,"unhandled case {}::{}",type_name<decltype(arg)>(), to_string(arg)); \
 	break
+
+// version that do not throw necessarily
+#define MREQUIRE_RET(success,must_throw,return_value,...) \
+	if (!(success)) { \
+		if (!must_throw) return return_value; \
+		else { MREQUIRE(success, __VA_ARGS__); } ; }
+
+
+#define MREQUIRE_EQUAL_RET(success,must_throw,return_value,a,b,...) \
+	if (!(success)) { \
+		if (!must_throw) return return_value; \
+		else { MREQUIRE_EQUAL(a,b, __VA_ARGS__); } ; }
+
