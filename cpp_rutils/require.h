@@ -100,7 +100,7 @@
 	break
 
 // version that do not throw necessarily
-#define MREQUIRE_RET(success,must_throw,return_value,...) \
+#define MREQUIRE_RET(must_throw,return_value,success,...) \
 	if (!(success)) { \
 		if (!must_throw) return return_value; \
 		else { MREQUIRE(success, __VA_ARGS__); } ; }

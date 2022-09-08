@@ -79,7 +79,7 @@ TEST_CASE("move", "[require][hide]")
 
 int test_MREQUIRE_RET(bool must_throw, bool success) {
 	int res = 1;
-	MREQUIRE_RET(success, must_throw, res);
+	MREQUIRE_RET(must_throw, res, success);
 	return 2;
 }
 
