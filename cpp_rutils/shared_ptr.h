@@ -50,3 +50,18 @@ using up = std::unique_ptr<_Ty>;
 // Unique Pointer to Const
 template <class _Ty>
 using upc = std::unique_ptr<const _Ty>;
+
+template <class _Ty>
+upc<_Ty> new_upc(_Ty&& t)
+{
+	return upc<_Ty>(new _Ty(std::forward<_Ty>(t)));
+}
+
+template <class _Ty>
+up<_Ty> new_up(_Ty&& t)
+{
+	return up<_Ty>(new _Ty(std::forward<_Ty>(t)));
+}
+
+
+
