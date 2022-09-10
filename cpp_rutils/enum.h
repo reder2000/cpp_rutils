@@ -20,6 +20,7 @@ template <class T>
 const char* enum_to_string(T)
 {
 	static_assert(always_false_v<T>);
+	return nullptr;
 }
 
 template <class T>

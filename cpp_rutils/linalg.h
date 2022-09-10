@@ -3,9 +3,9 @@
 // very minimal linear algorithms
 
 #include <numeric>
-
-#include "require.h"
 #include <vector>
+#include <algorithm>
+#include "require.h"
 
 template <class _Ty>
 std::vector<_Ty> add(const std::vector<_Ty>& a, std::vector<_Ty>& b)
