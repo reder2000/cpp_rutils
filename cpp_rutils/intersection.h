@@ -5,6 +5,8 @@
 
 #include <utility>
 #include <algorithm>
+#include <iterator>
+
 #include "transform.h"
 
 template <class In, class Compare >

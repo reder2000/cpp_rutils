@@ -11,6 +11,7 @@
 #include <memory>
 #include <iostream>
 
+// forward declare std stuff
 namespace std {
 	template <class _Kty, class _Ty, class _Hasher, class _Keyeq,
 		class _Alloc>
@@ -19,6 +20,12 @@ namespace std {
 	template <class _Kty, class _Ty, class _Pr,
 		class _Alloc>
 	class map;
+
+	template <class _Ty, class _Alloc>
+	class vector;
+
+	template <class _Elem, class _Traits, class _Alloc >
+	class basic_string;
 }
 
 namespace detail

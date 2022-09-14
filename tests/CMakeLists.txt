@@ -21,8 +21,8 @@ add_executable(cpp_rutils_tests ${srcs}) # ${headers})
 
 target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt)
 
-target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)
-add_definitions(-DUSING_PCH)
+#target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)
+#add_definitions(-DUSING_PCH)
 
 #enable_testing()
 #add_test(NAME main COMMAND cpp_rutils_tests)
