@@ -31,14 +31,14 @@ namespace std {
 namespace detail
 {
 	// we cannot return a char array from a function, therefore we need a wrapper
-	template <unsigned N>
+	template <size_t N>
 	struct String {
 		char c[N];
 	};
 
-	template<unsigned ...Len>
+	template<size_t ...Len>
 	constexpr auto cat(const char(&...strings)[Len]) {
-		constexpr unsigned N = (... + Len) - sizeof...(Len);
+		constexpr size_t N = (... + Len) - sizeof...(Len);
 		String<N + 1> result = {};
 		result.c[N] = '\0';
 
@@ -57,7 +57,7 @@ namespace detail
 		constexpr static auto get()
 		{
 			constexpr auto sv = ::type_name<T>();
-			constexpr unsigned N = sv.length();
+			constexpr size_t N = sv.length();
 			String<N + 1> result = {};
 			result.c[N] = '\0';
 
@@ -130,14 +130,14 @@ constexpr auto type_name_short() noexcept {
 	}
 };
 
-template <unsigned N>
+template <size_t N>
 std::ostream& operator <<(std::ostream& os, const detail::String<N> s)
 {
 	os << s.c;
 	return os;
 }
 
-template <unsigned N>
+template <size_t N>
 struct fmt::formatter<::detail::String<N>> : formatter<std::string>
 {
 	// parse is inherited from formatter<string_view>.
