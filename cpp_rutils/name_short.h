@@ -3,9 +3,23 @@
 // compile time type name
 
 #include "name.h"
-#include <vector>
+//#include <vector>
+//#include <unordered_map>
+//#include <map>
+//#include <string>
+#include <fmt/format.h>
+#include <memory>
 #include <iostream>
-#include <unordered_map>
+
+namespace std {
+	template <class _Kty, class _Ty, class _Hasher, class _Keyeq,
+		class _Alloc>
+	class unordered_map;
+
+	template <class _Kty, class _Ty, class _Pr,
+		class _Alloc>
+	class map;
+}
 
 namespace detail
 {
@@ -58,17 +72,46 @@ namespace detail
 		}
 	};
 
-	template <class _Kty, class _Ty, class _Hasher, class _Keyeq ,
+	template <class _Kty, class _Ty, class _Hasher, class _Keyeq,
 		class _Alloc>
-	struct type_namer < std::unordered_map<_Kty,_Ty,_Hasher, _Keyeq, _Alloc>>
+	struct type_namer < std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq, _Alloc>>
 	{
 		constexpr static	auto get()
 		{
-			return cat("unordered_map<", type_namer<_Kty>().get().c, "," , type_namer<_Ty>().get().c, ">");
+			return cat("unordered_map<", type_namer<_Kty>().get().c, ",", type_namer<_Ty>().get().c, ">");
 		}
 
 	};
 
+	template <class _Elem, class _Traits, class _Alloc >
+	struct type_namer < std::basic_string<_Elem, _Traits, _Alloc>>
+	{
+		constexpr static	auto get()
+		{
+			return cat("string");
+		}
+
+	};
+
+	template <class _Ty>
+	struct type_namer < std::shared_ptr<_Ty>>
+	{
+		constexpr static	auto get()
+		{
+			return cat("shared_ptr<", type_namer<_Ty>().get().c, ">");
+		}
+	};
+
+	template <class _Kty, class _Ty, class _Pr,
+		class _Alloc>
+	struct type_namer < std::map<_Kty, _Ty, _Pr, _Alloc>>
+	{
+		constexpr static	auto get()
+		{
+			return cat("map<", type_namer<_Kty>().get().c, ",", type_namer<_Ty>().get().c, ">");
+		}
+
+	};
 
 }
 
@@ -81,8 +124,20 @@ constexpr auto type_name_short() noexcept {
 };
 
 template <unsigned N>
-std::ostream& operator <<(std::ostream &os , const detail::String<N> s)
+std::ostream& operator <<(std::ostream& os, const detail::String<N> s)
 {
 	os << s.c;
 	return os;
 }
+
+template <unsigned N>
+struct fmt::formatter<::detail::String<N>> : formatter<std::string>
+{
+	// parse is inherited from formatter<string_view>.
+	template <typename FormatContext>
+	auto format(::detail::String<N> c, FormatContext& ctx)
+	{
+		static std::string formatString("%Y-%m-%dT%T%Z");
+		return formatter<std::string>::format(c.c, ctx);
+	}
+};

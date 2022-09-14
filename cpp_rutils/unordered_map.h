@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <fmt/format.h>
-#include "name.h"
+#include "name_short.h"
 
 template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq = std::equal_to<_Kty>>
 using um = std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>;
@@ -21,7 +21,7 @@ struct um_p : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq> {
 		auto w = this->find(key);
 		if (w != this->end())
 			return w->second;
-		throw std::out_of_range(fmt::format("({}) {} not found in map", type_name<_Kty>(), key));
+		throw std::out_of_range(fmt::format("({}) {} not found in map", type_name_short<_Kty>(), key));
 	}
 };
 

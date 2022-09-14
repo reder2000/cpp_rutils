@@ -4,7 +4,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <iostream>
-#include <cpp_rutils/name.h>
+#include <cpp_rutils/name_short.h>
 #include <map>
 
 
@@ -38,7 +38,7 @@ TEST_CASE("mem_size", "[mem][hide]") {
     auto pr = [](auto&& a) {
         using T = std::decay_t<decltype(a)>;
         auto sz = memory_size(a);
-        std::cout << type_name<T>() << " : " << sz << std::endl;
+        std::cout << type_name_short<T>() << " : " << sz << std::endl;
     };
     pr((int)1);
     pr(std::nullptr_t{});

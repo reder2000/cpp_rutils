@@ -5,7 +5,7 @@
 // MACRO( condition , fmt_format_spec, args...)
 
 #include <fmt/format.h>
-#include "name.h"
+#include "name_short.h"
 #include <boost/preprocessor/variadic/size.hpp>
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/dec.hpp>
@@ -96,7 +96,7 @@
 	break
 
 #define default_fail_enum_string(arg) \
-	default: MREQUIRE(false,"unhandled case {}::{}",type_name<decltype(arg)>(), to_string(arg)); \
+	default: MREQUIRE(false,"unhandled case {}::{}",type_name_short<decltype(arg)>(), to_string(arg)); \
 	break
 
 // version that do not throw necessarily
