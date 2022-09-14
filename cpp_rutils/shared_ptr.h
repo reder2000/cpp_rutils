@@ -16,7 +16,13 @@ template <class _Ty>
 using spc = std::shared_ptr<const _Ty>;
 
 // abbreviation for std::make_shared
-#define m_sp std::make_shared
+// problems with aggregates & llvm so this does not work #define m_sp std::make_shared
+template <typename T, typename... Args>
+std::shared_ptr<T> m_sp(Args&&... args)
+{
+	return std::make_shared<T>(T{ std::forward<Args>(args)... });
+}
+
 
 template <class _Ty>
 sp<_Ty> new_sp() {
