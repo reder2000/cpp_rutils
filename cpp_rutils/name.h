@@ -4,6 +4,7 @@
 
 #include <string_view>
 
+// lengthy namer
 template <typename T>
 constexpr auto type_name() noexcept {
 	std::string_view name, prefix, suffix;
