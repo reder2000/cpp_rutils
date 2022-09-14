@@ -75,7 +75,7 @@ namespace detail
 	{
 		constexpr static	auto get()
 		{
-			return cat("vector<", type_namer<_Ty>().get().c, ">");
+			return cat("vector<", type_namer<std::decay_t<_Ty>>().get().c, ">");
 		}
 	};
 
@@ -85,7 +85,7 @@ namespace detail
 	{
 		constexpr static	auto get()
 		{
-			return cat("unordered_map<", type_namer<_Kty>().get().c, ",", type_namer<_Ty>().get().c, ">");
+			return cat("unordered_map<", type_namer< std::decay_t<_Kty>>().get().c, ",", type_namer< std::decay_t<_Ty>>().get().c, ">");
 		}
 
 	};
@@ -105,7 +105,7 @@ namespace detail
 	{
 		constexpr static	auto get()
 		{
-			return cat("shared_ptr<", type_namer<_Ty>().get().c, ">");
+			return cat("shared_ptr<", type_namer< std::decay_t<_Ty>>().get().c, ">");
 		}
 	};
 
@@ -115,7 +115,7 @@ namespace detail
 	{
 		constexpr static	auto get()
 		{
-			return cat("map<", type_namer<_Kty>().get().c, ",", type_namer<_Ty>().get().c, ">");
+			return cat("map<", type_namer< std::decay_t<_Kty>>().get().c, ",", type_namer< std::decay_t<_Ty>>().get().c, ">");
 		}
 
 	};
@@ -126,7 +126,7 @@ namespace detail
 template <typename T>
 constexpr auto type_name_short() noexcept {
 	{
-		return detail::type_namer<T>::get();
+		return detail::type_namer<std::decay_t<T>>::get();
 	}
 };
 

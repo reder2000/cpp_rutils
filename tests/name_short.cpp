@@ -8,10 +8,14 @@
 TEST_CASE("short_name_vector", "[name][hide]")
 {
 
-	std::vector<int> toto;
+	const std::vector<int> toto;
 	std::cout << type_name_short<decltype(toto)>() << std::endl;
+	auto& toto_ref = toto;
+	std::cout << type_name_short<decltype(toto_ref)>() << std::endl;
 	std::vector<std::vector<int>> tototo;
 	std::cout << type_name_short<decltype(tototo)>() << std::endl;
 	std::unordered_map<int, decltype(tototo)> tata;
 	std::cout << type_name_short<decltype(tata)>() << std::endl;
+	std::shared_ptr<const std::vector<int>> sp;
+	std::cout << type_name_short<decltype(sp)>() << std::endl;
 }
