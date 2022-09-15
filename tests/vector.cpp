@@ -86,4 +86,9 @@ TEST_CASE("apply", "[enum][hide]")
    REQUIRE((*(vsm3[0]))[0] == 1.);
    REQUIRE(std::get<0>(f3).empty());
 
+   sp_vc<double> shared_ptr_vector_double(new std::vector{ 1.,2.,3. });
+   (*shared_ptr_vector_double)[1] = 4;
+   spc_vc<double> shared_ptr_const_vector_double(new std::vector{ 1.,2.,3. });
+   CHECK((*shared_ptr_const_vector_double)[1] == 2.);
+
 }

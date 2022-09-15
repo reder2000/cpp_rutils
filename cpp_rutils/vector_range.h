@@ -17,7 +17,7 @@ std::vector<I> vector_range(I start, I stop, J step);
 // ---------------------------
 
 template<class I>
-inline std::vector<I> vector_range(I stop)
+std::vector<I> vector_range(I stop)
 {
     std::vector<I> res(stop);
     for (I i = 0; i < stop; ++i)
@@ -26,7 +26,7 @@ inline std::vector<I> vector_range(I stop)
 }
 
 template<class I>
-inline std::vector<I> vector_range(I start, I stop)
+std::vector<I> vector_range(I start, I stop)
 {
     std::vector<I> res(stop-start);
     size_t j = 0; 
@@ -36,7 +36,7 @@ inline std::vector<I> vector_range(I start, I stop)
 }
 
 template<class I, class J>
-inline std::vector<I> vector_range(I start, I stop, J step)
+std::vector<I> vector_range(I start, I stop, J step)
 {
     std::vector<I> res;
     if (start > stop) {

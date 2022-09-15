@@ -13,13 +13,14 @@ template<class _Ty>
 using sp_vc = sp<vc<_Ty>>;
 
 template<class _Ty>
-inline
+using spc_vc = sp<const vc<_Ty>>;
+
+template<class _Ty>
 sp_vc<_Ty> new_sp_vc(std::initializer_list<_Ty> l) {
     return sp_vc<_Ty>(new vc<_Ty>(l));
 }
 
 template<class _Ty, class... Args>
-inline
 sp_vc<_Ty> new_sp_vc(Args... args) {
     return sp_vc<_Ty>(new vc<_Ty>(args...));
 }
@@ -28,13 +29,11 @@ template<class _Ty>
 using vc_sp = vc<sp<_Ty>>;
 
 template<class _Ty>
-inline
 vc_sp<_Ty> new_vc_sp(_Ty &&t) {
     return vc_sp<_Ty>({new_sp<_Ty>(std::forward<_Ty>(t))});
 }
 
 template<class _Ty>
-inline
 vc_sp<_Ty> new_vc_sp(std::initializer_list<_Ty> l) {
     vc_sp<_Ty> res(l.size());
     std::transform(l.begin(), l.end(), res.begin(),
