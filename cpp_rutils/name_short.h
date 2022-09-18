@@ -6,7 +6,7 @@
 //#include <vector>
 //#include <unordered_map>
 //#include <map>
-//#include <string>
+#include <string>
 #include <fmt/format.h>
 #include <memory>
 #include <iostream>
@@ -24,8 +24,6 @@ namespace std {
 	template <class _Ty, class _Alloc>
 	class vector;
 
-	template <class _Elem, class _Traits, class _Alloc >
-	class basic_string;
 }
 
 namespace detail
