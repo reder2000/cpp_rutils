@@ -41,3 +41,11 @@ constexpr my_uint64_t operator"" _GB(my_uint64_t giga_bytes)
 {
 	return 1024_MB * giga_bytes;
 }
+inline double operator"" _pct(long double d)
+{
+	return 0.01 * d;
+}
+inline double operator"" _bps(long double d)
+{
+	return 0.0001 * d;
+}
