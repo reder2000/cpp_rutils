@@ -28,6 +28,13 @@ std::vector<_Ty> minus(const std::vector<_Ty>& a, std::vector<_Ty>& b)
 }
 
 template<typename _Ty>
+_Ty sum(const std::vector<_Ty> &v) {
+    MREQUIRE(!v.empty());
+    const size_t sz = v.size();
+    return std::accumulate(v.begin(), v.end(), 0.0) ;
+}
+
+template<typename _Ty>
 _Ty mean(const std::vector<_Ty> &v) {
     MREQUIRE(!v.empty());
     const size_t sz = v.size();

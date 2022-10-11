@@ -7,6 +7,7 @@ TEST_CASE("linalg", "[name][hide]")
     CHECK(add(a,b)==std::vector<double>{4.,4.,4.});
     CHECK(minus(a,b)==std::vector<double>{-2.,0.,2.});
     CHECK(mean(a)==2.);
+    CHECK(sum(a)==6.);
     CHECK(variance(a,0)==(2./3.));
     CHECK(variance(a,1)==1.);
     CHECK(covariance(a,b,0)==(-2./3.));
