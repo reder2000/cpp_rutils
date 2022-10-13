@@ -20,4 +20,8 @@ TEST_CASE("intersection", "[intersection][hide]")
 	CHECK(res5 == std::vector<int>{1, 2, 3, 4 });
 	auto res6 = set_intersection(vr);
 	CHECK(res6 == std::vector<int>{3});
+	std::vector < std::vector<int>> vv({ v1,v2,v3 });
+	auto res7 = set_intersection(vv);
+	CHECK(res7 == std::vector<int>{3});
+
 }
