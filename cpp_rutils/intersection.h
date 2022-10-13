@@ -54,6 +54,21 @@ std::vector<typename In::value_type>  intersection_vcs(const In& v1, const In& v
 	return intersection_vc(v1, intersection_vcs(v2,args...));
 }
 
+
+template <class V, class Op>
+std::vector<
+	std::reference_wrapper<const std::decay_t<std::invoke_result_t<Op, typename V::value_type>>>>
+	make_vector_reference(const V& vs, Op op)
+{
+	using T = std::decay_t<std::invoke_result_t<Op, typename V::value_type>>;
+	//static_assert(std::is_same_v<T, std::vector<TZDate>>);
+	std::vector<std::reference_wrapper<const T>> res;
+	res.reserve(vs.size());
+	for (auto const& v : vs)
+		res.emplace_back(op(v));
+	return res;
+}
+
 template <class T>
 std::vector<T> set_union(const std::vector<std::reference_wrapper<const std::vector<T>>>& vs )
 {
@@ -85,7 +100,7 @@ std::vector<T> set_intersection(const std::vector<std::reference_wrapper<const s
 				u.first->second++;
 			}
 			//inter[t] += 1;
-	const int N = vs.size();
+	const size_t N = vs.size();
 	std::vector<T> res;
 	for (auto const i : inter)
 		if (i.second == N)
