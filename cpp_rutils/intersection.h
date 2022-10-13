@@ -73,9 +73,10 @@ std::vector<T> set_union(const std::vector<std::reference_wrapper<const std::vec
 template <class T>
 std::vector<T> set_intersection(const std::vector<std::reference_wrapper<const std::vector<T>>>& vs)
 {
-	const size_t M = std::accumulate(vs.begin(), vs.end(), std::numeric_limits<size_t>::max(), [](size_t a, const std::reference_wrapper<const std::vector<T>>& b)
-		{return std::min(a, b.get().size()); });
-	std::unordered_map<T,size_t> inter;
+	//const size_t M = std::accumulate(vs.begin(), vs.end(), std::numeric_limits<size_t>::max(), [](size_t a, const std::reference_wrapper<const std::vector<T>>& b)
+	//	{return std::min(a, b.get().size()); });
+	const size_t M = std::accumulate(vs.begin(), vs.end(), size_t(0), [](size_t a, const std::reference_wrapper<const std::vector<T>>& b)
+		{return std::max(a, b.get().size()); });	std::unordered_map<T,size_t> inter;
 	inter.reserve(M);
 	for (auto const& v : vs)
 		for (auto const& t : v.get())
