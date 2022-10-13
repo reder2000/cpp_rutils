@@ -6,6 +6,9 @@
 #include <utility>
 #include <algorithm>
 #include <iterator>
+#include <numeric>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "transform.h"
 
@@ -51,4 +54,41 @@ std::vector<typename In::value_type>  intersection_vcs(const In& v1, const In& v
 	return intersection_vc(v1, intersection_vcs(v2,args...));
 }
 
+template <class T>
+std::vector<T> set_union(const std::vector<std::reference_wrapper<const std::vector<T>>>& vs )
+{
+	const size_t M = std::accumulate(vs.begin(), vs.end(), size_t(0), [](size_t a, const std::reference_wrapper<const std::vector<T>>& b)
+		{return std::max(a, b.get().size()); });
+	std::unordered_set<T> inter;
+	inter.reserve(M);
+	for (auto const& v : vs)
+		for (auto const& t : v.get())
+			inter.insert(t);
+	std::vector<T> res(inter.begin(), inter.end());
+	std::sort(res.begin(), res.end());
+	return res;
+}
 
+
+template <class T>
+std::vector<T> set_intersection(const std::vector<std::reference_wrapper<const std::vector<T>>>& vs)
+{
+	const size_t M = std::accumulate(vs.begin(), vs.end(), std::numeric_limits<size_t>::max(), [](size_t a, const std::reference_wrapper<const std::vector<T>>& b)
+		{return std::min(a, b.get().size()); });
+	std::unordered_map<T,size_t> inter;
+	inter.reserve(M);
+	for (auto const& v : vs)
+		for (auto const& t : v.get())
+			{
+				auto u = inter.try_emplace(t, size_t(0));
+				u.first->second++;
+			}
+			//inter[t] += 1;
+	const int N = vs.size();
+	std::vector<T> res;
+	for (auto const i : inter)
+		if (i.second == N)
+			res.push_back(i.first);
+	std::sort(res.begin(), res.end());
+	return res;
+}
