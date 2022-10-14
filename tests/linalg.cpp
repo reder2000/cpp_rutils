@@ -21,6 +21,9 @@ TEST_CASE("linalg", "[name][hide]")
     CHECK(fabs(cv - -0.004324163) < 1e-7);
     cv = log_covariance(c, d, 1);
     CHECK(fabs(cv - -0.006486244) < 1e-7);
-
-
+    std::vector<int> e{ 1,2,3,4,5,6};
+    LightMatrix<int> m(std::move(e), size_t(2), size_t(3));
+    CHECK(m(1, 2) == 6);
+    CHECK_THROWS(m.at(2, 3));
 }
+

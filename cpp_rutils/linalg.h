@@ -7,51 +7,113 @@
 #include <algorithm>
 #include "require.h"
 
-template <class _Ty>
-std::vector<_Ty> add(const std::vector<_Ty>& a, std::vector<_Ty>& b)
+// 1-d
+
+template <class InIt, class BinOp, class T, class Fn>
+T accumulate_adjacent(const InIt first, const InIt last, BinOp op, T val, Fn fn);
+
+//  sum mean variance
+template<typename T>
+T sum(const std::vector<T>& v);
+template<typename T>
+T mean(const std::vector<T>& v);
+template<typename T>
+T variance(const std::vector<T>& v, unsigned short ddof);
+template <class T>
+T log_variance(const std::vector<T>& v, unsigned short ddof);
+
+// 2-d
+
+template <class InIt, class BinOp, class T, class Fn>
+T accumulate_biadjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn);
+
+// - + var cov
+
+template <class T>
+std::vector<T> add(const std::vector<T>& a, std::vector<T>& b);
+template <class T>
+std::vector<T> minus(const std::vector<T>& a, std::vector<T>& b);
+template <class T>
+T covariance(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof);
+template <class T>
+std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof);
+template <class T>
+T log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof);
+
+// light matrix
+template <class T>
+class LightMatrix
 {
-	std::vector<_Ty> res;
+public:
+	LightMatrix() = default;
+	LightMatrix(size_t rows, size_t cols);
+	LightMatrix(size_t rows, size_t cols, const T val);
+	LightMatrix(std::vector<T> && values, size_t rows, size_t cols);
+
+	size_t rows() const { return _rows; }
+	size_t cols() const { return _cols; }
+	size_t size() const { return _vec.size(); }
+
+	const T& at(size_t r, size_t c) const;
+	T& at(size_t r, size_t c);
+	T& operator()(size_t r, size_t c);
+	const T& operator()(size_t r, size_t c) const;
+private:
+
+	size_t _rows;
+	size_t _cols;
+	using data_type = std::vector<T>;
+	data_type _vec;
+
+};
+
+
+
+template <class T>
+std::vector<T> add(const std::vector<T>& a, std::vector<T>& b)
+{
+	std::vector<T> res;
 	MREQUIRE_EQUAL(a.size(), b.size());
 	res.reserve(a.size());
-	std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(res), std::plus<_Ty>());
+	std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(res), std::plus<T>());
 	return res;
 }
 
-template <class _Ty>
-std::vector<_Ty> minus(const std::vector<_Ty>& a, std::vector<_Ty>& b)
+template <class T>
+std::vector<T> minus(const std::vector<T>& a, std::vector<T>& b)
 {
-	std::vector<_Ty> res;
+	std::vector<T> res;
 	MREQUIRE_EQUAL(a.size(), b.size());
 	res.reserve(a.size());
-	std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(res), std::minus<_Ty>());
+	std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(res), std::minus<T>());
 	return res;
 }
 
-template<typename _Ty>
-_Ty sum(const std::vector<_Ty>& v) {
+template<typename T>
+T sum(const std::vector<T>& v) {
 	MREQUIRE(!v.empty());
 	return std::accumulate(v.begin(), v.end(), 0.0);
 }
 
-template<typename _Ty>
-_Ty mean(const std::vector<_Ty>& v) {
+template<typename T>
+T mean(const std::vector<T>& v) {
 	MREQUIRE(!v.empty());
 	const size_t sz = v.size();
 	return std::accumulate(v.begin(), v.end(), 0.0) / sz;
 }
 
-template<typename _Ty>
-_Ty variance(const std::vector<_Ty>& v, unsigned short ddof) {
-	_Ty  res = 0.;
+template<typename T>
+T variance(const std::vector<T>& v, unsigned short ddof) {
+	T  res = 0.;
 	MREQUIRE(!v.empty());
 	const size_t sz = v.size();
 	if (sz == 1) {
 		return res;
 	}
 
-	const _Ty mean = std::accumulate(v.begin(), v.end(), 0.0) / sz;
+	const T mean = std::accumulate(v.begin(), v.end(), 0.0) / sz;
 
-	auto variance_func = [mean](_Ty accumulator, _Ty val) {
+	auto variance_func = [mean](T accumulator, T val) {
 		return accumulator + (val - mean) * (val - mean);
 	};
 
@@ -60,16 +122,16 @@ _Ty variance(const std::vector<_Ty>& v, unsigned short ddof) {
 	return res;
 }
 
-template <class _Ty>
-_Ty covariance(const std::vector<_Ty>& a, std::vector<_Ty>& b, unsigned short ddof)
+template <class T>
+T covariance(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof)
 {
-	_Ty res = 0.0;
+	T res = 0.0;
 	const size_t sz = a.size();
 	MREQUIRE_EQUAL(sz, b.size());
 	if (sz == 1) {
 		return res;
 	}
-	_Ty ma = mean(a), mb = mean(b);
+	T ma = mean(a), mb = mean(b);
 	auto ia = a.begin();
 	auto ib = b.begin();
 	for (size_t i = 0; i < sz; i++)
@@ -82,10 +144,10 @@ _Ty covariance(const std::vector<_Ty>& a, std::vector<_Ty>& b, unsigned short dd
 
 
 
-template <class _Ty>
-std::array<std::array<_Ty, 2>, 2> cov(const std::vector<_Ty>& a, std::vector<_Ty>& b, unsigned short ddof)
+template <class T>
+std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof)
 {
-	std::array<std::array<_Ty, 2>, 2> res;
+	std::array<std::array<T, 2>, 2> res;
 	res[0][0] = variance(a, ddof);
 	res[1][1] = variance(b, ddof);
 	res[0][1] = covariance(a, b, ddof);
@@ -122,7 +184,7 @@ typename InIt::value_type log_variance(const InIt first, const InIt last, unsign
 }
 
 template <class T>
-double log_variance(const std::vector<T>& v, unsigned short ddof)
+T log_variance(const std::vector<T>& v, unsigned short ddof)
 {
 	return log_variance(v.begin(), v.end(), ddof);
 }
@@ -162,7 +224,49 @@ typename InIt::value_type log_covariance(const InIt first1, const InIt last1, co
 }
 
 template <class T>
-double log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof)
+T log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof)
 {
 	return log_covariance(v1.begin(), v1.end(), v2.begin(), ddof);
+}
+
+template <class T>
+LightMatrix<T>::LightMatrix(size_t rows, size_t cols) : _rows(rows), _cols(cols), _vec(rows* cols)
+{
+}
+
+template <class T>
+LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T val) : _rows(rows), _cols(cols), _vec(rows* cols, val)
+{
+}
+
+template <class T>
+LightMatrix<T>::LightMatrix(std::vector<T> && values, size_t rows, size_t cols) : _rows(rows), _cols(cols), _vec(std::move(values))
+{
+	MREQUIRE_EQUAL(rows * cols, _vec.size());
+}
+
+template <class T>
+const T& LightMatrix<T>::at(size_t r, size_t c) const
+{
+	MREQUIRE_LESS(r, _rows);
+	MREQUIRE_LESS(c, _cols);
+	return _vec[r * _cols + c];
+}
+template <class T>
+T& LightMatrix<T>::at(size_t r, size_t c)
+{
+	MREQUIRE_LESS(r, _rows);
+	MREQUIRE_LESS(c, _cols);
+	return _vec[r * _cols + c];
+}
+
+template <class T>
+T& LightMatrix<T>::operator()(size_t r, size_t c)
+{
+	return _vec[r * _cols + c];
+}
+template <class T>
+const T& LightMatrix<T>::operator()(size_t r, size_t c) const
+{
+	return _vec[r * _cols + c];
 }
