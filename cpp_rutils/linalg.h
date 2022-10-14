@@ -92,3 +92,77 @@ std::array<std::array<_Ty,2>,2> res;
     res[1][0] = res[0][1];
 	return res;
 }
+
+template <class InIt, class BinOp, class T, class Fn>
+T accumulate_adjacent(const InIt first, const InIt last, BinOp op , T val, Fn fn )
+{
+    T res = val;
+    auto mfirst = first;
+    auto mlast = last;
+    auto ival = *mfirst;
+    while (++mfirst != mlast)
+    {
+        auto tmp = *mfirst;
+        res = fn(res, op(ival, tmp));
+        ival = std::move(tmp);
+    };
+    return res;
+}
+
+template <class InIt>
+typename InIt::value_type log_variance(const InIt first, const InIt last, size_t ddof)
+{
+    using T = typename InIt::value_type;
+    const size_t N = std::distance(first,last) - 1;
+    MREQUIRE_GREATER(N - ddof, 0, "vector must have at least {} elements",2+ddof);
+    T second_order = accumulate_adjacent(first, last, [](T a, T b) {return log(b / a); }, 0., [](T val, T x) {return val + x * x; }) / N;
+    T mean = log(*(last-1)/ *first) / N;
+    T res = N * (second_order - mean * mean) / (N - ddof);
+    return res;
+}
+
+template <class T>
+double log_variance(const std::vector<T>& v, size_t ddof)
+{
+    return log_variance(v.begin(), v.end(), ddof);
+}
+
+template <class InIt, class BinOp, class T, class Fn>
+T accumulate_biadjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn)
+{
+    T res = val;
+    auto mfirst1 = first1;
+    auto mlast1 = last1;
+    auto mfirst2 = first2;
+    auto ival1 = *mfirst1;
+    auto ival2 = *mfirst2;
+    while (++mfirst1 != mlast1)
+    {
+        ++mfirst2;
+        auto tmp1 = *mfirst1;
+        auto tmp2 = *mfirst2;
+        res = fn(res, op(ival1, tmp1), op(ival2, tmp2));
+        ival1 = std::move(tmp1);
+        ival2 = std::move(tmp2);
+    };
+    return res;
+}
+
+template <class InIt>
+typename InIt::value_type log_covariance(const InIt first1, const InIt last1, const InIt first2, size_t ddof)
+{
+    using T = typename InIt::value_type;
+    const size_t N = std::distance(first1, last1) - 1;
+    MREQUIRE_GREATER(N - ddof, 0, "vector must have at least {} elements", 2 + ddof);
+    T second_order = accumulate_biadjacent(first1, last1, first2,  [](T a, T b) {return log(b / a); }, 0., [](T val, T x, T y) {return val + x * y; }) / N;
+    T mean1 = log(*(last1 - 1) / *first1 ) / N;
+    T mean2 = log(*(first2+N) / *first2 ) / N;
+    T res = N * (second_order - mean1 * mean2) / (N - ddof);
+    return res;
+}
+
+template <class T>
+double log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, size_t ddof)
+{
+    return log_covariance(v1.begin(), v1.end(), v2.begin(),  ddof);
+}
