@@ -45,24 +45,30 @@ template <class T>
 class LightMatrix
 {
 public:
+	using value_tye = T;
+	using data_type = std::vector<T>;
+
 	LightMatrix() = default;
 	LightMatrix(size_t rows, size_t cols);
 	LightMatrix(size_t rows, size_t cols, const T val);
-	LightMatrix(std::vector<T> && values, size_t rows, size_t cols);
+	LightMatrix(std::vector<T>&& values, size_t rows, size_t cols);
 
 	size_t rows() const { return _rows; }
 	size_t cols() const { return _cols; }
 	size_t size() const { return _vec.size(); }
+	const data_type data() const { return _vec; }
 
 	const T& at(size_t r, size_t c) const;
 	T& at(size_t r, size_t c);
 	T& operator()(size_t r, size_t c);
 	const T& operator()(size_t r, size_t c) const;
+
+	bool operator ==(const LightMatrix<T>& other) const;
+
 private:
 
 	size_t _rows;
 	size_t _cols;
-	using data_type = std::vector<T>;
 	data_type _vec;
 
 };
@@ -240,7 +246,7 @@ LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T val) : _rows(rows)
 }
 
 template <class T>
-LightMatrix<T>::LightMatrix(std::vector<T> && values, size_t rows, size_t cols) : _rows(rows), _cols(cols), _vec(std::move(values))
+LightMatrix<T>::LightMatrix(std::vector<T>&& values, size_t rows, size_t cols) : _rows(rows), _cols(cols), _vec(std::move(values))
 {
 	MREQUIRE_EQUAL(rows * cols, _vec.size());
 }
@@ -269,4 +275,10 @@ template <class T>
 const T& LightMatrix<T>::operator()(size_t r, size_t c) const
 {
 	return _vec[r * _cols + c];
+}
+
+template<class T>
+inline bool LightMatrix<T>::operator==(const LightMatrix<T>& other) const
+{
+	return _rows == other._rows && _cols == other._cols && _vec == other._vec;
 }
