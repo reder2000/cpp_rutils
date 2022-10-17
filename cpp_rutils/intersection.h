@@ -102,7 +102,7 @@ std::vector<T> set_intersection(const std::vector<std::reference_wrapper<const s
 	//inter[t] += 1;
 	const size_t N = vs.size();
 	std::vector<T> res;
-	for (auto const i : inter)
+	for (auto i : inter)
 		if (i.second == N)
 			res.push_back(i.first);
 	std::sort(res.begin(), res.end());

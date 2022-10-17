@@ -36,6 +36,11 @@ check_cxx_source_compiles(
          using test = std::chrono::duration;
          int main(){ return 0; }"
          HAVE_CXX20_CHRONO_DURATION)
+check_cxx_source_compiles(
+        "#include <chrono>
+         using test = std::chrono::time_zone;
+         int main(){ return 0; }"
+         HAVE_CXX20_CHRONO_TIME_ZONE)
 configure_file(cpp_rutils/config.h.in cpp_rutils_config.h)
 include_directories(${CMAKE_BINARY_DIR})
 message("include_directories ${CMAKE_BINARY_DIR}")
