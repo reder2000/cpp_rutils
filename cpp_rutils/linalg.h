@@ -39,6 +39,8 @@ template <class T>
 std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof);
 template <class T>
 T log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof);
+template <class T>
+T return_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof);
 
 // light matrix
 template <class T>
@@ -229,10 +231,34 @@ typename InIt::value_type log_covariance(const InIt first1, const InIt last1, co
 	return res;
 }
 
+
+template <class InIt>
+typename InIt::value_type return_covariance(const InIt first1, const InIt last1, const InIt first2, unsigned short ddof)
+{
+	using T = typename InIt::value_type;
+	using tuple_t = std::tuple<T, T, T>;
+	const size_t N = std::distance(first1, last1) - 1;
+	MREQUIRE_GREATER(N - ddof, 0, "vector must have at least {} elements", 2 + ddof);
+	auto values = accumulate_biadjacent(first1, last1, first2, [](T a, T b) {return b / a -1 ; }, tuple_t{ 0.,0.,0. }
+		, [](tuple_t val, T x, T y) 
+		{std::get<0>(val) += x * y; std::get<1>(val) += x;  std::get<2>(val) += y; return val; });
+	T second_order = std::get<0>(values) / N;
+	T mean1 = std::get<1>(values) / N;
+	T mean2 = std::get<2>(values) / N;
+	T res = N * (second_order - mean1 * mean2) / (N - ddof);
+	return res;
+}
+
 template <class T>
 T log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof)
 {
 	return log_covariance(v1.begin(), v1.end(), v2.begin(), ddof);
+}
+
+template <class T>
+T return_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof)
+{
+	return return_covariance(v1.begin(), v1.end(), v2.begin(), ddof);
 }
 
 template <class T>
