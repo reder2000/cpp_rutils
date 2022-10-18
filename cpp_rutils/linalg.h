@@ -25,7 +25,7 @@ T log_variance(const std::vector<T>& v, unsigned short ddof);
 // 2-d
 
 template <class InIt, class T, class Fn>
-T accumulate2d(InIt first1, InIt last1,  InIt first2, T val, Fn fn);
+T accumulate2d(InIt first1, InIt last1, InIt first2, T val, Fn fn);
 
 template <class InIt, class BinOp, class T, class Fn>
 T accumulate2d_adjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn);
@@ -71,6 +71,8 @@ public:
 	const T& operator()(size_t r, size_t c) const;
 
 	bool operator ==(const LightMatrix<T>& other) const;
+
+	data_type operator*(const data_type& v) const;
 
 private:
 
@@ -238,7 +240,7 @@ template <class T>
 T sumproduct(const std::vector<T>& a, const std::vector<T>& b)
 {
 	MREQUIRE_EQUAL(a.size(), b.size());
-	return accumulate2d(a.begin(), a.end(), b.begin(), 0.,  [](T val, const T& x, const T& y) {return val + x * y; });
+	return accumulate2d(a.begin(), a.end(), b.begin(), 0., [](T val, const T& x, const T& y) {return val + x * y; });
 }
 
 
@@ -331,4 +333,22 @@ template<class T>
 inline bool LightMatrix<T>::operator==(const LightMatrix<T>& other) const
 {
 	return _rows == other._rows && _cols == other._cols && _vec == other._vec;
+}
+
+template <class T>
+typename LightMatrix<T>::data_type LightMatrix<T>::operator*(const data_type& v) const
+{
+	MREQUIRE_EQUAL(_cols, v.size());
+	data_type res;
+	res.reserve(rows());
+	auto iv = _vec.begin();
+	for (size_t i = 0; i < _rows; ++i)
+	{
+		T r = 0.;
+		auto ij = v.begin();
+		for (size_t j = 0; j < _cols; ++j)
+			r += *iv++ * *ij++;
+		res.push_back(r);
+	}
+	return res;
 }

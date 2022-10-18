@@ -34,5 +34,8 @@ TEST_CASE("linalg", "[name][hide]")
     LightMatrix<int> m3(std::move(e3), size_t(3), size_t(2));
     CHECK(m3(2, 1) == 6);
     CHECK(m!=m3);
+    std::vector<int> aa{ 1,2,3 };
+    std::vector<int> r{ 14,32 };
+    CHECK(m * aa == r);
 }
 
