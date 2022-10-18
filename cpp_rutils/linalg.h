@@ -24,8 +24,11 @@ T log_variance(const std::vector<T>& v, unsigned short ddof);
 
 // 2-d
 
+template <class InIt, class T, class Fn>
+T accumulate2d(InIt first1, InIt last1,  InIt first2, T val, Fn fn);
+
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate_biadjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn);
+T accumulate2d_adjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn);
 
 // - + var cov
 
@@ -34,9 +37,11 @@ std::vector<T> add(const std::vector<T>& a, std::vector<T>& b);
 template <class T>
 std::vector<T> minus(const std::vector<T>& a, std::vector<T>& b);
 template <class T>
-T covariance(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof);
+T sumproduct(const std::vector<T>& a, const std::vector<T>& b);
 template <class T>
-std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof);
+T covariance(const std::vector<T>& a, const std::vector<T>& b, unsigned short ddof);
+template <class T>
+std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, const std::vector<T>& b, unsigned short ddof);
 template <class T>
 T log_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned short ddof);
 template <class T>
@@ -131,7 +136,7 @@ T variance(const std::vector<T>& v, unsigned short ddof) {
 }
 
 template <class T>
-T covariance(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof)
+T covariance(const std::vector<T>& a, const std::vector<T>& b, unsigned short ddof)
 {
 	T res = 0.0;
 	const size_t sz = a.size();
@@ -150,10 +155,8 @@ T covariance(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof)
 	return res;
 }
 
-
-
 template <class T>
-std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, std::vector<T>& b, unsigned short ddof)
+std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a, const std::vector<T>& b, unsigned short ddof)
 {
 	std::array<std::array<T, 2>, 2> res;
 	res[0][0] = variance(a, ddof);
@@ -197,8 +200,21 @@ T log_variance(const std::vector<T>& v, unsigned short ddof)
 	return log_variance(v.begin(), v.end(), ddof);
 }
 
+template <class InIt, class T, class Fn>
+T accumulate2d(InIt first1, InIt last1, InIt first2, T val, Fn fn)
+{
+	T res = val;
+	auto mlast1 = last1;
+	auto mfirst2 = first2;
+	for (auto mfirst1 = first1; mfirst1 != mlast1; ++mfirst2, ++mfirst1)
+	{
+		res = fn(res, *mfirst1, *mfirst2);
+	};
+	return res;
+}
+
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate_biadjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn)
+T accumulate2d_adjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn)
 {
 	T res = val;
 	auto mfirst1 = first1;
@@ -218,13 +234,21 @@ T accumulate_biadjacent(const InIt first1, const InIt last1, const InIt first2, 
 	return res;
 }
 
+template <class T>
+T sumproduct(const std::vector<T>& a, const std::vector<T>& b)
+{
+	MREQUIRE_EQUAL(a.size(), b.size());
+	return accumulate2d(a.begin(), a.end(), b.begin(), 0.,  [](T val, const T& x, const T& y) {return val + x * y; });
+}
+
+
 template <class InIt>
 typename InIt::value_type log_covariance(const InIt first1, const InIt last1, const InIt first2, unsigned short ddof)
 {
 	using T = typename InIt::value_type;
 	const size_t N = std::distance(first1, last1) - 1;
 	MREQUIRE_GREATER(N - ddof, 0, "vector must have at least {} elements", 2 + ddof);
-	T second_order = accumulate_biadjacent(first1, last1, first2, [](T a, T b) {return log(b / a); }, 0., [](T val, T x, T y) {return val + x * y; }) / N;
+	T second_order = accumulate2d_adjacent(first1, last1, first2, [](T a, T b) {return log(b / a); }, 0., [](T val, T x, T y) {return val + x * y; }) / N;
 	T mean1 = log(*(last1 - 1) / *first1) / N;
 	T mean2 = log(*(first2 + N) / *first2) / N;
 	T res = N * (second_order - mean1 * mean2) / (N - ddof);
@@ -239,8 +263,8 @@ typename InIt::value_type return_covariance(const InIt first1, const InIt last1,
 	using tuple_t = std::tuple<T, T, T>;
 	const size_t N = std::distance(first1, last1) - 1;
 	MREQUIRE_GREATER(N - ddof, 0, "vector must have at least {} elements", 2 + ddof);
-	auto values = accumulate_biadjacent(first1, last1, first2, [](T a, T b) {return b / a -1 ; }, tuple_t{ 0.,0.,0. }
-		, [](tuple_t val, T x, T y) 
+	auto values = accumulate2d_adjacent(first1, last1, first2, [](T a, T b) {return b / a - 1; }, tuple_t{ 0.,0.,0. }
+		, [](tuple_t val, T x, T y)
 		{std::get<0>(val) += x * y; std::get<1>(val) += x;  std::get<2>(val) += y; return val; });
 	T second_order = std::get<0>(values) / N;
 	T mean1 = std::get<1>(values) / N;
