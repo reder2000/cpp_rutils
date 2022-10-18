@@ -15,4 +15,6 @@ TEST_CASE("transform", "[transform][hide]")
 	auto ww = List(to_string, v);
 
 	CHECK(std::string("3") == ww[3]);
+
+	CHECK(List_if(v, [](int i) {return i % 2 == 1; }) == std::vector<int>{1, 3});
 }

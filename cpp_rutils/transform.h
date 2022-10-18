@@ -21,3 +21,11 @@ std::vector<std::invoke_result_t<Fun, typename Vec::value_type>> List(Fun fun, c
 {
 	return transform_vc(vec, fun);
 }
+
+template <class UnaryPredicate, class Vec>
+Vec List_if(const Vec& vec, UnaryPredicate pred)
+{
+	Vec res;
+	std::copy_if(vec.begin(), vec.end(), std::back_inserter(res), pred);
+	return res;
+}
