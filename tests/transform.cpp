@@ -11,4 +11,8 @@ TEST_CASE("transform", "[transform][hide]")
 	auto w = transform_vc(v, to_string);
 
 	CHECK(std::string("2") == w[2] );
+
+	auto ww = List(to_string, v);
+
+	CHECK(std::string("3") == ww[3]);
 }

@@ -15,3 +15,9 @@ auto transform_vc(const In& in, Tr tr) {
 	return res;
 }
 
+
+template <class Fun, class Vec>
+std::vector<std::invoke_result_t<Fun, typename Vec::value_type>> List(Fun fun, const Vec& vec)
+{
+	return transform_vc(vec, fun);
+}
