@@ -37,5 +37,7 @@ TEST_CASE("linalg", "[name][hide]")
     std::vector<int> aa{ 1,2,3 };
     std::vector<int> r{ 14,32 };
     CHECK(m * aa == r);
+    std::vector<int> aa2{ 2,4,6 };
+    CHECK(mult(aa, 2) == aa2);
 }
 

@@ -18,6 +18,10 @@ T sum(const std::vector<T>& v);
 template<typename T>
 T mean(const std::vector<T>& v);
 template<typename T>
+std::vector<T> & mult_self(std::vector<T>& v, const T& val);
+template<typename T>
+std::vector<T> mult(const std::vector<T>& v, const T& val);
+template<typename T>
 T variance(const std::vector<T>& v, unsigned short ddof);
 template <class T>
 T log_variance(const std::vector<T>& v, unsigned short ddof);
@@ -117,6 +121,20 @@ T mean(const std::vector<T>& v) {
 	return std::accumulate(v.begin(), v.end(), 0.0) / sz;
 }
 
+template <typename T>
+std::vector<T>& mult_self(std::vector<T>& v, const T& val)
+{
+	for (auto& x : v) x *= val;
+	return v;
+}
+
+template <typename T>
+std::vector<T> mult(std::vector<T>& v, const T& val)
+{
+	std::vector<T> res = v;
+	mult_self(res, val);
+	return res;
+}
 template<typename T>
 T variance(const std::vector<T>& v, unsigned short ddof) {
 	T  res = 0.;
