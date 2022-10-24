@@ -9,11 +9,12 @@ namespace throwing {
 	requires (is_printable< typename std::iterator_traits<_FwdIt>::value_type > )
     bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
         if (_First != _Last) {
+          auto First = _First;
             for (auto _Next = _First; ++_Next != _Last; ++_First) {
                 if (!(_Pred(*_First, *_Next))) {
 					auto _First_str = to_string(*_First);
 					auto _Next_str = to_string(*_Next);
-                    auto where = std::distance(_First, _Next);
+                    auto where = std::distance(First, _Next);
                     throw std::runtime_error(fmt::format("range not strictly sorted at index {}: !({} < {})", where, _First_str, _Next_str));
                 }
             }
@@ -25,9 +26,10 @@ namespace throwing {
         requires (! is_printable< typename std::iterator_traits<_FwdIt>::value_type >)
     bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
         if (_First != _Last) {
+          auto First = _First;
             for (auto _Next = _First; ++_Next != _Last; ++_First) {
                 if (!(_Pred(*_First, *_Next))) {
-                    auto where = std::distance(_First, _Next);
+                    auto where = std::distance(First, _Next);
                     throw std::runtime_error(fmt::format("range not strictly sorted at index {}", where));
                 }
             }
