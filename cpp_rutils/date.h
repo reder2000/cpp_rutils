@@ -6,7 +6,7 @@
 
 #include <chrono>
 
-#if defined(HAVE_CXX20_CHRONO_DURATION)
+#if defined(HAVE_CXX20_CHRONO_DURATION) && !defined(__MING32__)
 #define std__chrono std::chrono
 #else
 #include <date/date.h>
