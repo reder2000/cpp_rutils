@@ -78,6 +78,10 @@ public:
 
 	data_type operator*(const data_type& v) const;
 
+	void assign_col(size_t c , const std::vector<T> & v) ;
+
+	std::vector<T> get_row(size_t r) const;
+
 private:
 
 	size_t _rows;
@@ -86,6 +90,10 @@ private:
 
 };
 
+
+// ----------------------------------------
+// implementation
+// ----------------------------------------
 
 
 template <class T>
@@ -368,5 +376,32 @@ typename LightMatrix<T>::data_type LightMatrix<T>::operator*(const data_type& v)
 			r += *iv++ * *ij++;
 		res.push_back(r);
 	}
+	return res;
+}
+
+template <class T>
+void LightMatrix<T>::assign_col(size_t c , const std::vector<T>& v)
+{
+	MREQUIRE_LESS(c,_cols);
+	MREQUIRE_EQUAL(v.size(),_rows);
+	T* t = std::addressof(_vec[c]);
+	auto pv = v.begin();
+	for (size_t i=0; i<_rows; ++i)
+	{
+		*t = *pv;
+		t+=_cols;
+		pv++;
+	}
+}
+
+template <class T>
+std::vector<T> LightMatrix<T>::get_row(size_t r) const
+{
+	MREQUIRE_LESS(r,_rows);
+	std::vector<T> res;
+	res.reserve(_cols);
+	const T* t = std::addressof(_vec[r*_cols]);
+	for (size_t i=0; i<_cols; ++t,++i)
+		res.push_back(*t);
 	return res;
 }

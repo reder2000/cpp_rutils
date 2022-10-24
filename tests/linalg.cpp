@@ -39,5 +39,8 @@ TEST_CASE("linalg", "[name][hide]")
     CHECK(m * aa == r);
     std::vector<int> aa2{ 2,4,6 };
     CHECK(mult(aa, 2) == aa2);
+    CHECK(m3.get_row(1) == std::vector<int>{3,4});
+    m3.assign_col(1,std::vector<int>{7,8,9});
+    CHECK(m3.get_row(1) == std::vector<int>{3,8});
 }
 
