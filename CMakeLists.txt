@@ -24,6 +24,7 @@ if ("${fmt_VERSION}" VERSION_LESS "9.0.0")
 endif()
 message("fmt version ${fmt_VERSION} is >= 9.0.0. ok.")
 boost_header_only_package(preprocessor preprocessor.hpp)
+find_vcpkg_install_missing(tl-expected)
 
 include(CheckSymbolExists)
 check_symbol_exists(strerror_s "string.h" HAVE_STRERROR_S)

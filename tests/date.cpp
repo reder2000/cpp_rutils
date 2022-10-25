@@ -13,5 +13,7 @@ TEST_CASE("date", "[require][hide]")
 	auto sdate = fmt::format("{}", date);
 	auto date2 = parse_date(sdate);
 	CHECK(date == date2);
+	auto missed = try_parse_date("totalbs");
+	CHECK(!missed.has_value());
 }
 

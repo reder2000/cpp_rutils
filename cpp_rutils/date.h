@@ -3,7 +3,6 @@
 // will use either chrono or date
 
 #include "cpp_rutils_config.h"
-
 #include <chrono>
 
 #if defined(HAVE_CXX20_CHRONO_DURATION) && !defined(__MING32__)
@@ -13,6 +12,7 @@
 #include <date/tz.h>
 #define std__chrono date
 #endif
+
 
 #include "secure_deprecate.h"
 #include "to_.h"
@@ -130,17 +130,28 @@ struct fmt::formatter<Date> : formatter<std::string>
 };
 
 // parser
-Date parse_date(std::string_view sv);
 
+tl::expected<Date,std::string> try_parse_date(std::string_view sv)  ;
+
+Date parse_date(std::string_view sv); 
 
 inline
 Date parse_date(std::string_view sv)
 {
+	auto pres = try_parse_date(sv);
+	if (!pres.has_value())
+		MFAIL("cannot parse {} into date : {}" ,sv,pres.error());
+	return pres.value<>();
+}
+
+inline
+tl::expected<Date,std::string> try_parse_date(std::string_view sv)
+{
   int year, month, day;
   // 2018/12/21
-  MREQUIRE(sv.size() == 10);
-  MREQUIRE(sv[4] == '/');
-  MREQUIRE(sv[7] == '/');
+  MEXPECTED(sv.size() == 10);
+  MEXPECTED(sv[4] == '/' || sv[4] == '-');
+  MEXPECTED(sv[7] == '/' || sv[7] == '-');
   auto s = sv.data();
   auto f = [&s](int& res, int l, int sk)
   {

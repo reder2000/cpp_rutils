@@ -13,6 +13,7 @@
 #include <boost/preprocessor/variadic/to_tuple.hpp>
 #include <boost/preprocessor/tuple/enum.hpp>
 #include <boost/preprocessor/facilities/is_empty.hpp>
+#include <tl/expected.hpp>
 
 #define MFAIL(...) \
 	throw std::runtime_error( \
@@ -112,4 +113,9 @@
 	if (!(a==b)) { \
 		if (!must_throw) return return_value; \
 		else { MREQUIRE_EQUAL(a,b, __VA_ARGS__); } ; }
+
+
+#define MEXPECTED(cond) \
+	if (!(cond)) \
+		return tl::unexpected( fmt::format("!({}), {} , {} , {} " , BOOST_PP_STRINGIZE(cond), __func__ , __FILE__ , __LINE__ ) )
 
