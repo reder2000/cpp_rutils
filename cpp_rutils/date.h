@@ -136,18 +136,22 @@ Date parse_date(std::string_view sv);
 inline
 Date parse_date(std::string_view sv)
 {
-	int  year, month, day;
-	auto s = sv.data();
-	auto f = [&s](int& res, int l, int sk)
-	{
-		std::from_chars(s, s + l, res);
-		s += (l + sk);
-	};
-	f(year, 4, 1);
-	f(month, 2, 1);
-	f(day, 2, 1);
-	auto ld = Date{ std__chrono::year(year) / std__chrono::month(month) / std__chrono::day(day) };
-	return ld;
+  int year, month, day;
+  // 2018/12/21
+  MREQUIRE(sv.size() == 10);
+  MREQUIRE(sv[4] == '/');
+  MREQUIRE(sv[7] == '/');
+  auto s = sv.data();
+  auto f = [&s](int& res, int l, int sk)
+  {
+    std::from_chars(s, s + l, res);
+    s += (l + sk);
+  };
+  f(year, 4, 1);
+  f(month, 2, 1);
+  f(day, 2, 1);
+  auto ld = Date{std__chrono::year(year) / std__chrono::month(month) / std__chrono::day(day)};
+  return ld;
 }
 
 inline
