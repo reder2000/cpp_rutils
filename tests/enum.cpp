@@ -18,4 +18,6 @@ TEST_CASE("enum string", "[enum][hide]")
     CHECK(enum_to_string(toto) == std::string("high"));
     CHECK(to_string(toto) == "high");
     CHECK(string_to_enum< DataType>("low") == DataType::low);
+    // test fmt::format
+    CHECK(fmt::format("{}",toto)=="high");
 }

@@ -15,7 +15,7 @@ TEST_CASE("map", "[map][hide]")
 
 	std::vector<int> v1{ 0,1,2,4 };
 	auto s1 = Dict(v1,[](int i){return i*i;});
-	CHECK(s1[3]==16);
+	CHECK(s1[4]==16);
 	auto s2 = DictSelf<int>(v1,[](auto &&a,int){return a.size();});
-	CHECK(s2[3]==3);
+	CHECK(s2[4]==3);
 }

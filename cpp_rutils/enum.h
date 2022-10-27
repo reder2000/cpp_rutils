@@ -65,8 +65,21 @@ template <> \
 inline std::string to_string<name>(const name &value)\
 { return std::string(enum_to_string(value)) ; }
 
+#define EMIT_ENUM_CLASS_FMT_FORMATTER(name) \
+template <>\
+struct fmt::formatter<name> : formatter<std::string>\
+{\
+  template <typename FormatContext>\
+  auto format(name v, FormatContext& ctx)\
+  {\
+	auto s = ::to_string(v);\
+    return formatter<std::string>::format(s, ctx);\
+  }\
+}
+
 
 #define EMIT_ENUM_CLASS(name) \
 	EMIT_ENUM_CLASS_ENUM(name); \
 	EMIT_ENUM_CLASS_TO_STRING(name); \
-	EMIT_STRING_TO_ENUM_CLASS(name)
+	EMIT_STRING_TO_ENUM_CLASS(name); \
+	EMIT_ENUM_CLASS_FMT_FORMATTER(name) 
