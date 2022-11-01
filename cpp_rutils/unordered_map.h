@@ -16,6 +16,8 @@ template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq =
 struct um_p : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq> {
 	using std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>::unordered_map;
 
+	um_p (std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq> &&other ) {this->std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>::operator=(other);}
+
 	const _Ty& at(const _Kty& key) const
 	{
 		auto w = this->find(key);
