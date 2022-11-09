@@ -29,3 +29,15 @@ Vec List_if(const Vec& vec, UnaryPredicate pred)
 	std::copy_if(vec.begin(), vec.end(), std::back_inserter(res), pred);
 	return res;
 }
+
+template <VectorConcept In, class Pred>
+bool contains_if(const In& in, Pred pred)
+{
+	return std::find_if(in.begin(), in.end(), pred) != in.end();
+}
+
+template <VectorConcept In>
+bool contains(const In& in, typename In::value_type val)
+{
+	return std::find(in.begin(), in.end(), val) != in.end();
+}
