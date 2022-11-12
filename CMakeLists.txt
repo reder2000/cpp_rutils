@@ -48,7 +48,8 @@ message("include_directories ${CMAKE_BINARY_DIR}")
 
 #if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 if (NOT HAVE_CXX20_CHRONO)
-  find_vcpkg_install_missing(date date[remote-api])
+  #find_vcpkg_install_missing(date date[remote-api])
+  find_package(date REQUIRED)
   set (additional_targets date::date date::date-tz)
 endif()
 
