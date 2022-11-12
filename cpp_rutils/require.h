@@ -119,3 +119,16 @@
 	if (!(cond)) \
 		return tl::unexpected( fmt::format("!({}), {} , {} , {} " , BOOST_PP_STRINGIZE(cond), __func__ , __FILE__ , __LINE__ ) )
 
+
+#define TRY_INIT1(some_fun,...) [&](){ try{return some_fun;} \
+     catch(const std::exception & e) { throw std::runtime_error( \
+		fmt::format("{} , {} , {} , . exception {} from {} " , __func__ , __FILE__ , __LINE__ ,\
+		  e.what() , fmt::format(__VA_ARGS__))) ; } } ()
+
+#define TRY_INIT0(...) \
+	TRY_INIT1(__VA_ARGS__, # __VA_ARGS__ )
+
+#define TRY_INIT(...) \
+	BOOST_PP_IF(BOOST_PP_DEC(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__)) , \
+			TRY_INIT1(__VA_ARGS__) , TRY_INIT0(__VA_ARGS__))
+
