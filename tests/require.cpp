@@ -89,3 +89,17 @@ TEST_CASE("MREQUIRE_RET", "[require][hide]")
 	CHECK(test_MREQUIRE_RET(false, false) == 1);
 	CHECK_THROWS(test_MREQUIRE_RET(true, false));
 }
+
+
+TEST_CASE("MREQUIRE_INIT", "[require][hide]")
+{
+	auto good_fun = []() {return std::string("OK"); };
+	auto bad_fun = []() {throw std::runtime_error("ouch");  return std::string("OK"); };
+
+	auto a = TRY_INIT(good_fun(), "ok");
+	auto b = TRY_INIT(good_fun());
+
+	CHECK_THROWS( TRY_INIT(bad_fun(), "this is {}", "bad"));
+	CHECK_THROWS(TRY_INIT(bad_fun() ));
+
+}
