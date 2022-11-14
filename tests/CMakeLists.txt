@@ -5,26 +5,14 @@ message("Configuring cpp_rutils/tests ...")
 
 
 find_vcpkg_install_missing(Catch2 catch2)
-message("CATCH2_LIBRARIES: ${Catch2_Libs}")
-find_vcpkg_install_missing(fmt)
 
-#file(GLOB headers ../include/*.h )
 file (GLOB srcs CONFIGURE_DEPENDS *.cpp)
 
 include_directories(../cpp_rutils)
 include_directories(..)
 
-#include(CTest)
-#enable_testing()
+add_executable(cpp_rutils_tests ${srcs})
 
-add_executable(cpp_rutils_tests ${srcs}) # ${headers})
-
-target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt)
-
-#target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)
-#add_definitions(-DUSING_PCH)
-
-#enable_testing()
-#add_test(NAME main COMMAND cpp_rutils_tests)
+target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt  date::date date::date-tz)
 
 message("... done cpp_rutils/tests Configuring")

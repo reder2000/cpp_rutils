@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required (VERSION 3.20)
+
 project("cpp_rutils" VERSION 1.0.1
              DESCRIPTION "some basic cpp framework"
              HOMEPAGE_URL "https://github.com/reder2000/cpp_rutils")
@@ -22,7 +23,6 @@ find_vcpkg_install_missing(fmt)
 if ("${fmt_VERSION}" VERSION_LESS "9.0.0")
     message(FATAL_ERROR  "fmt version ${fmt_VERSION} must be >= 9.0.0.\n Please upgrade vcpkg")
 endif()
-message("fmt version ${fmt_VERSION} is >= 9.0.0. ok.")
 boost_header_only_package(preprocessor preprocessor.hpp)
 find_vcpkg_install_missing(tl-expected)
 
@@ -31,7 +31,6 @@ check_symbol_exists(strerror_s "string.h" HAVE_STRERROR_S)
 check_symbol_exists(getenv_s "stdlib.h" HAVE_GETENV_S)
 check_symbol_exists(localtime_s "time.h" HAVE_LOCALTIME_S)
 include(CheckCXXSourceCompiles)
-#set(CMAKE_REQUIRED_LIBRARIES cstring)
 check_cxx_source_compiles(
         "#include <chrono>
          using test = std::chrono::duration;
@@ -46,14 +45,28 @@ configure_file(cpp_rutils/config.h.in cpp_rutils_config.h)
 include_directories(${CMAKE_BINARY_DIR})
 message("include_directories ${CMAKE_BINARY_DIR}")
 
-#if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-if (NOT HAVE_CXX20_CHRONO)
-  #find_vcpkg_install_missing(date date[remote-api])
-  find_package(date REQUIRED)
-  set (additional_targets date::date date::date-tz)
+if (MSVC)
+message("using https://github.com/HowardHinnant/date.git")
+FetchContent_Declare(
+	  date_src
+	  GIT_REPOSITORY  "https://github.com/HowardHinnant/date.git"
+	  GIT_TAG origin/master
+	  GIT_REMOTE_UPDATE_STRATEGY REBASE_CHECKOUT
+	  GIT_PROGRESS TRUE
+	  GIT_SHALLOW TRUE
+	  LOG_UPDATE TRUE
+	  SOURCE_SUBDIR  date_src
+	  BUILD_TZ_LIB
+	)
+FetchContent_Populate(date_src)
+set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard whose features are requested." )
+set(BUILD_TZ_LIB ON CACHE INTERNAL "BUILD_TZ_LIB")
+add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR})
+message("add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR}")
+else ()
+    message("using vcpkg date")
+  find_vcpkg_install_missing(date date[remote-api])
 endif()
-
-
 
 add_source_group(cpp_rutils)
 set(all_sources ${all_sources} cpp_rutils/config.h.in)
@@ -64,15 +77,13 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_library(cpp_rutils INTERFACE ${all_sources} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
-target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only ${additional_targets})
+target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only date::date date::date-tz)
+#target_link_libraries(cpp_rutils INTERFACE "$<BUILD_INTERFACE:date>")
 
 target_include_directories(
   ${PROJECT_NAME}
   INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-
-# require C++20
-#target_compile_features(cpp_rutils INTERFACE cxx_std_20)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}_Targets
