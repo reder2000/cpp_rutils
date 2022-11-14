@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "vector_concept.h"
+#include <algorithm>
 
 // return a new, transformed vector
 

@@ -5,7 +5,7 @@
 #include "cpp_rutils_config.h"
 #include <chrono>
 
-#if defined(HAVE_CXX20_CHRONO_DURATION) && !defined(__MING32__)
+#if MSVC_DATE_IS_FAST // defined(HAVE_CXX20_CHRONO_DURATION) && !defined(__MING32__)
 #define std__chrono std::chrono
 #else
 #include <date/date.h>
