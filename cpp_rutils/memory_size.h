@@ -90,7 +90,7 @@ namespace memory {
 
     template<typename T>
     concept no_needs_recursion =
-        is_iterable<T> && !need_inspection <typename T::value_type>;
+        is_iterable<T> && !need_inspection <typename T::value_type> && !has_internal_impl<T>;
 
     template<typename T>
     concept has_capacity =
