@@ -147,7 +147,7 @@ Date parse_date(std::string_view sv)
 inline
 tl::expected<Date,std::string> try_parse_date(std::string_view sv)
 {
-  int year, month, day;
+  int year=0, month=0, day=0;
   // 2018/12/21
   MEXPECTED(sv.size() == 10);
   MEXPECTED(sv[4] == '/' || sv[4] == '-');

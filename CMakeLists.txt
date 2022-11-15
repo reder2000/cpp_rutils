@@ -43,7 +43,7 @@ check_cxx_source_compiles(
          HAVE_CXX20_CHRONO_TIME_ZONE)
 configure_file(cpp_rutils/config.h.in cpp_rutils_config.h)
 include_directories(${CMAKE_BINARY_DIR})
-message("include_directories ${CMAKE_BINARY_DIR}")
+message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
 
 if (MSVC)
 message("using https://github.com/HowardHinnant/date.git")
