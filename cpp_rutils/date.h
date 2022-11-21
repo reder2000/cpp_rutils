@@ -20,6 +20,8 @@
 
 #include <charconv>
 
+#include "period.h"
+
 // date type
 using Date = std__chrono::year_month_day;
 
@@ -129,6 +131,9 @@ struct fmt::formatter<Date> : formatter<std::string>
 	}
 };
 
+Date operator+(Date d, Period p);
+
+
 // parser
 
 tl::expected<Date,std::string> try_parse_date(std::string_view sv)  ;
@@ -142,6 +147,31 @@ Date parse_date(std::string_view sv)
 	if (!pres.has_value())
 		MFAIL("cannot parse {} into date : {}" ,sv,pres.error());
 	return pres.value<>();
+}
+
+inline Date operator+(Date d, Period p)
+{
+	Date res;
+	std__chrono::sys_days sd(d);
+	switch (p._units)
+	{
+	case TimeUnit::Days:
+		res = sd + std__chrono::days{ p._length };
+		break;
+	case TimeUnit::Months:
+		res = d;
+		res += std__chrono::months{ p._length };
+		if (!res.ok())
+			res = res.year() / res.month() / std__chrono::last;
+		break;
+	case TimeUnit::Years:
+		res = d;
+		res += std__chrono::years{ p._length };
+		break;
+	default:
+		MFAIL("unit {} cannot be added to date", p._units);
+	}
+	return res;
 }
 
 inline
