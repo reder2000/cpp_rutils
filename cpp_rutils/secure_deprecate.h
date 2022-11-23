@@ -28,7 +28,7 @@ std::string m_strerror_s(int _ErrorMsg)
 	return s;
 #else
 	char buffer[1024];
-	if (auto failed = strerror_s(buffer, 1024, _ErrorMsg))
+	if (auto failed = strerror_s(buffer, 1024, _ErrorMsg); failed)
 	{
 		constexpr size_t size = 1024*64;
 		char buffer2[size];
