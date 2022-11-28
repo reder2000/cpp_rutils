@@ -42,5 +42,7 @@ TEST_CASE("linalg", "[name][hide]")
     CHECK(m3.get_row(1) == std::vector<int>{3,4});
     m3.assign_col(1,std::vector<int>{7,8,9});
     CHECK(m3.get_row(1) == std::vector<int>{3,8});
+    mult_self(aa, aa2);
+    CHECK(aa == std::vector<int>{ 2,8,18 });
 }
 

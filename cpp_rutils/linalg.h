@@ -20,6 +20,8 @@ T mean(const std::vector<T>& v);
 template<typename T>
 std::vector<T> & mult_self(std::vector<T>& v, const T& val);
 template<typename T>
+std::vector<T>& mult_self(std::vector<T>& v, const std::vector<T>& other_v);
+template<typename T>
 std::vector<T> mult(const std::vector<T>& v, const T& val);
 template<typename T>
 T variance(const std::vector<T>& v, unsigned short ddof);
@@ -133,6 +135,18 @@ template <typename T>
 std::vector<T>& mult_self(std::vector<T>& v, const T& val)
 {
 	for (auto& x : v) x *= val;
+	return v;
+}
+
+template<typename T>
+std::vector<T>& mult_self(std::vector<T>& v, const std::vector<T>& other_v)
+{
+	MREQUIRE_EQUAL(v.size(), other_v.size());
+	auto j = other_v.begin();
+	for (auto& x : v) {
+		x *= *j;
+		++j;
+	}
 	return v;
 }
 
