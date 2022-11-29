@@ -42,3 +42,28 @@ bool contains(const In& in, typename In::value_type val)
 {
 	return std::find(in.begin(), in.end(), val) != in.end();
 }
+
+
+template <class T>
+[[nodiscard]] std::vector<T> concat(const std::vector<T>& dst, const std::vector<T>& src)
+{
+	std::vector<T>	res{ dst };
+	res.insert(
+		res.end(),
+		src.begin(),
+		src.end()
+	);
+	return res;
+}
+
+// concat with move
+template <class T>
+std::vector<T> &concat(std::vector<T> & dst, std::vector<T> && src)
+{
+	dst.insert(
+		dst.end(),
+		std::make_move_iterator(src.begin()),
+		std::make_move_iterator(src.end())
+	);
+	return dst;
+}

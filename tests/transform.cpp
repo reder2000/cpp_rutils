@@ -23,4 +23,11 @@ TEST_CASE("transform", "[transform][hide]")
 	CHECK(contains_if(v, [](auto&& x) {return x == 2; }));
 	CHECK(!contains_if(v, [](auto&& x) {return x == 10; }));
 
+	std::vector<int> cc{ 4,5,6 };
+	concat(v, std::move(cc));
+	CHECK(v.at(6) == 6);
+	std::vector<int> dd{ 7,8 };
+	auto vv = concat(v, dd);
+	CHECK(vv.at(8) == 8);
+	CHECK(v.size() == 7);
 }
