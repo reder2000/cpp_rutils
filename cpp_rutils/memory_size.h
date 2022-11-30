@@ -184,7 +184,7 @@ namespace memory
   template <is_unordered_map_no_needs_recursion M>
   size_t used_size(const M& m, record& )
   {
-    size_t res = (m.size() * (sizeof(M::value_type) + sizeof(void*)) +  // data list
+    size_t res = (m.size() * (sizeof(typename M::value_type) + sizeof(void*)) +  // data list
                   m.bucket_count() * (sizeof(void*) + sizeof(size_t)))  // bucket index
                  * 3  // estimated allocation overheads
         ;
@@ -195,7 +195,7 @@ namespace memory
   template <is_unordered_map_needs_recursion M>
   size_t used_size(const M& m, record& mc)
   {
-    size_t res = (m.size() * (sizeof(M::value_type) + sizeof(void*)) +  // data list
+    size_t res = (m.size() * (sizeof(typename M::value_type) + sizeof(void*)) +  // data list
                   m.bucket_count() * (sizeof(void*) + sizeof(size_t)))  // bucket index
                  * 3  // estimated allocation overheads
         ;
