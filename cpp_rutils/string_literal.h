@@ -75,4 +75,47 @@ namespace detail
 template <StringLiteral T, class U>
 constexpr size_t tuple_sl_element = detail::tuple_sl_element_struct<T, U>::value;
 
+namespace detail {
+    template <StringLiteral T, class Tuple>
+    struct is_tuple_sl_element_struct
+    {
+        static constexpr bool value = false;
+    };
 
+    template <StringLiteral T, StringLiteral... Types>
+    struct is_tuple_sl_element_struct<T, tuple_sl<T, Types...>>
+    {
+        static constexpr bool value = true;
+    };
+
+    template <StringLiteral T, StringLiteral U, StringLiteral... Types>
+    struct is_tuple_sl_element_struct<T, tuple_sl<U, Types...>>
+    {
+        static const bool value = is_tuple_sl_element_struct<T, tuple_sl<Types...>>::value;
+    };
+}
+
+// is T  in tuple_sl ?
+template <StringLiteral T, class U>
+constexpr bool is_tuple_sl_element = detail::is_tuple_sl_element_struct<T, U>::value;
+
+namespace detail {
+
+
+    template< std::size_t I, class T >
+    struct tuple_sl_element;
+
+    // recursive case
+    template< std::size_t I, StringLiteral Head, StringLiteral ... Tail >
+    struct tuple_sl_element<I, tuple_sl<Head, Tail...>>
+        : tuple_sl_element<I - 1, tuple_sl<Tail...>> { };
+
+    // base case
+    template< StringLiteral Head, StringLiteral ... Tail >
+    struct tuple_sl_element<0, tuple_sl<Head, Tail...>> {
+        static constexpr auto value  = Head;
+    };
+}
+
+template <std::size_t I, class T>
+constexpr auto tuple_sl_element_t = detail::tuple_sl_element<I,T>::value;
