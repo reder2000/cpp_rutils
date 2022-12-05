@@ -15,12 +15,13 @@
 #include "boost/preprocessor/seq/elem.hpp"
 #include "to_string.h"
 #include "always_false.h"
+#include "string_literal.h"
 
 template <class T>
-const char* enum_to_string(T)
+std::string_view enum_to_string(T)
 {
 	static_assert(always_false_v<T>);
-	return nullptr;
+	return {};
 }
 
 template <class T>
@@ -30,40 +31,68 @@ T string_to_enum(std::string_view s);
 #define NAME_TUPLE(name) \
 	BOOST_PP_CAT(name,_tuple)
 
-
-// name_tuple = (a,b) =>
-// enum class name_tuple {a,b}
+// name_tuple = (a,b,...) =>
+// enum class name_tuple {a,b,...}
 #define EMIT_ENUM_CLASS_ENUM(name) \
 enum class name { \
 	BOOST_PP_TUPLE_REM_CTOR(NAME_TUPLE(name)) \
 }
 
-// , data::elem , "elem"
+// , data::elem => , "elem"
 #define EMIT_ENUM_TO_STRING(r, data, i, elem) \
 	BOOST_PP_COMMA_IF(i) BOOST_PP_STRINGIZE(elem)
 
-// name_tuple = (a,b) =>
-// name2String map = { {a,"a"} , {b,"b"} }
+// name => name_tuple_sl
+#define NAME_TUPLE_SL(name) \
+	BOOST_PP_CAT(name,_tuple_sl)
+
+// name => name_tuple_sl = tuple_sl<"a","b",...>
+#define EMIT_TUPLE_SL(name) \
+	using NAME_TUPLE_SL(name) = tuple_sl< \
+		BOOST_PP_LIST_FOR_EACH_I(EMIT_ENUM_TO_STRING,name,BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  \
+		>
+
+// name => enum to string
 #define EMIT_ENUM_CLASS_TO_STRING(name) \
 template <> \
-inline const char*  enum_to_string<name>(name value)  { \
-	static const char* tab[] = { \
-	BOOST_PP_LIST_FOR_EACH_I(EMIT_ENUM_TO_STRING,name,BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  \
-	} ;\
-	return tab[static_cast<size_t>(value)] ;\
-}
+inline std::string_view enum_to_string<name>(name value)  { \
+	size_t i = static_cast <size_t>(static_cast<std::underlying_type_t<name>>(value));\
+	return  tuple_sl_get_i<NAME_TUPLE_SL(name)>(i) ; }
 
-#define EMIT_STRING_TO_ENUM(r, data, elem) if (BOOST_PP_SEQ_ELEM(0,data) == BOOST_PP_STRINGIZE(elem)) return BOOST_PP_SEQ_ELEM(1,data)::elem ;
+//// name_tuple = (a,b) =>
+//// name2String map = { {a,"a"} , {b,"b"} }
+//#define EMIT_ENUM_CLASS_TO_STRING(name) \
+//template <> \
+//inline const char*  enum_to_string<name>(name value)  { \
+//	static const char* tab[] = { \
+//	BOOST_PP_LIST_FOR_EACH_I(EMIT_ENUM_TO_STRING,name,BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  \
+//	} ;\
+//	return tab[static_cast<size_t>(value)] ;\
+//}
 
+// name => string to enum
 #define EMIT_STRING_TO_ENUM_CLASS(name) \
 template <> \
 inline name string_to_enum(std::string_view s) { \
-	BOOST_PP_LIST_FOR_EACH( EMIT_STRING_TO_ENUM , (s)(name) , BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)) )  \
-	throw std::runtime_error(fmt::format("did not find {}", s)); \
-} \
+size_t i = tuple_sl_index_s<NAME_TUPLE_SL(name)>(s); \
+MREQUIRE(i!=std::string::npos,"{} is not a valid string for",s,BOOST_PP_STRINGIZE(name));\
+	return static_cast<name>(i); } \
 template <> \
-inline std::string to_string<name>(const name &value)\
-{ return std::string(enum_to_string(value)) ; }
+inline std::string to_string<name>(const name& value)\
+{ return std::string(enum_to_string(value)); }
+
+
+//#define EMIT_STRING_TO_ENUM(r, data, elem) if (BOOST_PP_SEQ_ELEM(0,data) == BOOST_PP_STRINGIZE(elem)) return BOOST_PP_SEQ_ELEM(1,data)::elem ;
+//
+//#define EMIT_STRING_TO_ENUM_CLASS(name) \
+//template <> \
+//inline name string_to_enum(std::string_view s) { \
+//	BOOST_PP_LIST_FOR_EACH( EMIT_STRING_TO_ENUM , (s)(name) , BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)) )  \
+//	throw std::runtime_error(fmt::format("did not find {}", s)); \
+//} \
+//template <> \
+//inline std::string to_string<name>(const name &value)\
+//{ return std::string(enum_to_string(value)) ; }
 
 #define EMIT_ENUM_CLASS_FMT_FORMATTER(name) \
 template <>\
@@ -80,6 +109,7 @@ struct fmt::formatter<name> : formatter<std::string>\
 
 #define EMIT_ENUM_CLASS(name) \
 	EMIT_ENUM_CLASS_ENUM(name); \
+	EMIT_TUPLE_SL(name); \
 	EMIT_ENUM_CLASS_TO_STRING(name); \
 	EMIT_STRING_TO_ENUM_CLASS(name); \
 	EMIT_ENUM_CLASS_FMT_FORMATTER(name) 

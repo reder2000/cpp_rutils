@@ -71,6 +71,7 @@ endif()
 add_source_group(cpp_rutils)
 set(all_sources ${all_sources} cpp_rutils/config.h.in)
 add_source_group(cpp_rutils/throwing)
+add_source_group(cpp_rutils/detail)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # define a header-only library
