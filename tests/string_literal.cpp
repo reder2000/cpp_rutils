@@ -3,6 +3,7 @@
 #include <optional>
 #include <array>
 #include <name_short.h>
+#include <always_false.h>
 
 //#define DataType_tuple (close,\
 //open,\
@@ -23,6 +24,27 @@ concept is_good_string = tuple_sl_contains < U, tuple_sl<"toto", "tata">>   ;
 template <StringLiteral U> requires is_good_string<U>
 void fun() {}
 
+template <StringLiteral T>
+struct always_false_sl
+{
+	static constexpr bool value = false;
+};
+
+
+struct toto
+{
+	template <StringLiteral S>
+	static toto* create()
+	{
+		static_assert(always_false_sl<S>::value);
+	}
+};
+
+template <>
+toto* toto::create<"tutu">()
+{
+	return nullptr;
+}
 
 
 TEST_CASE("string literal", "[enum][hide]")
@@ -40,4 +62,11 @@ TEST_CASE("string literal", "[enum][hide]")
 	std::cout << "XXXXXXXXXXXXXX " << tt << "\n";
 	CHECK(tuple_sl_get_i<tu>(1) == "tata");
 	CHECK(tuple_sl_index_s<tu>("tata") == 1);
+}
+
+TEST_CASE("string literal ctor")
+{
+// fails
+// auto t = toto::create<"titi">();
+	auto t = toto::create<"tutu">();
 }

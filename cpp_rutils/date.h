@@ -25,18 +25,21 @@
 // date type
 using Date = std__chrono::year_month_day;
 
+constexpr std__chrono::days operator""_days(unsigned long long h)
+{
+  return std__chrono::days(h);
+}
+
 // date constructor without boilerplate conversions
 constexpr Date make_date(int _year, int _month, int _day)
 {
-  using namespace std__chrono;
-  return Date{year(_year), month(_month), day(_day)};
+  return Date{std__chrono::year(_year), std__chrono::month(_month), std__chrono::day(_day)};
 }
 
 // date constructor without boilerplate conversions
 inline Date make_date_checked(int _year, int _month, int _day)
 {
-  using namespace std__chrono;
-  auto res = Date{year(_year), month(_month), day(_day)};
+  auto res = Date{std__chrono::year(_year), std__chrono::month(_month), std__chrono::day(_day)};
   MREQUIRE(res.ok(), "date {}/{}/{} problem", _year, _month, _day);
   return res;
 }

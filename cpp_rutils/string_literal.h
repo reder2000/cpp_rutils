@@ -49,27 +49,28 @@ struct tuple_sl<U, Us...> : private tuple_sl<Us...>
 
 #include "detail/string_literal.h"
 
+
 // is T  in tuple_sl ? returns std::string::npos if not found
 template <StringLiteral T, class U>
-constexpr bool tuple_sl_contains = detail::tuple_sl_contains<T, U>::value;
+constexpr bool tuple_sl_contains = detaill::tuple_sl_contains<T, U>::value;
 
 // find index of T in tuple_sl
 template <StringLiteral T, class U>
-constexpr size_t tuple_sl_index = detail::tuple_sl_index   <T, U>::value;
+constexpr size_t tuple_sl_index = detaill::tuple_sl_index   <T, U>::value;
 
 // find value if Ith string literal in T
 template <std::size_t I, class T>
-constexpr auto tuple_sl_get = detail::tuple_sl_get<I, T>::value;
+constexpr auto tuple_sl_get = detaill::tuple_sl_get<I, T>::value;
 
 // array of values
 template <typename T>
-constexpr auto tuple_sl_array = detail::get_tuple_sl_array(T{});
+constexpr auto tuple_sl_array = detaill::get_tuple_sl_array(T{});
 
 // runtime i-th value
 template <typename T>
 std::string_view tuple_sl_get_i(size_t i)
 {
-	return detail::tuple_sl_get_i(i, T{});
+	return detaill::d_tuple_sl_get_i(i, T{});
 }
 
 // runtime index of value. npos if not found
