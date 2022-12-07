@@ -24,6 +24,20 @@ if ("${fmt_VERSION}" VERSION_LESS "9.0.0")
     message(FATAL_ERROR  "fmt version ${fmt_VERSION} must be >= 9.0.0.\n Please upgrade vcpkg")
 endif()
 boost_header_only_package(preprocessor preprocessor.hpp)
+if (${MINGW})
+# libbacktrace does not work properlmy on msys2
+#find_package(backtrace REQUIRED)
+#set(additional_libraries backtrace)
+add_compile_definitions(BOOST_STACKTRACE_USE_NOOP)
+endif()
+if (${UNIX})
+boost_header_only_package(stacktrace stacktrace.hpp)
+add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
+#sorry but stacktrace misses a config so we run into that line at each configure
+vcpkg_install(libbacktrace)
+#find_vcpkg_install_missing(backtrace libbacktrace)
+set(additional_libraries backtrace)
+endif()
 find_vcpkg_install_missing(tl-expected)
 
 include(CheckSymbolExists)
@@ -78,7 +92,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_library(cpp_rutils INTERFACE ${all_sources} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
-target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only date::date date::date-tz)
+target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only date::date date::date-tz ${additional_libraries})
 #target_link_libraries(cpp_rutils INTERFACE "$<BUILD_INTERFACE:date>")
 
 target_include_directories(

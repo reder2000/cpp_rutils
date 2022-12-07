@@ -13,6 +13,6 @@ include_directories(..)
 
 add_executable(cpp_rutils_tests ${srcs})
 
-target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt  date::date date::date-tz)
+target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt  date::date date::date-tz ${additional_libraries})
 
 message("... done cpp_rutils/tests Configuring")

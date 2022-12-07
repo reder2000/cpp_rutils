@@ -34,7 +34,7 @@ struct always_false_sl
 struct toto
 {
 	template <StringLiteral S>
-	static toto* create()
+	[[noreturn]] static toto* create()
 	{
 		static_assert(always_false_sl<S>::value);
 	}

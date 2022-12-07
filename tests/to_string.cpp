@@ -25,6 +25,19 @@ template <> struct fmt::formatter<A> : formatter<std::string> {
 };
 
 
+std::string_view at_most_n_lines(std::string_view sv, size_t n)
+{
+    auto i = sv.begin();
+    for (; n > 0; --n)
+    {
+        i = std::find(i, sv.end(), '\n');
+        if (i == sv.end()) break;
+        ++i;
+    }
+    return std::string_view(sv.begin(), i);
+}
+
+
 TEST_CASE("to_string", "[to_string][hide]")
 {
     int i = 10;

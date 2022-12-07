@@ -14,21 +14,37 @@
 #include <boost/preprocessor/tuple/enum.hpp>
 #include <boost/preprocessor/facilities/is_empty.hpp>
 #include <tl/expected.hpp>
+#include <boost/stacktrace.hpp>
+
+// formatter
+template <>
+struct fmt::formatter<boost::stacktrace::stacktrace> : formatter<std::string>
+{
+	// parse is inherited from formatter<string_view>.
+	template <typename FormatContext>
+	auto format(boost::stacktrace::stacktrace c, FormatContext& ctx)
+	{
+		std::stringstream ss;
+		ss << c;
+		return formatter<std::string>::format(ss.str(), ctx);
+	}
+};
+
 
 #define MFAIL(...) \
 	throw std::runtime_error( \
-		fmt::format("{} , {} , {} , {} " , __func__ , __FILE__ , __LINE__ ,\
-		  fmt::format(__VA_ARGS__)))
+		fmt::format("{} , {} , {} , {} , \n stacktrace : {} " , __func__ , __FILE__ , __LINE__ ,\
+		  fmt::format(__VA_ARGS__), boost::stacktrace::stacktrace()))
 
 #define MREQUIRE2(success,VA_ARGS1,VA_ARGS2) \
 	if (!(success)) throw std::runtime_error( \
-		fmt::format("{} , {} , {} , {} , {}" , __func__ , __FILE__ , __LINE__ ,\
-		  fmt::format(BOOST_PP_TUPLE_ENUM(VA_ARGS1)), fmt::format(BOOST_PP_TUPLE_ENUM(VA_ARGS2))))
+		fmt::format("{} , {} , {} , {} , {} , \n stacktrace : {} " , __func__ , __FILE__ , __LINE__ ,\
+		  fmt::format(BOOST_PP_TUPLE_ENUM(VA_ARGS1)), fmt::format(BOOST_PP_TUPLE_ENUM(VA_ARGS2)), boost::stacktrace::stacktrace()))
 
 #define MREQUIRE1(success,...) \
 	if (!(success)) throw std::runtime_error( \
-		fmt::format("{} , {} , {} , {} " , __func__ , __FILE__ , __LINE__ ,\
-		  fmt::format(__VA_ARGS__)))
+		fmt::format("{} , {} , {} , {} , \n stacktrace : {} " , __func__ , __FILE__ , __LINE__ ,\
+		  fmt::format(__VA_ARGS__), boost::stacktrace::stacktrace()))
 
 #define MREQUIRE0(...) \
 	MREQUIRE1(__VA_ARGS__, # __VA_ARGS__ )
@@ -74,13 +90,13 @@
     }                                                                                                                                                \
     catch (std::exception & e)                                                                                                                       \
     {                                                                                                                                                \
-      throw std::runtime_error(fmt::format("{} , {} , {} failed with exception {} ({}) ", __func__, __FILE__, __LINE__, e.what()   \
-                   , fmt::format(__VA_ARGS__)        ));                                                                                                            \
+      throw std::runtime_error(fmt::format("{} , {} , {} failed with exception {} ({}) , \n stacktrace : {} ", __func__, __FILE__, __LINE__, e.what()   \
+                   , fmt::format(__VA_ARGS__)  , boost::stacktrace::stacktrace()      ));                                                                                                            \
     }                                                                                                                                                \
     if (! success)                                                                             \
     {                                                                                          \
-      throw std::runtime_error(fmt::format("{} , {} , {} , {} ", __func__, __FILE__, __LINE__, \
-                                           fmt::format(__VA_ARGS__)));                         \
+      throw std::runtime_error(fmt::format("{} , {} , {} , {} , \n stacktrace : {} ", __func__, __FILE__, __LINE__, \
+                                           fmt::format(__VA_ARGS__), boost::stacktrace::stacktrace()));                         \
     }                                                                                          \
   }
 
@@ -122,8 +138,8 @@
 
 #define TRY_INIT1(some_fun,...) [&](){ try{return some_fun;} \
      catch(const std::exception & e) { throw std::runtime_error( \
-		fmt::format("{} , {} , {} , . exception {} from {} " , __func__ , __FILE__ , __LINE__ ,\
-		  e.what() , fmt::format(__VA_ARGS__))) ; } } ()
+		fmt::format("{} , {} , {} , . exception {} from {} , \n stacktrace : {} " , __func__ , __FILE__ , __LINE__ ,\
+		  e.what() , fmt::format(__VA_ARGS__), boost::stacktrace::stacktrace())) ; } } ()
 
 #define TRY_INIT0(...) \
 	TRY_INIT1(__VA_ARGS__, # __VA_ARGS__ )

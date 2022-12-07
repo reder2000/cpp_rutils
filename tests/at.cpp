@@ -2,6 +2,7 @@
 #include <throwing/at.h>
 #include <map>
 #include <unordered_map>
+#include <to_string.h>
 
 TEST_CASE("throwing at", "[enum][hide]")
 {
@@ -17,14 +18,14 @@ TEST_CASE("throwing at", "[enum][hide]")
 		}
 	catch(const std::exception &e)
 	{
-		fmt::print("exception {}\n", e.what());
+		fmt::print("exception {}\n", at_most_n_lines(e.what(),15));
 	}
 	try {
 		AT(um, 2);
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("exception {}\n", e.what());
+		fmt::print("exception {}\n", at_most_n_lines(e.what(),15));
 	}
 
 }

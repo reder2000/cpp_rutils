@@ -11,6 +11,7 @@ EMIT_ENUM_CLASS(EnumFail);
 
 TEST_CASE("require", "[require][hide]")
 {
+	//try { MFAIL("reason why"); }	catch (const std::exception& e) { fmt::print("failed since: {}", e.what()); }
 	auto f = []() { MREQUIRE(true); };
 	CHECK_NOTHROW(f());
 	auto g = []() { MREQUIRE(false); };
@@ -31,9 +32,9 @@ TEST_CASE("require", "[require][hide]")
 	CHECK_THROWS(k(EnumFail::bad));
 	auto failure = []() {throw std::runtime_error("expected to fail"); return 1; };
 	try { MREQUIRE_TRY(failure()); }
-	catch (std::exception& e) { std::cout << e.what() <<  std::endl; }
+	catch (std::exception& e) { std::cout << at_most_n_lines( e.what() ,5) <<  std::endl; }
 	try { MREQUIRE_TRY(failure() , "{}" , "failure"); }
-	catch (std::exception& e) { std::cout << e.what() << std::endl; }
+	catch (std::exception& e) { std::cout << at_most_n_lines( e.what() ,5) << std::endl; }
 
 }
 

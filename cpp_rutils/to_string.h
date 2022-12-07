@@ -7,6 +7,7 @@
 #include <string>
 #include <fmt/format.h>
 #include <variant>
+#include <string_view>
 
 template<typename T>
 inline constexpr bool is_stdstring_convertible = std::is_convertible_v<T, std::string>;
@@ -75,3 +76,4 @@ std::string to_string(const std::variant<T...> &v) {
     return std::visit([](auto &&a) { return to_string(a); }, v);
 };
 
+std::string_view at_most_n_lines(std::string_view sv, size_t n);
