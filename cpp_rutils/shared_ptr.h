@@ -75,4 +75,8 @@ up<_Ty> new_up(_Ty&& t)
 }
 
 
-
+template <class T>
+std::decay_t<T>& auto_const_cast(const T& t)
+{
+        return const_cast<std::decay_t<T>&>(t);
+}

@@ -16,6 +16,10 @@
 #include <tl/expected.hpp>
 #include <sstream>
 #include <boost/stacktrace.hpp>
+#ifdef small
+#undef small
+#undef bug
+#endif
 
 // formatter
 template <>

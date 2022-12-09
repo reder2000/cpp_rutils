@@ -24,7 +24,7 @@ class ScopedTimer
   {
     _what       = std::move(what);
     _start_time = std::chrono::steady_clock::now();
-    std::cout << _what << "[ ";
+    std::cout << "[ " << _what <<  std::flush;
   }
   void end()
   {
