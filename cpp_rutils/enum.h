@@ -31,6 +31,11 @@ T string_to_enum(std::string_view s);
 #define NAME_TUPLE(name) \
 	BOOST_PP_CAT(name,_tuple)
 
+// process tuple with macro
+#define PROCESS_TUPLE(macro, data, name) \
+  BOOST_PP_LIST_FOR_EACH_I(macro, data, BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))
+
+
 // name_tuple = (a,b,...) =>
 // enum class name_tuple {a,b,...}
 #define EMIT_ENUM_CLASS_ENUM(name) \
@@ -45,12 +50,15 @@ enum class name { \
 // name => name_tuple_sl
 #define NAME_TUPLE_SL(name) \
 	BOOST_PP_CAT(name,_tuple_sl)
-
 // name => name_tuple_sl = tuple_sl<"a","b",...>
 #define EMIT_TUPLE_SL(name) \
 	using NAME_TUPLE_SL(name) = tuple_sl< \
-		BOOST_PP_LIST_FOR_EACH_I(EMIT_ENUM_TO_STRING,name,BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  \
+		PROCESS_TUPLE(EMIT_ENUM_TO_STRING,name,name)  \
 		>
+// deprecated
+//#define EMIT_TUPLE_SL(name)                                      \
+//  using NAME_TUPLE_SL(name) = tuple_sl<BOOST_PP_LIST_FOR_EACH_I( \
+//      EMIT_ENUM_TO_STRING, name, BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))>
 
 // name => enum to string
 #define EMIT_ENUM_CLASS_TO_STRING(name) \
@@ -124,7 +132,12 @@ struct fmt::formatter<name> : formatter<std::string>\
 #define EMIT_ENUM_PYBIND11_VALUE(r,data,i,elem) \
   .value(BOOST_PP_STRINGIZE(elem),data::elem)
 
-#define EMIT_ENUM_PYBIND11(name,m) \
-  py::enum_<name>(m, BOOST_PP_STRINGIZE(name), py::arithmetic())\
-  BOOST_PP_LIST_FOR_EACH_I( \
-      EMIT_ENUM_PYBIND11_VALUE, name, BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  
+// deprecate
+//#define EMIT_ENUM_PYBIND11(name,m) \
+//  py::enum_<name>(m, BOOST_PP_STRINGIZE(name), py::arithmetic())\
+//  BOOST_PP_LIST_FOR_EACH_I( \
+//      EMIT_ENUM_PYBIND11_VALUE, name, BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  
+
+#define EMIT_ENUM_PYBIND11(name, m)                                                        \
+  py::enum_<name>(m, BOOST_PP_STRINGIZE(name), py::arithmetic())  \
+    PROCESS_TUPLE(EMIT_ENUM_PYBIND11_VALUE,name,name)

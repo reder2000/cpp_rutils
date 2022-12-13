@@ -16,6 +16,6 @@ struct SimpleClass
 TEST_CASE("SimpleClass", "[enum][hide]")
 {
 	SimpleClass sc;
-	sc.i = 12;
-	sc.d = 3.14;
+	sc._i = 12;
+	sc._d = 3.14;
 }
