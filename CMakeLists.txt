@@ -70,11 +70,13 @@ FetchContent_Declare(
 	  GIT_SHALLOW TRUE
 	  LOG_UPDATE TRUE
 	  SOURCE_SUBDIR  date_src
-	  BUILD_TZ_LIB
+      USE_SYSTEM_TZ_DB ON
+	  BUILD_TZ_LIB ON
 	)
 FetchContent_Populate(date_src)
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard whose features are requested." )
 set(BUILD_TZ_LIB ON CACHE INTERNAL "BUILD_TZ_LIB")
+set(USE_SYSTEM_TZ_DB ON CACHE INTERNAL "USE_SYSTEM_TZ_DB")
 add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR})
 message("add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR}")
 else ()

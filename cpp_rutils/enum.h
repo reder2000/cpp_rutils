@@ -113,3 +113,18 @@ struct fmt::formatter<name> : formatter<std::string>\
 	EMIT_ENUM_CLASS_TO_STRING(name); \
 	EMIT_STRING_TO_ENUM_CLASS(name); \
 	EMIT_ENUM_CLASS_FMT_FORMATTER(name) 
+
+
+// expanding pybind
+
+//py::enum_<ScopedEnum>(m, "ScopedEnum", py::arithmetic())
+//    .value("Two", ScopedEnum::Two)
+//    .value("Three", ScopedEnum::Three);
+
+#define EMIT_ENUM_PYBIND11_VALUE(r,data,i,elem) \
+  .value(BOOST_PP_STRINGIZE(elem),data::elem)
+
+#define EMIT_ENUM_PYBIND11(name,m) \
+  py::enum_<name>(m, BOOST_PP_STRINGIZE(name), py::arithmetic())\
+  BOOST_PP_LIST_FOR_EACH_I( \
+      EMIT_ENUM_PYBIND11_VALUE, name, BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  
