@@ -20,7 +20,7 @@ T mean(const std::vector<T>& v);
 template<typename T>
 std::vector<T> & mult_self(std::vector<T>& v, const T& val);
 template<typename T>
-std::vector<T>& mult_self(std::vector<T>& v, const std::vector<T>& other_v);
+std::vector<T>& div_self(std::vector<T>& v, const std::vector<T>& other_v);
 template<typename T>
 std::vector<T> mult(const std::vector<T>& v, const T& val);
 template<typename T>
@@ -30,8 +30,8 @@ T log_variance(const std::vector<T>& v, unsigned short ddof);
 
 // 2-d
 
-template <class InIt, class T, class Fn>
-T accumulate2d(InIt first1, InIt last1, InIt first2, T val, Fn fn);
+template <class InIt1, class InIt2, class T, class Fn>
+T accumulate2d(InIt1 first1, InIt1 last1, InIt2 first2, T val, Fn fn);
 
 template <class InIt, class BinOp, class T, class Fn>
 T accumulate2d_adjacent(const InIt first1, const InIt last1, const InIt first2, BinOp op, T val, Fn fn);
@@ -42,8 +42,8 @@ template <class T>
 std::vector<T> add(const std::vector<T>& a, std::vector<T>& b);
 template <class T>
 std::vector<T> minus(const std::vector<T>& a, std::vector<T>& b);
-template <class T>
-T sumproduct(const std::vector<T>& a, const std::vector<T>& b);
+template <class V, class W>
+auto sumproduct(const V& a, const W& b) -> decltype(V::value_type(0) * W::value_type(0) );
 template <class T>
 T covariance(const std::vector<T>& a, const std::vector<T>& b, unsigned short ddof);
 template <class T>
@@ -136,6 +136,14 @@ std::vector<T>& mult_self(std::vector<T>& v, const T& val)
 {
 	for (auto& x : v) x *= val;
 	return v;
+}
+
+template <typename T>
+std::vector<T>& div_self(std::vector<T>& v, const T& val)
+{
+        for (auto& x : v)
+          x /= val;
+        return v;
 }
 
 template<typename T>
@@ -242,8 +250,8 @@ T log_variance(const std::vector<T>& v, unsigned short ddof)
 	return log_variance(v.begin(), v.end(), ddof);
 }
 
-template <class InIt, class T, class Fn>
-T accumulate2d(InIt first1, InIt last1, InIt first2, T val, Fn fn)
+template <class InIt1, class InIt2, class T, class Fn>
+T accumulate2d(InIt1 first1, InIt1 last1, InIt2 first2, T val, Fn fn)
 {
 	T res = val;
 	auto mlast1 = last1;
@@ -276,11 +284,14 @@ T accumulate2d_adjacent(const InIt first1, const InIt last1, const InIt first2, 
 	return res;
 }
 
-template <class T>
-T sumproduct(const std::vector<T>& a, const std::vector<T>& b)
+template <class V, class W>
+auto sumproduct(const V& a, const W& b) -> decltype(V::value_type(0) * W::value_type(0))
 {
+	using T = decltype(V::value_type(0) * W::value_type(0));
 	MREQUIRE_EQUAL(a.size(), b.size());
-	return accumulate2d(a.begin(), a.end(), b.begin(), 0., [](T val, const T& x, const T& y) {return val + x * y; });
+        return accumulate2d(a.begin(), a.end(), b.begin(), 0.,
+                            [](T val, const V::value_type& x, const W::value_type & y)
+                            { return val + x * y; });
 }
 
 
