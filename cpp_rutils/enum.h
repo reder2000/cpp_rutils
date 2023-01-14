@@ -139,5 +139,5 @@ struct fmt::formatter<name> : formatter<std::string>\
 //      EMIT_ENUM_PYBIND11_VALUE, name, BOOST_PP_TUPLE_TO_LIST(NAME_TUPLE(name)))  
 
 #define EMIT_ENUM_PYBIND11(name, m)                                                        \
-  py::enum_<name>(m, BOOST_PP_STRINGIZE(name), py::arithmetic())  \
+  pybind11::enum_<name>(m, BOOST_PP_STRINGIZE(name), pybind11::arithmetic())  \
     PROCESS_TUPLE(EMIT_ENUM_PYBIND11_VALUE,name,name)

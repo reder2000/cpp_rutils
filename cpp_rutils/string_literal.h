@@ -77,5 +77,5 @@ std::string_view tuple_sl_get_i(size_t i)
 template <typename T>
 size_t tuple_sl_index_s(std::string_view s)
 {
-	return index(tuple_sl_array<T>, s );
+	return index_of(tuple_sl_array<T>, s );
 }
