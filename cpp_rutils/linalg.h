@@ -43,7 +43,8 @@ std::vector<T> add(const std::vector<T>& a, std::vector<T>& b);
 template <class T>
 std::vector<T> minus(const std::vector<T>& a, std::vector<T>& b);
 template <class V, class W>
-auto sumproduct(const V& a, const W& b) -> decltype(V::value_type(0) * W::value_type(0) );
+auto sumproduct(const V& a, const W& b)
+    -> decltype(typename V::value_type(0) * typename W::value_type(0));
 template <class T>
 T covariance(const std::vector<T>& a, const std::vector<T>& b, unsigned short ddof);
 template <class T>
@@ -285,9 +286,10 @@ T accumulate2d_adjacent(const InIt first1, const InIt last1, const InIt first2, 
 }
 
 template <class V, class W>
-auto sumproduct(const V& a, const W& b) -> decltype(V::value_type(0) * W::value_type(0))
+auto sumproduct(const V& a, const W& b)
+    -> decltype(typename V::value_type(0) * typename W::value_type(0))
 {
-	using T = decltype(V::value_type(0) * W::value_type(0));
+	using T = decltype(typename V::value_type(0) * typename W::value_type(0));
 	MREQUIRE_EQUAL(a.size(), b.size());
         return accumulate2d(a.begin(), a.end(), b.begin(), 0.,
                             [](T val, const V::value_type& x, const W::value_type & y)
