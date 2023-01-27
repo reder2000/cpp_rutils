@@ -18,7 +18,7 @@
 
 
 template <StringLiteral U>
-concept is_good_string = tuple_sl_contains < U, tuple_sl<"toto", "tata">>   ;
+concept is_good_string = tuple_sl_contains < U, tuple_sl<"toto", "tata">>;
 
 
 template <StringLiteral U> requires is_good_string<U>
@@ -34,16 +34,16 @@ struct always_false_sl
 struct toto
 {
 	template <StringLiteral S>
-	[[noreturn]] static toto* create()
+	static void create()
 	{
 		static_assert(always_false_sl<S>::value);
 	}
 };
 
 template <>
-toto* toto::create<"tutu">()
+void toto::create<"tutu">()
 {
-	return nullptr;
+
 }
 
 
@@ -66,7 +66,7 @@ TEST_CASE("string literal", "[enum][hide]")
 
 TEST_CASE("string literal ctor")
 {
-// fails
-// auto t = toto::create<"titi">();
-	auto t = toto::create<"tutu">();
+	// fails
+	//auto t = toto::create<"titi">();
+	toto::create<"tutu">();
 }

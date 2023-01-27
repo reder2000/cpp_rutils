@@ -4,3 +4,4 @@ CMakeSettings.json
 build/
 .vscode/
 cpp_rutils/config.h
+mybuild-cl/
