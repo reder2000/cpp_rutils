@@ -16,7 +16,7 @@ template <class _Ty>
 using spc = std::shared_ptr<const _Ty>;
 
 template <typename T, typename... Args>
-std::shared_ptr<T> make_share_aggregate(Args&&... args)
+std::shared_ptr<T> make_shared_aggregate(Args&&... args)
 {
   return std::make_shared<T>(T{std::forward<Args>(args)...});
 }
@@ -25,7 +25,7 @@ std::shared_ptr<T> make_share_aggregate(Args&&... args)
 // problems with aggregates & llvm so this does not work #define m_sp std::make_shared
 #ifdef __clang__
 template <typename T, typename... Args>
-#define m_sp make_share_aggregate
+#define m_sp make_shared_aggregate
 #else
 #define m_sp std::make_shared
 #endif

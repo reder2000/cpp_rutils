@@ -132,7 +132,7 @@ struct fmt::formatter<Date> : formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>
-  auto format(Date c, FormatContext& ctx)
+  auto format(Date c, FormatContext& ctx) const
   {
     auto res = fmt::format("{:04}-{:02}-{:02}", (int)c.year(), (unsigned int)(c.month()),
                            (unsigned int)c.day());
