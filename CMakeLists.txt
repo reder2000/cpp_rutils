@@ -6,6 +6,8 @@ project("cpp_rutils" VERSION 1.0.1
 
 message("Configuring cpp_rutils ...")
 
+set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard whose features are requested." )
+
 include(GNUInstallDirs)
 
 include(FetchContent)
@@ -56,11 +58,9 @@ check_cxx_source_compiles(
          int main(){ return 0; }"
          HAVE_CXX20_CHRONO_TIME_ZONE)
 check_cxx_source_compiles(
-        "#include <cstddef>
-         int main(){
-             ssize_t res = 0; 
-             return res;}"
-         HAVE_CXX20_SSIZE_T)
+        "#include <sys/types.h>
+		 int main(){ssize_t s=-1; return (s+1);}"
+		HAVE_CXX23_SSIZE_T)
 configure_file(cpp_rutils/config.h.in cpp_rutils_config.h)
 include_directories(${CMAKE_BINARY_DIR})
 message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
@@ -80,7 +80,6 @@ FetchContent_Declare(
 	  BUILD_TZ_LIB ON
 	)
 FetchContent_Populate(date_src)
-set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard whose features are requested." )
 set(BUILD_TZ_LIB ON CACHE INTERNAL "BUILD_TZ_LIB")
 set(USE_SYSTEM_TZ_DB ON CACHE INTERNAL "USE_SYSTEM_TZ_DB")
 add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR})
