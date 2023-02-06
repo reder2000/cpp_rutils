@@ -1,7 +1,7 @@
 #pragma once
 
-// helper function to compute/deduce the used_size of an object
-// an object of type T may provide a computation by either
+// Helper function to compute/deduce the used_size of an object.
+// An object of type T may provide a computation by either
 // implementing a member function size_impl(memory::record &) const
 // or a free function size_impl(const T&, memory::record &)
 

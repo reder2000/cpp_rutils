@@ -1,7 +1,8 @@
-mybuild/
+mybuild*/
 CMakeSettings.json
 .vs/
 build/
 .vscode/
 cpp_rutils/config.h
-mybuild-cl/
+cmake-build-*/
+.idea/

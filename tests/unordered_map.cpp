@@ -19,7 +19,7 @@ TEST_CASE("unordered_map_callback", "[enum][hide]")
 	CHECK(map.find_or_add(2, fns, 2) == 4.);
 	auto fnc = []() {return 3.; };
 	CHECK(map.find_or_add(-3, fnc) == 3.);
-	auto& v = map[10];
+    [[maybe_unused]] auto& v = map[10];
 }
 
 TEST_CASE("default_dict", "[enum][hide]")
@@ -28,13 +28,13 @@ TEST_CASE("default_dict", "[enum][hide]")
 	default_dict<std::string, size_t> dd([](auto&& self) {return self.size(); });
 	dd["1"];
 	dd["2"];
-	bool res  = dd["2"] == 1;
+    [[maybe_unused]] bool res  = dd["2"] == 1;
 }
 
 TEST_CASE("ump", "[enum][hide]")
 {
 	um_p<int, int> m;
-	m[1] = 1;;
+	m[1] = 1;
 	m[2] = 2;
 	CHECK_THROWS_AS(m.at(3),std::out_of_range);
 	try {

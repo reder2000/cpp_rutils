@@ -27,7 +27,7 @@ struct fmt::formatter<boost::stacktrace::stacktrace> : formatter<std::string>
 {
 	// parse is inherited from formatter<string_view>.
 	template <typename FormatContext>
-	auto format(boost::stacktrace::stacktrace c, FormatContext& ctx)
+	auto format(const boost::stacktrace::stacktrace &c, FormatContext& ctx)
 	{
 		std::stringstream ss;
 		ss << c;
@@ -127,8 +127,8 @@ struct fmt::formatter<boost::stacktrace::stacktrace> : formatter<std::string>
 		if (!must_throw) return return_value; \
 		else { \
 			BOOST_PP_IF(BOOST_PP_DEC(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__)) , \
-			MREQUIRE1(success,__VA_ARGS__) , MREQUIRE0(success)); } ; }
-
+			MREQUIRE1(success,__VA_ARGS__) , MREQUIRE0(success)); } ; }     \
+    while (false)
 
 #define MREQUIRE_EQUAL_RET(must_throw,return_value,a,b,...) \
 	if (!(a==b)) { \

@@ -14,8 +14,8 @@ public:
 	Period() = default;
 	Period(int64_t length, TimeUnit units) : _length(length), _units(units) {}
 
-	int64_t to_seconds() const;
-	int64_t to_minutes() const;
+	[[nodiscard]] int64_t to_seconds() const;
+	[[nodiscard]] int64_t to_minutes() const;
 
 	int64_t _length = 0;
 	TimeUnit _units = TimeUnit::Days;
@@ -28,10 +28,8 @@ int64_t Period::to_seconds() const
 	{
 	case TimeUnit::Seconds:
 		return _length;
-		break;
 	case TimeUnit::Minutes:
 		return _length * 60;
-		break;
 	default:
 		MFAIL("{} not handled", _units);
 	}
@@ -45,10 +43,8 @@ int64_t Period::to_minutes() const
 	case TimeUnit::Seconds:
 		MREQUIRE(_length % 60 == 0, "cannot convert {} to minutes", _length);
 		return _length / 60;
-		break;
 	case TimeUnit::Minutes:
 		return _length;
-		break;
 	default:
 		MFAIL("{} not handled", _units);
 	}

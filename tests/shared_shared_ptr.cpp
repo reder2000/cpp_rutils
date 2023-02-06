@@ -2,7 +2,7 @@
 #include <shared_shared_ptr.h>
 #include <shared_ptr.h>
 
-// shared shared  Pointer
+// shared pointer of shared_pointer (why?)
 template <class _Ty>
 using spsp = std::shared_ptr<std::shared_ptr<_Ty>>;
 

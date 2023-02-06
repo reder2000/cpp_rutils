@@ -7,7 +7,7 @@ class ScopedTimer
 {
  public:
   ScopedTimer() = delete;
-  ScopedTimer(std::string what) { start(std::move(what)); }
+  explicit ScopedTimer(std::string what) { start(std::move(what)); }
   ~ScopedTimer() { end(); }
 
   void restart(std::string what)

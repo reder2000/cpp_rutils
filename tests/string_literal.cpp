@@ -57,7 +57,7 @@ TEST_CASE("string literal", "[enum][hide]")
 	// this would fail  fun<"titi">();
 	//std::array < const char*, 2> t{ "toto","tata" };
 	//auto t = detail::get_tuple_sl_array(tu{});
-	auto t = tuple_sl_array<tu>;
+    [[maybe_unused]] auto t = tuple_sl_array<tu>;
 	auto tt = type_name_short<decltype(t)>();
 	std::cout << "XXXXXXXXXXXXXX " << tt << "\n";
 	CHECK(tuple_sl_get_i<tu>(1) == "tata");

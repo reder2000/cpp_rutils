@@ -10,7 +10,7 @@ std::filesystem::path get_home_path() {
 #if defined(_WIN32)
 	return std::filesystem::path{m_getenv_s("USERPROFILE")};
 #else
-    return std::filesystem::path(m_getenv_s("HOME"));
+    return std::filesystem::path{m_getenv_s("HOME")};
 #endif
 }
 

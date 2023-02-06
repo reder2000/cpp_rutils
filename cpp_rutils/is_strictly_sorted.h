@@ -4,11 +4,11 @@
 
 #include <functional>
 
-template <class _FwdIt, class _Pr>
-bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
-        if (_First != _Last) {
-            for (auto _Next = _First; ++_Next != _Last; ++_First) {
-                if (!(_Pred( *_First, *_Next))) {
+template <class FwdIt, class Pr>
+bool is_strictly_sorted(FwdIt first, FwdIt last, Pr pred) { // test if range is strictly ordered by operator<
+        if (first != last) {
+            for (auto next = first; ++next != last; ++first) {
+                if (!(pred( *first, *next))) {
                     return false;
                 }
             }
@@ -16,24 +16,24 @@ bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if ran
         return true;
 }
 
-template <class _FwdIt>
-bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last) { // test if range is strictly ordered by operator<
-    return is_strictly_sorted(_First, _Last, std::less{});
+template <class FwdIt>
+bool is_strictly_sorted(FwdIt first, FwdIt last) { // test if range is strictly ordered by operator<
+    return is_strictly_sorted(first, last, std::less{});
 }
 
-template <class _FwdIt, class _Pr>
-_FwdIt is_strictly_sorted_until(_FwdIt _First, _FwdIt _Last, _Pr _Pred) {
-    if (_First != _Last) {
-        for (auto _Next = _First; ++_Next != _Last; ++_First) {
-            if (!(_Pred(*_First, *_Next))) {
-                return _First;
+template <class FwdIt, class Pr>
+FwdIt is_strictly_sorted_until(FwdIt first, FwdIt last, Pr pred) {
+    if (first != last) {
+        for (auto next = first; ++next != last; ++first) {
+            if (!(pred(*first, *next))) {
+                return first;
             }
         }
     }
-    return _Last;
+    return last;
 }
 
-template <class _FwdIt>
-_FwdIt is_strictly_sorted_until(_FwdIt _First, _FwdIt _Last) { // test if range is strictly ordered by operator<
-    return is_strictly_sorted_until(_First, _Last, std::less{});
+template <class FwdIt>
+FwdIt is_strictly_sorted_until(FwdIt first, FwdIt last) { // test if range is strictly ordered by operator<
+    return is_strictly_sorted_until(first, last, std::less{});
 }

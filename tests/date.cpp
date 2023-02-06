@@ -15,6 +15,6 @@ TEST_CASE("date", "[require][hide]")
 	CHECK(date == date2);
 	auto missed = try_parse_date("totalbs");
 	CHECK(!missed.has_value());
-	auto tz = std__chrono::locate_zone("Zulu");
+	[[maybe_unused]] auto tz = std__chrono::locate_zone("Zulu");
 }
 

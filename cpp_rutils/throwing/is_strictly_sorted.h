@@ -5,31 +5,31 @@
 
 namespace throwing {
 
-    template <class _FwdIt, class _Pr>
-	requires (is_printable< typename std::iterator_traits<_FwdIt>::value_type > )
-    bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
-        if (_First != _Last) {
-          auto First = _First;
-            for (auto _Next = _First; ++_Next != _Last; ++_First) {
-                if (!(_Pred(*_First, *_Next))) {
-					auto _First_str = to_string(*_First);
-					auto _Next_str = to_string(*_Next);
-                    auto where = std::distance(First, _Next);
-                    throw std::runtime_error(fmt::format("range not strictly sorted at index {}: !({} < {})", where, _First_str, _Next_str));
+    template <class FwdIt, class Pr>
+	requires (is_printable< typename std::iterator_traits<FwdIt>::value_type > )
+    bool is_strictly_sorted(FwdIt first, FwdIt last, Pr pred) { // test if range is strictly ordered by operator<
+        if (first != last) {
+          auto First = first;
+            for (auto next = first; ++next != last; ++first) {
+                if (!(pred(*first, *next))) {
+					auto first_str = to_string(*first);
+					auto next_str = to_string(*next);
+                    auto where = std::distance(First, next);
+                    throw std::runtime_error(fmt::format("range not strictly sorted at index {}: !({} < {})", where, first_str, next_str));
                 }
             }
         }
         return true;
     }
 
-    template <class _FwdIt, class _Pr>
-        requires (! is_printable< typename std::iterator_traits<_FwdIt>::value_type >)
-    bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last, _Pr _Pred) { // test if range is strictly ordered by operator<
-        if (_First != _Last) {
-          auto First = _First;
-            for (auto _Next = _First; ++_Next != _Last; ++_First) {
-                if (!(_Pred(*_First, *_Next))) {
-                    auto where = std::distance(First, _Next);
+    template <class FwdIt, class Pr>
+        requires (! is_printable< typename std::iterator_traits<FwdIt>::value_type >)
+    bool is_strictly_sorted(FwdIt first, FwdIt last, Pr pred) { // test if range is strictly ordered by operator<
+        if (first != last) {
+          auto First = first;
+            for (auto next = first; ++next != last; ++first) {
+                if (!(pred(*first, *next))) {
+                    auto where = std::distance(First, next);
                     throw std::runtime_error(fmt::format("range not strictly sorted at index {}", where));
                 }
             }
@@ -37,9 +37,9 @@ namespace throwing {
         return true;
     }
 
-    template <class _FwdIt>
-    bool is_strictly_sorted(_FwdIt _First, _FwdIt _Last) { // test if range is strictly ordered by operator<
-        return is_strictly_sorted(_First, _Last, std::less{});
+    template <class FwdIt>
+    bool is_strictly_sorted(FwdIt first, FwdIt last) { // test if range is strictly ordered by operator<
+        return is_strictly_sorted(first, last, std::less{});
     }
 
 

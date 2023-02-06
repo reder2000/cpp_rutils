@@ -74,6 +74,6 @@ std::string to_string(const T &v) {
 template<class... T>
 std::string to_string(const std::variant<T...> &v) {
     return std::visit([](auto &&a) { return to_string(a); }, v);
-};
+}
 
 std::string_view at_most_n_lines(std::string_view sv, size_t n);

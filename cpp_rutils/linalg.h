@@ -10,7 +10,7 @@
 // 1-d
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate_adjacent(const InIt first, const InIt last, BinOp op, T val, Fn fn);
+T accumulate_adjacent(InIt const&  first, InIt  const& last, BinOp op, T val, Fn fn);
 
 //  sum mean variance
 template <typename T>
@@ -34,9 +34,9 @@ template <class InIt1, class InIt2, class T, class Fn>
 T accumulate2d(InIt1 first1, InIt1 last1, InIt2 first2, T val, Fn fn);
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate2d_adjacent(const InIt first1,
-                        const InIt last1,
-                        const InIt first2,
+T accumulate2d_adjacent(const InIt &first1,
+                        const InIt &last1,
+                        const InIt &first2,
                         BinOp      op,
                         T          val,
                         Fn         fn);
@@ -71,13 +71,13 @@ class LightMatrix
 
   LightMatrix() = default;
   LightMatrix(size_t rows, size_t cols);
-  LightMatrix(size_t rows, size_t cols, const T val);
+  LightMatrix(size_t rows, size_t cols, const T &val);
   LightMatrix(std::vector<T>&& values, size_t rows, size_t cols);
 
-  size_t          rows() const { return _rows; }
-  size_t          cols() const { return _cols; }
-  size_t          size() const { return _vec.size(); }
-  const data_type data() const { return _vec; }
+  [[nodiscard]] size_t          rows() const { return _rows; }
+  [[nodiscard]] size_t          cols() const { return _cols; }
+  [[nodiscard]] size_t          size() const { return _vec.size(); }
+  const data_type & data() const { return _vec; }
 
   const T& at(size_t r, size_t c) const;
   T&       at(size_t r, size_t c);
@@ -93,8 +93,8 @@ class LightMatrix
   std::vector<T> get_row(size_t r) const;
 
  private:
-  size_t    _rows;
-  size_t    _cols;
+  size_t    _rows=0;
+  size_t    _cols=0;
   data_type _vec;
 };
 
@@ -231,7 +231,7 @@ std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a,
 }
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate_adjacent(const InIt first, const InIt last, BinOp op, T val, Fn fn)
+T accumulate_adjacent(InIt const&  first,  InIt const& last, BinOp op, T val, Fn fn)
 {
   T    res    = val;
   auto mfirst = first;
@@ -242,7 +242,7 @@ T accumulate_adjacent(const InIt first, const InIt last, BinOp op, T val, Fn fn)
     auto tmp = *mfirst;
     res      = fn(res, op(ival, tmp));
     ival     = std::move(tmp);
-  };
+  }
   return res;
 }
 
@@ -276,14 +276,14 @@ T accumulate2d(InIt1 first1, InIt1 last1, InIt2 first2, T val, Fn fn)
   for (auto mfirst1 = first1; mfirst1 != mlast1; ++mfirst2, ++mfirst1)
   {
     res = fn(res, *mfirst1, *mfirst2);
-  };
+  }
   return res;
 }
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate2d_adjacent(const InIt first1,
-                        const InIt last1,
-                        const InIt first2,
+T accumulate2d_adjacent(const InIt &first1,
+                        const InIt &last1,
+                        const InIt &first2,
                         BinOp      op,
                         T          val,
                         Fn         fn)
@@ -302,7 +302,7 @@ T accumulate2d_adjacent(const InIt first1,
     res       = fn(res, op(ival1, tmp1), op(ival2, tmp2));
     ival1     = std::move(tmp1);
     ival2     = std::move(tmp2);
-  };
+  }
   return res;
 }
 
@@ -382,7 +382,7 @@ LightMatrix<T>::LightMatrix(size_t rows, size_t cols) : _rows(rows), _cols(cols)
 }
 
 template <class T>
-LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T val)
+LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T & val)
     : _rows(rows), _cols(cols), _vec(rows * cols, val)
 {
 }

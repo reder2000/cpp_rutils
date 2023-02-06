@@ -30,10 +30,10 @@ TEST_CASE("require", "[require][hide]")
 		} };
 	CHECK_NOTHROW(k(EnumFail::good));
 	CHECK_THROWS(k(EnumFail::bad));
-	auto failure = []() {throw std::runtime_error("expected to fail"); return 1; };
-	try { MREQUIRE_TRY(failure()); }
+	auto failure = []() -> bool {throw std::runtime_error("expected to fail"); };
+	try { MREQUIRE_TRY(failure()) }
 	catch (std::exception& e) { std::cout << at_most_n_lines( e.what() ,5) <<  std::endl; }
-	try { MREQUIRE_TRY(failure() , "{}" , "failure"); }
+	try { MREQUIRE_TRY(failure() , "{}" , "failure") }
 	catch (std::exception& e) { std::cout << at_most_n_lines( e.what() ,5) << std::endl; }
 
 }
@@ -58,11 +58,11 @@ TEST_CASE("move", "[require][hide]")
 	const double* where = std::addressof(vd0[0]);
 	VD vd1(std::move(vd0));
 
-	REQUIRE(vd0.size() == 0);
+	REQUIRE(vd0.empty());
 
 	VV vv;
 	vv.push_back(std::move(vd1));
-	REQUIRE(vd1.size() == 0);
+	REQUIRE(vd1.empty());
 
 	REQUIRE(std::addressof(vv[0][0]) == where);
 
@@ -95,10 +95,10 @@ TEST_CASE("MREQUIRE_RET", "[require][hide]")
 TEST_CASE("MREQUIRE_INIT", "[require][hide]")
 {
 	auto good_fun = []() {return std::string("OK"); };
-	auto bad_fun = []() {throw std::runtime_error("ouch");  return std::string("OK"); };
+	auto bad_fun = []() -> std::string {throw std::runtime_error("ouch");  };
 
-	auto a = TRY_INIT(good_fun(), "ok");
-	auto b = TRY_INIT(good_fun());
+    [[maybe_unused]] auto a = TRY_INIT(good_fun(), "ok");
+    [[maybe_unused]] auto b = TRY_INIT(good_fun());
 
 	CHECK_THROWS( TRY_INIT(bad_fun(), "this is {}", "bad"));
 	CHECK_THROWS(TRY_INIT(bad_fun() ));

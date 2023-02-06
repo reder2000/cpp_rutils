@@ -202,5 +202,6 @@ inline tl::expected<Date, std::string> try_parse_date(std::string_view sv)
 
 inline Date add_days(Date dt, int nb_days)
 {
-  return Date(std__chrono::sys_days(dt) + std__chrono::days(nb_days));
+  auto res = Date(std__chrono::sys_days(dt) + std__chrono::days(nb_days));
+  return res;
 }

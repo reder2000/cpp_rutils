@@ -34,7 +34,7 @@ std::string_view at_most_n_lines(std::string_view sv, size_t n)
         if (i == sv.end()) break;
         ++i;
     }
-    return std::string_view(sv.begin(), i);
+    return std::string_view{sv.begin(), i};
 }
 
 

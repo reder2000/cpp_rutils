@@ -17,7 +17,7 @@ namespace std {
 		class _Alloc>
 	class unordered_map;
 
-	template <class _Kty, class _Ty, class _Pr,
+	template <class _Kty, class _Ty, class Pr,
 		class _Alloc>
 	class map;
 
@@ -107,9 +107,9 @@ namespace detail
 		}
 	};
 
-	template <class _Kty, class _Ty, class _Pr,
+	template <class _Kty, class _Ty, class Pr,
 		class _Alloc>
-	struct type_namer < std::map<_Kty, _Ty, _Pr, _Alloc>>
+	struct type_namer < std::map<_Kty, _Ty, Pr, _Alloc>>
 	{
 		constexpr static	auto get()
 		{
@@ -126,7 +126,7 @@ constexpr auto type_name_short() noexcept {
 	{
 		return detail::type_namer<std::decay_t<T>>::get();
 	}
-};
+}
 
 template <size_t N>
 std::ostream& operator <<(std::ostream& os, const detail::String<N> s)
