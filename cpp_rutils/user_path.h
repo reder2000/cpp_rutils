@@ -5,15 +5,19 @@
 #include <filesystem>
 #include "secure_deprecate.h"
 
-inline
-std::filesystem::path get_home_path() {
+inline std::filesystem::path get_home_path()
+{
 #if defined(_WIN32)
-	return std::filesystem::path{m_getenv_s("USERPROFILE")};
+  return std::filesystem::path{m_getenv_s("USERPROFILE")};
 #else
-    return std::filesystem::path{m_getenv_s("HOME")};
+  return std::filesystem::path{m_getenv_s("HOME")};
 #endif
 }
 
+inline std::filesystem::path get_data_path()
+{
+  return get_home_path() / "tmp" / "data";
+}
 // fmt interface to path
 // should be in fmt/std
 
