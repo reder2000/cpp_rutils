@@ -24,7 +24,6 @@ std::shared_ptr<T> make_shared_aggregate(Args&&... args)
 // abbreviation for std::make_shared
 // problems with aggregates & llvm so this does not work #define m_sp std::make_shared
 #ifdef __clang__
-template <typename T, typename... Args>
 #define m_sp make_shared_aggregate
 #else
 #define m_sp std::make_shared
