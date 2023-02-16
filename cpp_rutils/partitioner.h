@@ -7,6 +7,10 @@ struct Partitioner
 	Partitioner(size_t total_size, size_t chunk_size, size_t max_nb_cores = 0);
 	Partitioner(const std::vector<size_t>& sizes);
 
+	size_t size() const {
+		return  _chunks.size();
+	}
+
 	struct chunk_type
 	{
 		size_t _start;
