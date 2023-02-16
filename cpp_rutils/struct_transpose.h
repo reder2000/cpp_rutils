@@ -80,6 +80,11 @@
 //name_tuple_struct_declare(mystruct);
 //name_tuple_struct_vector_declare(mystruct);
 
+#define name_tuple_struct_vector_merge_declare_all(name) \
+	name_tuple_struct_declare(name);\
+	name_tuple_struct_vector_declare(name);\
+	name_tuple_struct_vector_merge_declare(name)
+
 template <class T>
 std::vector<T> merge(const std::vector < std::vector < T>>& vs)
 {

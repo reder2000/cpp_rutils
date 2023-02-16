@@ -25,10 +25,10 @@ TEST_CASE("struct_transpose", "[transform][hide]")
 //#define mystruct_tuple ((BOOST_IDENTITY_TYPE((std::vector<int>)),i),(BOOST_IDENTITY_TYPE((std::unordered_set<double>)),d))
 #define mystruct_tuple ((std::vector<int>,i),(BOOST_IDENTITY_TYPE((std::unordered_map<double,int>)),d))
 //#define mystruct_tuple 	((int,i),(double,d))
-name_tuple_struct_declare(mystruct);
-name_tuple_struct_vector_declare(mystruct);
-name_tuple_struct_vector_merge_declare(mystruct);
-
+//name_tuple_struct_declare(mystruct);
+//name_tuple_struct_vector_declare(mystruct);
+//name_tuple_struct_vector_merge_declare(mystruct);
+name_tuple_struct_vector_merge_declare_all(mystruct);
 
 TEST_CASE("struct_transpose_cplx", "[transform][hide]")
 {
