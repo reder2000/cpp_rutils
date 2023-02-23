@@ -10,6 +10,7 @@
 #include <boost/preprocessor/comma_if.hpp>
 #include <unordered_map>
 #include <unordered_set>
+#include "require.h"
 
 /*
  building struct of vectors
@@ -100,6 +101,13 @@ template <class T>
 T merge2(const T& first, const T& second)
 {
   static_assert(always_false_v<T>);
+}
+
+template <class T> requires std::is_arithmetic_v <T>
+T merge2(const T& first, const T& second)
+{
+    MREQUIRE_EQUAL(first, second);
+    return first;
 }
 
 template <class T>
