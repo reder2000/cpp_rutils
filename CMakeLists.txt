@@ -66,26 +66,8 @@ include_directories(${CMAKE_BINARY_DIR})
 message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
 
 if (MSVC)
-message("using https://github.com/HowardHinnant/date.git")
-FetchContent_Declare(
-	  date_src
-	  GIT_REPOSITORY  "https://github.com/HowardHinnant/date.git"
-	  GIT_TAG origin/master
-	  GIT_REMOTE_UPDATE_STRATEGY REBASE_CHECKOUT
-	  GIT_PROGRESS TRUE
-	  GIT_SHALLOW TRUE
-	  LOG_UPDATE TRUE
-	  SOURCE_SUBDIR  date_src
-      USE_SYSTEM_TZ_DB ON
-	  BUILD_TZ_LIB ON
-	)
-FetchContent_Populate(date_src)
-set(BUILD_TZ_LIB ON CACHE INTERNAL "BUILD_TZ_LIB")
-set(USE_SYSTEM_TZ_DB ON CACHE INTERNAL "USE_SYSTEM_TZ_DB")
-add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR})
-message("add_subdirectory(${date_src_SOURCE_DIR} ${date_src_BINARY_DIR}")
-else ()
-    message("using vcpkg date")
+find_vcpkg_install_missing(date)
+#else ()
   find_vcpkg_install_missing(date date[remote-api])
 endif()
 
