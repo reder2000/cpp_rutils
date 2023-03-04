@@ -18,8 +18,9 @@ struct Do
   F _f;
 };
 
-// return a new, transformed vector
 
+
+// return a new, transformed vector
 template <VectorConcept In, class Tr>
 auto transform_vc(const In& in, Tr tr)
 {
@@ -32,7 +33,20 @@ auto transform_vc(const In& in, Tr tr)
 }
 
 
-template <class Fun, class Vec>
+template <class Fun, class Iterable>
+auto List(Fun fun, const Iterable& iter)
+{
+  //using result_type = typename std::invoke_result_t<Tr, typename In::value_type>;
+  //using iterator_type = std::invoke_result_t<decltype(&Iterable::begin)>;
+  using iterator_type = decltype(*std::declval<Iterable>().begin());
+  using result_type   = std::invoke_result_t<Fun, iterator_type>;
+  std::vector<result_type> res;
+  for (auto i : iter)
+    res.push_back(fun(i));
+  return res;
+}
+
+template <class Fun, VectorConcept Vec>
 std::vector<std::invoke_result_t<Fun, typename Vec::value_type>> List(Fun fun, const Vec& vec)
 {
   return transform_vc(vec, fun);
