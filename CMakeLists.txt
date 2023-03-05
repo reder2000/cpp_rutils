@@ -67,8 +67,8 @@ message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
 
 if (MSVC)
 find_vcpkg_install_missing(date)
-#else ()
-  find_vcpkg_install_missing(date date[remote-api])
+else ()
+find_vcpkg_install_missing(date date[remote-api])
 endif()
 
 add_source_group(cpp_rutils)

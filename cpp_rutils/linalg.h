@@ -5,12 +5,14 @@
 #include <numeric>
 #include <vector>
 #include <algorithm>
+#include <span>
+
 #include "require.h"
 
 // 1-d
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate_adjacent(InIt const&  first, InIt  const& last, BinOp op, T val, Fn fn);
+T accumulate_adjacent(InIt const& first, InIt const& last, BinOp op, T val, Fn fn);
 
 //  sum mean variance
 template <typename T>
@@ -34,12 +36,12 @@ template <class InIt1, class InIt2, class T, class Fn>
 T accumulate2d(InIt1 first1, InIt1 last1, InIt2 first2, T val, Fn fn);
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate2d_adjacent(const InIt &first1,
-                        const InIt &last1,
-                        const InIt &first2,
-                        BinOp      op,
-                        T          val,
-                        Fn         fn);
+T accumulate2d_adjacent(const InIt& first1,
+                        const InIt& last1,
+                        const InIt& first2,
+                        BinOp       op,
+                        T           val,
+                        Fn          fn);
 
 // - + var cov
 
@@ -71,13 +73,13 @@ class LightMatrix
 
   LightMatrix() = default;
   LightMatrix(size_t rows, size_t cols);
-  LightMatrix(size_t rows, size_t cols, const T &val);
+  LightMatrix(size_t rows, size_t cols, const T& val);
   LightMatrix(std::vector<T>&& values, size_t rows, size_t cols);
 
-  [[nodiscard]] size_t          rows() const { return _rows; }
-  [[nodiscard]] size_t          cols() const { return _cols; }
-  [[nodiscard]] size_t          size() const { return _vec.size(); }
-  const data_type & data() const { return _vec; }
+  [[nodiscard]] size_t rows() const { return _rows; }
+  [[nodiscard]] size_t cols() const { return _cols; }
+  [[nodiscard]] size_t size() const { return _vec.size(); }
+  const data_type&     data() const { return _vec; }
 
   const T& at(size_t r, size_t c) const;
   T&       at(size_t r, size_t c);
@@ -90,11 +92,12 @@ class LightMatrix
 
   void assign_col(size_t c, const std::vector<T>& v);
 
-  std::vector<T> get_row(size_t r) const;
+  std::vector<T>                          get_row(size_t r) const;
+  std::span<const T, std::dynamic_extent> get_row_view(size_t r) const;
 
  private:
-  size_t    _rows=0;
-  size_t    _cols=0;
+  size_t    _rows = 0;
+  size_t    _cols = 0;
   data_type _vec;
 };
 
@@ -231,7 +234,7 @@ std::array<std::array<T, 2>, 2> cov(const std::vector<T>& a,
 }
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate_adjacent(InIt const&  first,  InIt const& last, BinOp op, T val, Fn fn)
+T accumulate_adjacent(InIt const& first, InIt const& last, BinOp op, T val, Fn fn)
 {
   T    res    = val;
   auto mfirst = first;
@@ -281,12 +284,12 @@ T accumulate2d(InIt1 first1, InIt1 last1, InIt2 first2, T val, Fn fn)
 }
 
 template <class InIt, class BinOp, class T, class Fn>
-T accumulate2d_adjacent(const InIt &first1,
-                        const InIt &last1,
-                        const InIt &first2,
-                        BinOp      op,
-                        T          val,
-                        Fn         fn)
+T accumulate2d_adjacent(const InIt& first1,
+                        const InIt& last1,
+                        const InIt& first2,
+                        BinOp       op,
+                        T           val,
+                        Fn          fn)
 {
   T    res     = val;
   auto mfirst1 = first1;
@@ -382,7 +385,7 @@ LightMatrix<T>::LightMatrix(size_t rows, size_t cols) : _rows(rows), _cols(cols)
 }
 
 template <class T>
-LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T & val)
+LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T& val)
     : _rows(rows), _cols(cols), _vec(rows * cols, val)
 {
 }
@@ -469,4 +472,10 @@ std::vector<T> LightMatrix<T>::get_row(size_t r) const
   for (size_t i = 0; i < _cols; ++t, ++i)
     res.push_back(*t);
   return res;
+}
+
+template <class T>
+std::span<const T, std::dynamic_extent> LightMatrix<T>::get_row_view(size_t r) const
+{
+  return std::span<const T, std::dynamic_extent>(_vec.data() + r * cols(), cols());
 }
