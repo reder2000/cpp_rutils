@@ -106,8 +106,8 @@ struct SliceVector
   }
 
   SliceVector(std::vector<std::decay_t<T>>& v)
-    requires !
-             std::is_const_v<T> : _data(v.data()),
+    requires (!
+             std::is_const_v<T>) : _data(v.data()),
       _size(v.size()), _stride(1)
   {
   }

@@ -453,7 +453,7 @@ typename LightMatrix<T>::data_type LightMatrix<T>::operator*(const data_type& v)
 template <class T>
 SliceVector<const T> LightMatrix<T>::get_col_view(size_t col) const
 {
-  return SliceVector<const T>{data().data() + col, _rows, _rows};
+  return SliceVector<const T>{data().data() + col, _rows, _cols};
 }
 
 template <class T>
