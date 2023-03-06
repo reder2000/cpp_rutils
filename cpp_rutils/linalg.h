@@ -8,6 +8,7 @@
 #include <span>
 
 #include "require.h"
+#include "slice_vector.h"
 
 // 1-d
 
@@ -78,8 +79,8 @@ class LightMatrix
 
   [[nodiscard]] size_t rows() const { return _rows; }
   [[nodiscard]] size_t cols() const { return _cols; }
-  [[nodiscard]] size_t size() const { return _vec.size(); }
-  const data_type&     data() const { return _vec; }
+  [[nodiscard]] size_t size() const { return _data.size(); }
+  const data_type&     data() const { return _data; }
 
   const T& at(size_t r, size_t c) const;
   T&       at(size_t r, size_t c);
@@ -90,7 +91,9 @@ class LightMatrix
 
   data_type operator*(const data_type& v) const;
 
-  void assign_col(size_t c, const std::vector<T>& v);
+  SliceVector<const T> get_col_view(size_t col) const;
+  void                 assign_col(size_t c, SliceVector<const T> v);
+  void                 assign_col(size_t c, SliceVector<T> v);
 
   std::vector<T>                          get_row(size_t r) const;
   std::span<const T, std::dynamic_extent> get_row_view(size_t r) const;
@@ -98,7 +101,7 @@ class LightMatrix
  private:
   size_t    _rows = 0;
   size_t    _cols = 0;
-  data_type _vec;
+  data_type _data;
 };
 
 
@@ -380,21 +383,21 @@ T return_covariance(const std::vector<T>& v1, const std::vector<T>& v2, unsigned
 }
 
 template <class T>
-LightMatrix<T>::LightMatrix(size_t rows, size_t cols) : _rows(rows), _cols(cols), _vec(rows * cols)
+LightMatrix<T>::LightMatrix(size_t rows, size_t cols) : _rows(rows), _cols(cols), _data(rows * cols)
 {
 }
 
 template <class T>
 LightMatrix<T>::LightMatrix(size_t rows, size_t cols, const T& val)
-    : _rows(rows), _cols(cols), _vec(rows * cols, val)
+    : _rows(rows), _cols(cols), _data(rows * cols, val)
 {
 }
 
 template <class T>
 LightMatrix<T>::LightMatrix(std::vector<T>&& values, size_t rows, size_t cols)
-    : _rows(rows), _cols(cols), _vec(std::move(values))
+    : _rows(rows), _cols(cols), _data(std::move(values))
 {
-  MREQUIRE_EQUAL(rows * cols, _vec.size());
+  MREQUIRE_EQUAL(rows * cols, _data.size());
 }
 
 template <class T>
@@ -402,31 +405,31 @@ const T& LightMatrix<T>::at(size_t r, size_t c) const
 {
   MREQUIRE_LESS(r, _rows);
   MREQUIRE_LESS(c, _cols);
-  return _vec[r * _cols + c];
+  return _data[r * _cols + c];
 }
 template <class T>
 T& LightMatrix<T>::at(size_t r, size_t c)
 {
   MREQUIRE_LESS(r, _rows);
   MREQUIRE_LESS(c, _cols);
-  return _vec[r * _cols + c];
+  return _data[r * _cols + c];
 }
 
 template <class T>
 T& LightMatrix<T>::operator()(size_t r, size_t c)
 {
-  return _vec[r * _cols + c];
+  return _data[r * _cols + c];
 }
 template <class T>
 const T& LightMatrix<T>::operator()(size_t r, size_t c) const
 {
-  return _vec[r * _cols + c];
+  return _data[r * _cols + c];
 }
 
 template <class T>
 inline bool LightMatrix<T>::operator==(const LightMatrix<T>& other) const
 {
-  return _rows == other._rows && _cols == other._cols && _vec == other._vec;
+  return _rows == other._rows && _cols == other._cols && _data == other._data;
 }
 
 template <class T>
@@ -435,7 +438,7 @@ typename LightMatrix<T>::data_type LightMatrix<T>::operator*(const data_type& v)
   MREQUIRE_EQUAL(_cols, v.size());
   data_type res;
   res.reserve(rows());
-  auto iv = _vec.begin();
+  auto iv = _data.begin();
   for (size_t i = 0; i < _rows; ++i)
   {
     T    r  = 0.;
@@ -448,11 +451,17 @@ typename LightMatrix<T>::data_type LightMatrix<T>::operator*(const data_type& v)
 }
 
 template <class T>
-void LightMatrix<T>::assign_col(size_t c, const std::vector<T>& v)
+SliceVector<const T> LightMatrix<T>::get_col_view(size_t col) const
+{
+  return SliceVector<const T>{data().data() + col, _rows, _rows};
+}
+
+template <class T>
+void LightMatrix<T>::assign_col(size_t c, SliceVector<const T> v)
 {
   MREQUIRE_LESS(c, _cols);
   MREQUIRE_EQUAL(v.size(), _rows);
-  T*   t  = std::addressof(_vec[c]);
+  T*   t  = std::addressof(_data[c]);
   auto pv = v.begin();
   for (size_t i = 0; i < _rows; ++i)
   {
@@ -468,7 +477,7 @@ std::vector<T> LightMatrix<T>::get_row(size_t r) const
   MREQUIRE_LESS(r, _rows);
   std::vector<T> res;
   res.reserve(_cols);
-  const T* t = std::addressof(_vec[r * _cols]);
+  const T* t = std::addressof(_data[r * _cols]);
   for (size_t i = 0; i < _cols; ++t, ++i)
     res.push_back(*t);
   return res;
@@ -477,5 +486,5 @@ std::vector<T> LightMatrix<T>::get_row(size_t r) const
 template <class T>
 std::span<const T, std::dynamic_extent> LightMatrix<T>::get_row_view(size_t r) const
 {
-  return std::span<const T, std::dynamic_extent>(_vec.data() + r * cols(), cols());
+  return std::span<const T, std::dynamic_extent>(_data.data() + r * cols(), cols());
 }
