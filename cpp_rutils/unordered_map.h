@@ -16,7 +16,7 @@ template <class _Kty, class _Ty, class _Hasher = std::hash<_Kty>, class _Keyeq =
 struct um_p : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq> {
 	using std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>::unordered_map;
 
-	um_p (std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq> &&other ) {this->std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>::operator=(other);}
+	um_p(std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>&& other) { this->std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>::operator=(other); }
 
 	const _Ty& at(const _Kty& key) const
 	{
@@ -96,3 +96,32 @@ struct default_dict : public std::unordered_map<_Kty, _Ty, _Hasher, _Keyeq>
 
 	creation_function_type _creation_fn;
 };
+
+
+// struct is from "https://www.cppstories.com/2021/heterogeneous-access-cpp20/"
+struct string_hash
+{
+	using is_transparent = void;
+	[[nodiscard]] size_t operator()(const char* txt) const
+	{
+		return std::hash<std::string_view>{}(txt);
+	}
+	[[nodiscard]] size_t operator()(std::string_view txt) const
+	{
+		return std::hash<std::string_view>{}(txt);
+	}
+	[[nodiscard]] size_t operator()(const std::string& txt) const
+	{
+		return std::hash<std::string>{}(txt);
+	}
+};
+
+struct string_equal
+{
+	using is_transparent = std::true_type;
+
+	bool operator()(std::string_view l, std::string_view r) const noexcept { return l == r; }
+};
+
+template <class T>
+using hl_unordered_map = std::unordered_map<std::string, T, string_hash, string_equal>;
