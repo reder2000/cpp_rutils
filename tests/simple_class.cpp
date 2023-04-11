@@ -5,7 +5,7 @@
 #include <require.h>
 #include <optional>
 
-#define SimpleClass_tuple ((int,i),(double,d))
+#define SimpleClass_tuple ((int,i),(double,d,2.))
 
 struct SimpleClass
 {
@@ -16,6 +16,7 @@ struct SimpleClass
 TEST_CASE("SimpleClass", "[enum][hide]")
 {
 	SimpleClass sc;
+	CHECK(sc._d == 2.);
 	sc._i = 12;
 	sc._d = 3.14;
 }

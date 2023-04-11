@@ -2,12 +2,22 @@
 
 #include "enum.h"
 #include "boost/preprocessor/tuple/elem.hpp"
+#include "boost/preprocessor/tuple/size.hpp"
+#include "boost/preprocessor/if.hpp"
+#include "boost/preprocessor/comparison/equal.hpp"
 
 // name_tuple = ((type_1,name_1),(type_2,name_2),...)
 
+// -> type_i _name_i = value_i ;
+#define EMIT_SIMPLE_CLASS_DECLARE_WITH_DEFAULT(elem) \
+  BOOST_PP_TUPLE_ELEM(0, elem) BOOST_PP_CAT(_, BOOST_PP_TUPLE_ELEM(1, elem)) = BOOST_PP_TUPLE_ELEM(2, elem)
+
+#define EMIT_SIMPLE_CLASS_DECLARE_WITHOUT_DEFAULT(elem) \
+  BOOST_PP_TUPLE_ELEM(0, elem) BOOST_PP_CAT(_, BOOST_PP_TUPLE_ELEM(1, elem))
+
 // -> type_i _name_i ;
 #define EMIT_SIMPLE_CLASS_DECLARE(r, data, i, elem) \
-  BOOST_PP_TUPLE_ELEM(0, elem) BOOST_PP_CAT(_, BOOST_PP_TUPLE_ELEM(1, elem));
+  BOOST_PP_IF(BOOST_PP_EQUAL(BOOST_PP_TUPLE_SIZE(elem) , 3), EMIT_SIMPLE_CLASS_DECLARE_WITH_DEFAULT(elem), EMIT_SIMPLE_CLASS_DECLARE_WITHOUT_DEFAULT(elem));
 
 // ->  type_i _name_i ; ...
 #define EMIT_SIMPLE_CLASS_DECLARE_ALL(name) PROCESS_TUPLE(EMIT_SIMPLE_CLASS_DECLARE, name, name)
