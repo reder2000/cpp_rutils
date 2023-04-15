@@ -29,7 +29,7 @@ std::vector<typename In::value_type>  intersection_vc(const In& v1, const In& v2
 }
 
 
-template <class In, class Fun , class Compare>
+template <class In, class Fun, class Compare>
 std::vector<typename std::invoke_result_t<Fun, typename In::value_type>> intersection_vc_fun(const In& v1, const In& v2, Fun fun, Compare comp) {
 	// fixme : uses intermediate storage
 	auto inter = intersection_vc(v1, v2, comp);
@@ -51,7 +51,7 @@ std::vector<typename In::value_type>  intersection_vcs(const In& v1, const In& v
 
 template <class In, class ...Args>
 std::vector<typename In::value_type>  intersection_vcs(const In& v1, const In& v2, const Args... args) {
-	return intersection_vc(v1, intersection_vcs(v2,args...));
+	return intersection_vc(v1, intersection_vcs(v2, args...));
 }
 
 template <class V, class Op>
@@ -68,22 +68,6 @@ std::vector<
 		res.emplace_back(op(v));
 	return res;
 }
-
-template <class T>
-std::vector<T> set_union(const std::vector<std::reference_wrapper<const std::vector<T>>>& vs)
-{
-	const size_t M = std::accumulate(vs.begin(), vs.end(), size_t(0), [](size_t a, const std::reference_wrapper<const std::vector<T>>& b)
-		{return std::max(a, b.get().size()); });
-	std::unordered_set<T> inter;
-	inter.reserve(M);
-	for (auto const& v : vs)
-		for (auto const& t : v.get())
-			inter.insert(t);
-	std::vector<T> res(inter.begin(), inter.end());
-	std::sort(res.begin(), res.end());
-	return res;
-}
-
 
 template <class T>
 std::vector<T> set_intersection(const std::vector<std::reference_wrapper<const std::vector<T>>>& vs)

@@ -16,8 +16,6 @@ TEST_CASE("intersection", "[intersection][hide]")
 	auto res4 = intersection_vcs(v1, v2, v3);
 	CHECK(res4 == std::vector<int>{ 3 });
 	std::vector < std::reference_wrapper<const std::vector<int>>> vr({ v1,v2,v3 });
-	auto res5 = set_union(vr);
-	CHECK(res5 == std::vector<int>{1, 2, 3, 4 });
 	auto res6 = set_intersection(vr);
 	CHECK(res6 == std::vector<int>{3});
 	std::vector < std::vector<int>> vv({ v1,v2,v3 });
