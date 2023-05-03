@@ -17,7 +17,7 @@ IndentWidth: 2
 MaxEmptyLinesToKeep: 3
 NamespaceIndentation: All
 ReflowComments: false
-SortIncludes: never
+SortIncludes: false
 SpaceAfterLogicalNot: true
 SpaceInEmptyBlock: false
 Standard: Latest

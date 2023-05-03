@@ -16,6 +16,7 @@
 #include "to_string.h"
 #include "always_false.h"
 #include "string_literal.h"
+#include "require.h"
 
 template <class T>
 std::string_view enum_to_string(T)
