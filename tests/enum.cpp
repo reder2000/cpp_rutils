@@ -1,7 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <enum.h>
 #include <string_literal.h>
-#include <always_false.h>
 #include <require.h>
 #include <optional>
 

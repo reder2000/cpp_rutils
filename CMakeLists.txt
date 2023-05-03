@@ -8,6 +8,8 @@ message("Configuring cpp_rutils ...")
 
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard whose features are requested." )
 
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/external:anglebrackets>")
+
 include(GNUInstallDirs)
 
 include(FetchContent)

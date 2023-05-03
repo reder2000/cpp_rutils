@@ -25,7 +25,6 @@ TEST_CASE("vector_sp", "[enum][hide]")
 }
 
 
-#include <utility>
 #include <tuple>
 
 //template<class T>

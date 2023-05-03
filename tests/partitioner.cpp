@@ -1,4 +1,3 @@
-#include <always_false.h>
 #include <catch2/catch_test_macros.hpp>
 #include <partitioner.h>
 #include <transform.h>

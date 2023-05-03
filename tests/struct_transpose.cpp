@@ -1,4 +1,3 @@
-#include <always_false.h>
 #include <numeric>
 #include <catch2/catch_test_macros.hpp>
 #include <struct_transpose.h>

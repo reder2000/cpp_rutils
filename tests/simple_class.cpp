@@ -5,7 +5,7 @@
 #include <require.h>
 #include <optional>
 
-#define SimpleClass_tuple ((int,i),(double,d,2.))
+#define SimpleClass_tuple ((int,i,0),(double,d,2.))
 
 struct SimpleClass
 {
