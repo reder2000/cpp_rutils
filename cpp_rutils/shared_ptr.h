@@ -87,3 +87,41 @@ std::decay_t<T>& auto_const_cast(const T& t)
 {
   return const_cast<std::decay_t<T>&>(t);
 }
+
+inline void null_deleter(const void*) {}
+
+//namespace detail
+//{
+//  template <typename T, typename E, bool B>
+//  struct type_if
+//  {
+//  };
+//
+//  template <typename T, typename E>
+//  struct type_if<T, E, true>
+//  {
+//    using type = T;
+//  };
+//
+//  template <typename T, typename E>
+//  struct type_if<T, E, false>
+//  {
+//    using type = E;
+//  };
+//
+//}  // namespace detail
+//
+//template <bool B, typename T, typename E>
+//using type_if = typename detail::type_if<T, E, B>::type;
+
+
+// temporarily store and object as a shared_ptr
+// object must stay alive before the shared_ptr goes
+// out of scope
+template <class T>
+std::shared_ptr<std::conditional_t<std::is_const_v<T>, const std::decay_t<T>, std::decay_t<T>>>
+temp_sp(T& t)
+{
+  using TT = std::conditional_t<std::is_const_v<T>, const std::decay_t<T>, std::decay_t<T>>;
+  return std::shared_ptr<TT>(&t, &null_deleter);
+}
