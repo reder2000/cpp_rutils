@@ -9,13 +9,22 @@
 #include <variant>
 #include <string_view>
 
+#if FMT_VERSION >= 100000
+#define FMT_VXX fmt::v10
+#elif FMT_VERSION >= 90000
+#define FMT_VXX fmt::v9
+#else
+#error "FMT VERSION TOO OLD"
+#endif
+
+
 template <typename T>
 inline constexpr bool is_stdstring_convertible = std::is_convertible_v<T, std::string>;
 
 template <typename T>
 constexpr bool is_fmt_formattable_t()
 {
-  using Context = fmt::v9::basic_format_context<fmt::v9::detail::buffer_appender<char>, char>;
+  using Context = FMT_VXX::basic_format_context<FMT_VXX::detail::buffer_appender<char>, char>;
   return fmt::has_formatter<T, Context>::value;
 }
 
