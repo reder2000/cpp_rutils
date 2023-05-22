@@ -1,4 +1,5 @@
 #pragma once
+#include "linalg.h"
 
 // light DataFrame
 template <typename _value_type, typename _index_type, typename _column_type>
