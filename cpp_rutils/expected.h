@@ -23,3 +23,8 @@ using unexpected_s = tl::unexpected<std::string>;
 
 #define CHECK_EXPECTED(e) \
   if (! e) return unexpected_s(e.error());
+
+#define EXPECTED_OR_RETURN(var, walue) \
+  auto var##temp = walue;              \
+  CHECK_EXPECTED((var##temp));         \
+  auto var = std::move(var##temp.value());
