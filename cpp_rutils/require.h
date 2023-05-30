@@ -13,7 +13,6 @@
 #include <boost/preprocessor/variadic/to_tuple.hpp>
 #include <boost/preprocessor/tuple/enum.hpp>
 #include <boost/preprocessor/facilities/is_empty.hpp>
-#include <tl/expected.hpp>
 #include <sstream>
 #include <boost/stacktrace.hpp>
 #ifdef small

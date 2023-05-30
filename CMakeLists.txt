@@ -42,7 +42,6 @@ vcpkg_install(libbacktrace)
 #find_vcpkg_install_missing(backtrace libbacktrace)
 set(additional_libraries backtrace)
 endif()
-find_vcpkg_install_missing(tl-expected)
 
 include(CheckSymbolExists)
 check_symbol_exists(strerror_s "string.h" HAVE_STRERROR_S)
@@ -63,6 +62,10 @@ check_cxx_source_compiles(
         "#include <sys/types.h>
 		 int main(){ssize_t s=-1; return (s+1);}"
 		HAVE_CXX23_SSIZE_T)
+check_cxx_source_compiles(
+        "#include <expected>
+		 int main(){std::expected<int,bool> res(1);  return res.value();}"
+		HAVE_CXX23_EXPECTED)
 configure_file(cpp_rutils/config.h.in cpp_rutils_config.h)
 include_directories(${CMAKE_BINARY_DIR})
 message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
@@ -71,6 +74,10 @@ if (MSVC)
 find_vcpkg_install_missing(date)
 else ()
 find_vcpkg_install_missing(date date[remote-api])
+endif()
+
+if (NOT HAVE_CXX23_EXPECTED)
+    find_vcpkg_install_missing(tl-expected)
 endif()
 
 add_source_group(cpp_rutils)

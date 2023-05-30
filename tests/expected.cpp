@@ -7,9 +7,9 @@
 TEST_CASE("expected", "[enum][hide]")
 {
   auto f = []() { MEXPECTED(false); };
-  fmt::print("unexpected : {}\n", f().value());
+  fmt::print("unexpected : {}\n", f());
   auto g = []() { MEXPECTED(false, "bad value {}", false); };
-  fmt::print("unexpected : {}\n", g().value());
+  fmt::print("unexpected : {}\n", g());
   auto h = []() -> expected_s<bool>
   {
     expected_s<bool> e;
@@ -17,5 +17,5 @@ TEST_CASE("expected", "[enum][hide]")
     CHECK_EXPECTED(e);
     return e;
   };
-  fmt::print("unexpected : {}\n", h().error());
+  fmt::print("unexpected : {}\n", h());
 }

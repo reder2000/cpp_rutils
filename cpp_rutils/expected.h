@@ -1,14 +1,24 @@
 #pragma once
 
+#include "cpp_rutils_config.h"
+
+#if defined(HAVE_CXX23_EXPECTED)
+#include <expected>
+template <class T>
+using expected_s   = std::expected<T, std::string>;
+using unexpected_s = std::unexpected<std::string>;
+#else
 #include <tl/expected.hpp>
-#include <boost/preprocessor/if.hpp>
-#include <boost/preprocessor/dec.hpp>
-#include <boost/preprocessor/variadic/size.hpp>
-
-
 template <class T>
 using expected_s   = tl::expected<T, std::string>;
 using unexpected_s = tl::unexpected<std::string>;
+#endif
+
+#include <boost/preprocessor/if.hpp>
+#include <boost/preprocessor/dec.hpp>
+#include <boost/preprocessor/variadic/size.hpp>
+#include <fmt/format.h>
+
 
 #define MEXPECTED1(success, ...) \
   if (! (success))               \
@@ -28,3 +38,28 @@ using unexpected_s = tl::unexpected<std::string>;
   auto var##temp = walue;              \
   CHECK_EXPECTED((var##temp));         \
   auto var = std::move(var##temp.value());
+
+template <>
+struct fmt::formatter<unexpected_s> : formatter<std::string>
+{
+  auto format(unexpected_s const& c, format_context& ctx) const
+  {
+    const std::string& v =
+#if defined(HAVE_CXX23_EXPECTED)
+        c.error();
+#else
+        c.value();
+#endif
+    return formatter<std::string>::format(v, ctx);
+  }
+};
+
+template <class T>
+struct fmt::formatter<expected_s<T>> : formatter<std::string>
+{
+  auto format(expected_s<T> const& c, format_context& ctx) const
+  {
+    if (c) return formatter<std::string>::format(fmt::format("{}", *c), ctx);
+    return formatter<std::string>::format(fmt::format("{}", c.error()), ctx);
+  }
+};

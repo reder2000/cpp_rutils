@@ -146,15 +146,15 @@ Date operator+(Date d, Period p);
 
 // parser
 
-tl::expected<Date, std::string> try_parse_date(std::string_view sv);
+expected_s<Date> try_parse_date(std::string_view sv);
 
 Date parse_date(std::string_view sv);
 
 inline Date parse_date(std::string_view sv)
 {
   auto pres = try_parse_date(sv);
-  if (! pres.has_value()) MFAIL("cannot parse {} into date : {}", sv, pres.error());
-  return pres.value<>();
+  if (! pres) MFAIL("cannot parse {} into date : {}", sv, pres.error());
+  return pres.value();
 }
 
 inline Date operator+(Date d, Period p)
@@ -181,7 +181,7 @@ inline Date operator+(Date d, Period p)
   return res;
 }
 
-inline tl::expected<Date, std::string> try_parse_date(std::string_view sv)
+inline expected_s<Date> try_parse_date(std::string_view sv)
 {
   int year = 0, month = 0, day = 0;
   // 2018/12/21

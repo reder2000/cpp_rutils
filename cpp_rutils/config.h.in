@@ -5,3 +5,4 @@
 #cmakedefine HAVE_CXX20_CHRONO_DURATION
 #cmakedefine HAVE_CXX20_CHRONO_TIME_ZONE
 #cmakedefine HAVE_CXX23_SSIZE_T
+#cmakedefine HAVE_CXX23_EXPECTED
