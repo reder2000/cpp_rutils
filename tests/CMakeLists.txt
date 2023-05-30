@@ -5,6 +5,7 @@ message("Configuring cpp_rutils/tests ...")
 
 
 find_vcpkg_install_missing(Catch2 catch2)
+find_vcpkg_install_missing(tl-expected)
 
 file (GLOB srcs CONFIGURE_DEPENDS *.cpp stdafx.h)
 
@@ -13,7 +14,7 @@ include_directories(..)
 
 add_executable(cpp_rutils_tests ${srcs})
 
-target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt  date::date date::date-tz ${additional_libraries})
+target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt  date::date date::date-tz tl::expected ${additional_libraries})
 
 if (NOT GCC)
 target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)

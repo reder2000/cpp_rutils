@@ -6,6 +6,7 @@
 #include "assign_m.h"
 #include "date.h"
 #include "enum.h"
+#include "expected.h"
 #include "get_loc.h"
 #include "index.h"
 #include "intersection.h"
