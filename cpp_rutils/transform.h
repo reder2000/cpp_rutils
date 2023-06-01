@@ -7,6 +7,8 @@
 // Do(lambda).ForEach(container)
 // Do(lambda).For(value)
 // Do(lambda).ForEach(container).And().For(value).
+// Do(lambda_1).ForEach(container).And(lambda_2).For(value).
+// Do(lambda,params).ForEach(container) => for (c : container) lamba(c,params)
 template <class F>
 struct Do
 {
@@ -18,10 +20,23 @@ struct Do
       _f(a);
     return *this;
   }
+  template <class C, class... Args>
+  Do& ForEach(C&& c, Args&&... args)
+  {
+    for (auto&& a : c)
+      _f(a, args...);
+    return *this;
+  }
   template <class C>
   Do& For(C&& c)
   {
     _f(c);
+    return *this;
+  }
+  template <class C, class... Args>
+  Do& For(C&& c, Args&&... args)
+  {
+    _f(c, args...);
     return *this;
   }
   Do& And() { return *this; }
