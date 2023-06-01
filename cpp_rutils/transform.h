@@ -25,7 +25,12 @@ struct Do
     return *this;
   }
   Do& And() { return *this; }
-  F   _f;
+  template <class G>
+  Do<G> And(G g)
+  {
+    return Do<G>(g);
+  }
+  F _f;
 };
 
 

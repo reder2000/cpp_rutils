@@ -36,4 +36,7 @@ TEST_CASE("transform", "[transform][hide]")
   CHECK(v2 == std::vector<int>{0, 1, 2, 3, 4});
   Do([](int& i) { i *= i; }).ForEach(v2);
   CHECK(v2 == std::vector<int>{0, 1, 4, 9, 16});
+  std::vector<int> v3;
+  Do([&v3](int i) { v3.push_back(i); }).ForEach(v1).And([](int& i) { i *= i; }).ForEach(v3);
+  CHECK(v3 == std::vector<int>{0, 1, 4, 9});
 }
