@@ -5,17 +5,27 @@
 #include <algorithm>
 
 // Do(lambda).ForEach(container)
+// Do(lambda).For(value)
+// Do(lambda).ForEach(container).And().For(value).
 template <class F>
 struct Do
 {
   Do(F f) : _f(f) {}
   template <class C>
-  void ForEach(C&& c)
+  Do& ForEach(C&& c)
   {
     for (auto&& a : c)
       _f(a);
+    return *this;
   }
-  F _f;
+  template <class C>
+  Do& For(C&& c)
+  {
+    _f(c);
+    return *this;
+  }
+  Do& And() { return *this; }
+  F   _f;
 };
 
 
