@@ -9,10 +9,11 @@ BasedOnStyle: Chromium
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Allman
 BreakConstructorInitializers: BeforeColon
-ColumnLimit: 100
+ColumnLimit: 120
 Cpp11BracedListStyle: true
 DerivePointerAlignment: true
 EmptyLineBeforeAccessModifier: Leave
+IndentPPDirectives: BeforeHash
 IndentWidth: 2
 MaxEmptyLinesToKeep: 3
 NamespaceIndentation: All

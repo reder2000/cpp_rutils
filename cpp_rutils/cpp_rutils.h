@@ -4,6 +4,7 @@
 
 #include "always_false.h"
 #include "assign_m.h"
+#include "cloneable.h"
 #include "date.h"
 #include "enum.h"
 #include "expected.h"
