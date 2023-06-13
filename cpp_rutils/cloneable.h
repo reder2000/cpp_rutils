@@ -7,6 +7,7 @@ class CloneableBase
 {
  protected:
   virtual CloneableBase *clone_impl() const = 0;
+  virtual ~CloneableBase() {}
 };
 
 template <typename Derived>
