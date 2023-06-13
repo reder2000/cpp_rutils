@@ -1,4 +1,5 @@
 #pragma once
+#include "vector_range.h"
 
 // find the nearest value in an increasing sequence
 // return index
