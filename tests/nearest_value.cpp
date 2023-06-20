@@ -46,3 +46,13 @@ TEST_CASE("nearest_value2", "[mem][hide]")
   std::vector<size_t> w7{18, 19, 17};
   CHECK(w == w7);
 }
+
+
+TEST_CASE("nearest_value3", "[mem][hide]")
+{
+  std::vector<std::string> v{"a", "b", "c", "d", "e", "f"};
+  auto i = find_nearest_value(100.1, v, [](const std::string &s) { return static_cast<double>(s[0]); });
+  CHECK(v[i] == "d");
+  auto w = find_nearest_values(3, 100.1, v, [](const std::string &s) { return static_cast<double>(s[0]); });
+  CHECK(w == std::vector<size_t>{3, 4, 2});
+}

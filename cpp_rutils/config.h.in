@@ -2,7 +2,8 @@
 #cmakedefine HAVE_STRERROR_S
 #cmakedefine HAVE_GETENV_S
 #cmakedefine HAVE_LOCALTIME_S
+#cmakedefine HAVE_SET_SE_TRANSLATOR
 #cmakedefine HAVE_CXX20_CHRONO_DURATION
 #cmakedefine HAVE_CXX20_CHRONO_TIME_ZONE
 #cmakedefine HAVE_CXX23_SSIZE_T
-#cmakedefine HAVE_CXX23_EXPECTED
+#cmakedefine HAVE_CXX23_EXPECTED	

@@ -49,6 +49,12 @@ check_symbol_exists(getenv_s "stdlib.h" HAVE_GETENV_S)
 check_symbol_exists(localtime_s "time.h" HAVE_LOCALTIME_S)
 include(CheckCXXSourceCompiles)
 check_cxx_source_compiles(
+        "#include <eh.h>
+         int main(){
+             _set_se_translator(nullptr);
+             return 0; }"
+         HAVE_SET_SE_TRANSLATOR)
+check_cxx_source_compiles(
         "#include <chrono>
          using test = std::chrono::duration;
          int main(){ return 0; }"
