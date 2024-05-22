@@ -52,13 +52,13 @@ int64_t Period::to_minutes() const
 
 
 template <>
-struct fmt::formatter<Period> : formatter<std::string>
+struct std__formatter<Period> : formatter<std::string>
 {
 	// parse is inherited from formatter<string_view>.
 	template <typename FormatContext>
-	auto format(Period c, FormatContext& ctx)
+	auto format(Period c, FormatContext& ctx) const
 	{
-		std::string ss = fmt::format("{} {}", c._length, c._units);
+          std::string ss = std__format("{} {}", c._length, c._units);
 		return formatter<std::string>::format(ss, ctx);
 	}
 };

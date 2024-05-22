@@ -1,6 +1,7 @@
 #pragma once
 
-#include "cpp_rutils_config.h"
+#include "cpp_rutils/config.h"
+#include "require.h"
 
 #if defined(HAVE_CXX23_EXPECTED)
 #include <expected>
@@ -17,13 +18,13 @@ using unexpected_s = tl::unexpected<std::string>;
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/variadic/size.hpp>
-#include <fmt/format.h>
+#include "format.h"
 
 
 #define MEXPECTED1(success, ...) \
   if (! (success))               \
   return unexpected_s(           \
-      fmt::format("{} , {} , {} , {} ", __func__, __FILE__, __LINE__, fmt::format(__VA_ARGS__)))
+      std__format("{} , {} , {} , {} ", __func__, __FILE__, __LINE__, std__format(__VA_ARGS__)))
 
 #define MEXPECTED0(...) MEXPECTED1(__VA_ARGS__, #__VA_ARGS__)
 
@@ -49,7 +50,7 @@ using unexpected_s = tl::unexpected<std::string>;
   auto var = std::move(var##temp.value());
 
 template <>
-struct fmt::formatter<unexpected_s> : formatter<std::string>
+struct std__formatter<unexpected_s> : formatter<std::string>
 {
   auto format(unexpected_s const& c, format_context& ctx) const
   {
@@ -64,11 +65,11 @@ struct fmt::formatter<unexpected_s> : formatter<std::string>
 };
 
 template <class T>
-struct fmt::formatter<expected_s<T>> : formatter<std::string>
+struct std__formatter<expected_s<T>> : formatter<std::string>
 {
   auto format(expected_s<T> const& c, format_context& ctx) const
   {
-    if (c) return formatter<std::string>::format(fmt::format("{}", *c), ctx);
-    return formatter<std::string>::format(fmt::format("{}", c.error()), ctx);
+    if (c) return formatter<std::string>::format(std__format("{}", *c), ctx);
+    return formatter<std::string>::format(std__format("{}", c.error()), ctx);
   }
 };

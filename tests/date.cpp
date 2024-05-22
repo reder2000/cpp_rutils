@@ -10,7 +10,7 @@ TEST_CASE("date", "[require][hide]")
 {
 	using duration [[maybe_unused]] = std__chrono::utc_clock::duration;
 	auto date = make_date(2022, 2, 2);
-	auto sdate = fmt::format("{}", date);
+	auto sdate = std__format("{}", date);
 	auto date2 = parse_date(sdate);
 	CHECK(date == date2);
 	auto missed = try_parse_date("totalbs");

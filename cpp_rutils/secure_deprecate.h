@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "require.h"
-#include "cpp_rutils_config.h"
+#include "cpp_rutils/config.h"
 
 // use those functions instead of those that trigger
 // annoying messages about deprecation in msvc
@@ -9,6 +9,10 @@
 std::string m_strerror_s(int _ErrorMsg);
 struct tm m_localtime_s(const time_t& tt);
 std::string  m_getenv_s(const std::string& var);
+
+#if !defined(HAVE_STRERROR_S)
+#include <string.h>
+#endif
 
 // implementation
 	

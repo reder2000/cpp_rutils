@@ -28,7 +28,7 @@ namespace nsSExceptionTranslator
 }  // namespace nsSExceptionTranslator
 LONG my_PvectoredExceptionHandler(_EXCEPTION_POINTERS* e)
 {
-  fmt::print("Runtime problem {}, exiting with code {:#x}", nsSExceptionTranslator::code_2_msg(e),
+  std__print("Runtime problem {}, exiting with code {:#x}", nsSExceptionTranslator::code_2_msg(e),
              e->ExceptionRecord->ExceptionCode);
   exit(e->ExceptionRecord->ExceptionCode);
   return EXCEPTION_EXECUTE_HANDLER;
@@ -77,7 +77,7 @@ std::string nsSExceptionTranslator::code_2_msg(EXCEPTION_POINTERS* e)
     {
       if (e->ExceptionRecord->ExceptionFlags == EXCEPTION_NONCONTINUABLE)
       {
-        fmt::print("EXCEPTION_ACCESS_VIOLATION EXCEPTION_NONCONTINUABLE aborting");
+        std__print("EXCEPTION_ACCESS_VIOLATION EXCEPTION_NONCONTINUABLE aborting");
         abort();
       }
       std::string res = "ACCESS_VIOLATION ";
@@ -87,7 +87,7 @@ std::string nsSExceptionTranslator::code_2_msg(EXCEPTION_POINTERS* e)
         res += "CANNOT READ ADDRESS ";
       else
         res += "CANNOT WRITE ADDRESS ";
-      return fmt::format("{} {}", res, reinterpret_cast<void*>(e->ExceptionRecord->ExceptionInformation[1]));
+      return std__format("{} {}", res, reinterpret_cast<void*>(e->ExceptionRecord->ExceptionInformation[1]));
     }
     default:
       return "UNKNOWN !!!";
@@ -195,6 +195,8 @@ SExceptionTranslator::~SExceptionTranslator()
 //}
 
   #include <csignal>
+
+  #if ! defined(linux)
 //  #include <cfenv>
 //
 //inline int feenableexcept(unsigned int excepts)
@@ -219,7 +221,7 @@ SExceptionTranslator::~SExceptionTranslator()
 
 void fpe_handler(int i)
 {
-  fmt::print("received signal {}\n", i);
+  std__print("received signal {}\n", i);
   _fpreset();
   _clearfp();
   signal(SIGFPE, fpe_handler);
@@ -283,7 +285,6 @@ SExceptionTranslator::~SExceptionTranslator() {}
 //      _clearfp();
 //      _control87( FPUcfp ,0xffff); }
 
-#endif
 
 #if ! defined(__clang__)
 
@@ -330,7 +331,7 @@ TEST_CASE("fpu_seh", "[mem][hide]")
     }
     catch (std::exception& e)
     {
-      fmt::print("tested! {}\n", e.what());
+      std__print("tested! {}\n", e.what());
     }
   };
   tt(f);
@@ -367,5 +368,8 @@ TEST_CASE("fpu_seh_clang", "[mem][hide]")
     std::cout << "caught" << std::endl;
   }
 }
+#endif 
+
+#endif
 
 #endif

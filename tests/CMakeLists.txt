@@ -15,14 +15,17 @@ file (GLOB srcs CONFIGURE_DEPENDS *.cpp stdafx.h)
 
 include_directories(../cpp_rutils)
 include_directories(..)
+include_directories(${CMAKE_BINARY_DIR})
+message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
 
 add_executable(cpp_rutils_tests ${srcs})
 #add_executable(cpp_rutils_tests fpu_seh.cpp)
 
-target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  fmt::fmt  date::date date::date-tz ${additional_libraries})
+target_link_libraries(cpp_rutils_tests Catch2::Catch2WithMain  date::date date::date-tz ${additional_libraries})
 #target_link_libraries(cpp_rutils_tests fmt::fmt  date::date date::date-tz ${additional_libraries})
 
-if (NOT GCC)
+if (MSVC)
+message("using Precompiled Headers")
 #set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP  0)
 target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)
 add_compile_definitions(USING_PCH)

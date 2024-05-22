@@ -10,6 +10,7 @@
 #include <boost/preprocessor/comma_if.hpp>
 #include <unordered_map>
 #include <unordered_set>
+#include <numeric>
 #include "require.h"
 #include "always_false.h"
 

@@ -6,7 +6,7 @@ project("cpp_rutils" VERSION 1.0.1
 
 message("Configuring cpp_rutils ...")
 
-set(CMAKE_CXX_STANDARD 20 CACHE STRING "The C++ standard whose features are requested." )
+set(CMAKE_CXX_STANDARD 26 CACHE STRING "The C++ standard whose features are requested." )
 
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/external:anglebrackets>")
 
@@ -23,10 +23,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(rr_cmake)
 include(${rr_cmake_SOURCE_DIR}/rr_cmake/common.cmake)
 
-find_vcpkg_install_missing(fmt)
-if ("${fmt_VERSION}" VERSION_LESS "9.0.0")
-    message(FATAL_ERROR  "fmt version ${fmt_VERSION} must be >= 9.0.0.\n Please upgrade vcpkg")
-endif()
 boost_header_only_package(preprocessor preprocessor.hpp)
 if (${MINGW})
 # libbacktrace does not work properlmy on msys2
@@ -66,6 +62,23 @@ check_cxx_source_compiles(
          int main(){ return 0; }"
          HAVE_CXX20_CHRONO_TIME_ZONE)
 check_cxx_source_compiles(
+        "#include <format>
+         int main(){ 
+             auto s = std::format(\"{}\",\"s\");
+             return 0; }"
+         HAVE_CXX20_STD_FORMAT)
+check_cxx_source_compiles(
+        "#include <format>
+         int main(){ 
+             std::print(\"{}\",\"s\");
+             return 0; }"         HAVE_CXX23_STD_PRINT)
+check_cxx_source_compiles(
+        "#include <format>
+         #include <filesystem>
+         int main(){ 
+             std::print(\"{}\",std::filesystem::path{});
+             return 0; }"         HAVE_CXX26_STD_FORMAT_PATH)
+check_cxx_source_compiles(
         "#include <sys/types.h>
 		 int main(){ssize_t s=-1; return (s+1);}"
 		HAVE_CXX23_SSIZE_T)
@@ -73,9 +86,17 @@ check_cxx_source_compiles(
         "#include <expected>
 		 int main(){std::expected<int,bool> res(1);  return res.value();}"
 		HAVE_CXX23_EXPECTED)
-configure_file(cpp_rutils/config.h.in cpp_rutils_config.h)
+configure_file(cpp_rutils/config.h.in cpp_rutils/config.h)
 include_directories(${CMAKE_BINARY_DIR})
 message("include_directories CMAKE_BINARY_DIR ${CMAKE_BINARY_DIR}")
+
+if (NOT HAVE_CXX20_STD_FORMAT)
+    find_vcpkg_install_missing(fmt)
+    if ("${fmt_VERSION}" VERSION_LESS "9.0.0")
+        message(FATAL_ERROR  "fmt version ${fmt_VERSION} must be >= 9.0.0.\n Please upgrade vcpkg")
+    endif()
+    set (additional_libraries ${additional_libraries}  fmt::fmt fmt::fmt-header-only )
+endif()
 
 if (MSVC)
 find_vcpkg_install_missing(date)
@@ -97,7 +118,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_library(cpp_rutils INTERFACE ${all_sources} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
-target_link_libraries(cpp_rutils INTERFACE fmt::fmt fmt::fmt-header-only date::date date::date-tz ${additional_libraries})
+target_link_libraries(cpp_rutils INTERFACE date::date date::date-tz ${additional_libraries})
 #target_link_libraries(cpp_rutils INTERFACE "$<BUILD_INTERFACE:date>")
 
 target_include_directories(

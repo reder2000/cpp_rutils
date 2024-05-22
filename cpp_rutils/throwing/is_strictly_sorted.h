@@ -15,7 +15,9 @@ namespace throwing {
 					auto first_str = to_string(*first);
 					auto next_str = to_string(*next);
                     auto where = std::distance(First, next);
-                    throw std::runtime_error(fmt::format("range not strictly sorted at index {}: !({} < {})", where, first_str, next_str));
+                                        throw std::runtime_error(
+                                            std__format("range not strictly sorted at index {}: !({} < {})", where,
+                                                        first_str, next_str));
                 }
             }
         }
@@ -30,7 +32,7 @@ namespace throwing {
             for (auto next = first; ++next != last; ++first) {
                 if (!(pred(*first, *next))) {
                     auto where = std::distance(First, next);
-                    throw std::runtime_error(fmt::format("range not strictly sorted at index {}", where));
+                  throw std::runtime_error(std__format("range not strictly sorted at index {}", where));
                 }
             }
         }

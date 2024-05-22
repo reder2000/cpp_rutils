@@ -16,10 +16,10 @@ std::ostream& operator<<(std::ostream& os, toto /*v*/) {
 struct A {};
 
 // fixme 
-template <> struct fmt::formatter<A> : formatter<std::string> {
+template <> struct std__formatter<A> : formatter<std::string> {
     // parse is inherited from formatter<string_view>.
     template <typename FormatContext>
-    auto format(A , FormatContext& ctx) {
+    auto format(A , FormatContext& ctx) const {
         return formatter<std::string>::format("A", ctx);
     }
 };

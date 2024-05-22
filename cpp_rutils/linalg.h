@@ -9,6 +9,7 @@
 
 #include "require.h"
 #include "slice_vector.h"
+#include <cmath>
 
 // 1-d
 

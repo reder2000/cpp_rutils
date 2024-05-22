@@ -5,31 +5,59 @@
 
 #include <sstream>
 #include <string>
-#include <fmt/format.h>
+#include "format.h"
 #include <variant>
 #include <string_view>
 
-#if FMT_VERSION >= 100000
-#define FMT_VXX fmt::v10
-#elif FMT_VERSION >= 90000
-#define FMT_VXX fmt::v9
-#else
-#error "FMT VERSION TOO OLD"
-#endif
+#include "to_string.h"
+
+//#if ! defined(HAVE_CXX20_STD_FORMAT)
+//  #if FMT_VERSION >= 100000
+//    #define FMT_VXX fmt::v10
+//  #elif FMT_VERSION >= 90000
+//    #define FMT_VXX fmt::v9
+//  #else
+//    #error "FMT VERSION TOO OLD"
+//  #endif
+//#endif
 
 
 template <typename T>
 inline constexpr bool is_stdstring_convertible = std::is_convertible_v<T, std::string>;
 
-template <typename T>
-constexpr bool is_fmt_formattable_t()
-{
-  using Context = FMT_VXX::basic_format_context<FMT_VXX::detail::buffer_appender<char>, char>;
-  return fmt::has_formatter<T, Context>::value;
-}
+template <class T>
+concept is_fmt_formattable_c = requires(T a) { std__formatter<T>{}; };
 
-template <typename T>
-inline constexpr bool is_fmt_formattable = is_fmt_formattable_t<T>();
+template <class T>
+constexpr bool is_fmt_formattable = is_fmt_formattable_c<T>;
+
+namespace
+{
+  namespace detaille
+  {
+    struct toto
+    {
+      int a, b;
+    };
+
+    static_assert(is_fmt_formattable_c<std::string>);
+    static_assert(! is_fmt_formattable_c<toto>);
+
+    static_assert(is_fmt_formattable<std::string>);
+    static_assert(! is_fmt_formattable<toto>);
+
+  }  // namespace
+}  // namespace
+
+//template <typename T>
+//constexpr bool is_fmt_formattable_t()
+//{
+//  using Context = FMT_VXX::basic_format_context<FMT_VXX::detail::buffer_appender<char>, char>;
+//  return fmt::has_formatter<T, Context>::value;
+//}
+//
+//template <typename T>
+//inline constexpr bool is_fmt_formattable = is_fmt_formattable_t<T>();
 
 // See http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4502.pdf.
 template <typename...>
@@ -67,8 +95,7 @@ std::string to_string(const T &v)
 
   static_assert((! is_pointer_to_non_void) || is_stdstring_convertible<T>, "must be implemented");
 
-  bool constexpr has_to_string =
-      is_stdstring_convertible<T> || is_fmt_formattable<T> || is_streamable<T>;
+  bool constexpr has_to_string = is_stdstring_convertible<T> || is_fmt_formattable<T> || is_streamable<T>;
 
   static_assert(has_to_string, "must be implemented");
 
@@ -78,7 +105,8 @@ std::string to_string(const T &v)
   }
   else if constexpr (is_fmt_formattable<T>)
   {
-    return fmt::format("{}", v);
+    static_assert(is_fmt_formattable_c<T>);
+    return std__format("{}", v);
   }
   else if constexpr (is_streamable<T>)
   {

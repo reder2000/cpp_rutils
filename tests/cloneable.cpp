@@ -1,4 +1,5 @@
 #include "cloneable.h"
+#include "shared_ptr.h"
 
 #include <catch2/catch_test_macros.hpp>
 

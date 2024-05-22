@@ -107,10 +107,10 @@ T string_to_enum(std::string_view s);
 
 #define EMIT_ENUM_CLASS_FMT_FORMATTER(name)            \
   template <>                                          \
-  struct fmt::formatter<name> : formatter<std::string> \
+  struct std__formatter<name> : formatter<std::string> \
   {                                                    \
     template <typename FormatContext>                  \
-    auto format(name v, FormatContext& ctx)            \
+    auto format(name v, FormatContext& ctx) const      \
     {                                                  \
       auto s = ::to_string(v);                         \
       return formatter<std::string>::format(s, ctx);   \

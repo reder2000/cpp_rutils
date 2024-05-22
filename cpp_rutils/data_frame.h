@@ -1,6 +1,7 @@
 #pragma once
 #include "light_matrix.h"
 #include "always_false.h"
+#include <cmath>
 
 template <class T>
 constexpr bool isempty(T t)

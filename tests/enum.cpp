@@ -24,8 +24,8 @@ TEST_CASE("enum string", "[enum][hide]")
 	CHECK(enum_to_string(toto) == std::string("high"));
 	CHECK(to_string(toto) == "high");
 	CHECK(string_to_enum< DataType>("low") == DataType::low);
-	// test fmt::format
-	CHECK(fmt::format("{}", toto) == "high");
+	// test std__format
+	CHECK(std__format("{}", toto) == "high");
 	//CHECK(enum_to_cstring<DataType::low>()==std::string("low"));
 	//auto t = enum_to_cstring<DataType::high>();
 	//auto d = cstring_to_enum< DataType, "high">;

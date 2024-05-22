@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <transform.h>
+#include <cmath>
 
 TEST_CASE("transform", "[transform][hide]")
 {

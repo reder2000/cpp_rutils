@@ -18,14 +18,14 @@ TEST_CASE("throwing at", "[enum][hide]")
 		}
 	catch(const std::exception &e)
 	{
-		fmt::print("exception {}\n", at_most_n_lines(e.what(),15));
+		std__print("exception {}\n", at_most_n_lines(e.what(),15));
 	}
 	try {
 		AT(um, 2);
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("exception {}\n", at_most_n_lines(e.what(),15));
+		std__print("exception {}\n", at_most_n_lines(e.what(),15));
 	}
 
 }

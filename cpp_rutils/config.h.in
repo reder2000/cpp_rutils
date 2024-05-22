@@ -7,3 +7,6 @@
 #cmakedefine HAVE_CXX20_CHRONO_TIME_ZONE
 #cmakedefine HAVE_CXX23_SSIZE_T
 #cmakedefine HAVE_CXX23_EXPECTED	
+#cmakedefine HAVE_CXX20_STD_FORMAT
+#cmakedefine HAVE_CXX23_STD_PRINT
+#cmakedefine HAVE_CXX26_STD_FORMAT_PATH

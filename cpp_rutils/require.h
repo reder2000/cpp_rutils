@@ -4,7 +4,7 @@
 // usually in the form
 // MACRO( condition , fmt_format_spec, args...)
 
-#include <fmt/format.h>
+#include "format.h"
 #include "name_short.h"
 #include <boost/preprocessor/variadic/size.hpp>
 #include <boost/preprocessor/if.hpp>
@@ -22,35 +22,35 @@
 
 // formatter
 template <>
-struct fmt::formatter<boost::stacktrace::stacktrace> : formatter<std::string>
+struct std__formatter<boost::stacktrace::stacktrace> : std__formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>
-  auto format(const boost::stacktrace::stacktrace& c, FormatContext& ctx)
+  auto format(const boost::stacktrace::stacktrace& c, FormatContext& ctx) const
   {
     std::stringstream ss;
     ss << c;
-    return formatter<std::string>::format(ss.str(), ctx);
+    return std__formatter<std::string>::format(ss.str(), ctx);
   }
 };
 
 
 #define MFAIL(...)                                                                          \
-  throw std::runtime_error(fmt::format("{} , {} , {} , {} , \n stacktrace : {} ", __func__, \
-                                       __FILE__, __LINE__, fmt::format(__VA_ARGS__),        \
+  throw std::runtime_error(std__format("{} , {} , {} , {} , \n stacktrace : {} ", __func__, \
+                                       __FILE__, __LINE__, std__format(__VA_ARGS__),        \
                                        boost::stacktrace::stacktrace()))
 
 #define MREQUIRE2(success, VA_ARGS1, VA_ARGS2)                                                  \
   if (! (success))                                                                              \
   throw std::runtime_error(                                                                     \
-      fmt::format("{} , {} , {} , {} , {} , \n stacktrace : {} ", __func__, __FILE__, __LINE__, \
-                  fmt::format(BOOST_PP_TUPLE_ENUM(VA_ARGS1)),                                   \
-                  fmt::format(BOOST_PP_TUPLE_ENUM(VA_ARGS2)), boost::stacktrace::stacktrace()))
+      std__format("{} , {} , {} , {} , {} , \n stacktrace : {} ", __func__, __FILE__, __LINE__, \
+                  std__format(BOOST_PP_TUPLE_ENUM(VA_ARGS1)),                                   \
+                  std__format(BOOST_PP_TUPLE_ENUM(VA_ARGS2)), boost::stacktrace::stacktrace()))
 
 #define MREQUIRE1(success, ...)                                                             \
   if (! (success))                                                                          \
-  throw std::runtime_error(fmt::format("{} , {} , {} , {} , \n stacktrace : {} ", __func__, \
-                                       __FILE__, __LINE__, fmt::format(__VA_ARGS__),        \
+  throw std::runtime_error(std__format("{} , {} , {} , {} , \n stacktrace : {} ", __func__, \
+                                       __FILE__, __LINE__, std__format(__VA_ARGS__),        \
                                        boost::stacktrace::stacktrace()))
 
 #define MREQUIRE0(...) MREQUIRE1(__VA_ARGS__, #__VA_ARGS__)
@@ -90,14 +90,14 @@ struct fmt::formatter<boost::stacktrace::stacktrace> : formatter<std::string>
     }                                                                                             \
     catch (std::exception & e)                                                                    \
     {                                                                                             \
-      throw std::runtime_error(fmt::format(                                                       \
+      throw std::runtime_error(std__format(                                                       \
           "{} , {} , {} failed with exception {} ({}) , \n stacktrace : {} ", __func__, __FILE__, \
-          __LINE__, e.what(), fmt::format(__VA_ARGS__), boost::stacktrace::stacktrace()));        \
+          __LINE__, e.what(), std__format(__VA_ARGS__), boost::stacktrace::stacktrace()));        \
     }                                                                                             \
     if (! success)                                                                                \
     {                                                                                             \
-      throw std::runtime_error(fmt::format("{} , {} , {} , {} , \n stacktrace : {} ", __func__,   \
-                                           __FILE__, __LINE__, fmt::format(__VA_ARGS__),          \
+      throw std::runtime_error(std__format("{} , {} , {} , {} , \n stacktrace : {} ", __func__,   \
+                                           __FILE__, __LINE__, std__format(__VA_ARGS__),          \
                                            boost::stacktrace::stacktrace()));                     \
     }                                                                                             \
   }
@@ -153,9 +153,9 @@ struct fmt::formatter<boost::stacktrace::stacktrace> : formatter<std::string>
     }                                                                                        \
     catch (const std::exception& e)                                                          \
     {                                                                                        \
-      throw std::runtime_error(fmt::format(                                                  \
+      throw std::runtime_error(std__format(                                                  \
           "{} , {} , {} , . exception {} from {} , \n stacktrace : {} ", __func__, __FILE__, \
-          __LINE__, e.what(), fmt::format(__VA_ARGS__), boost::stacktrace::stacktrace()));   \
+          __LINE__, e.what(), std__format(__VA_ARGS__), boost::stacktrace::stacktrace()));   \
     }                                                                                        \
   }()
 

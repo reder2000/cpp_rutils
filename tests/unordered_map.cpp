@@ -42,6 +42,6 @@ TEST_CASE("ump", "[enum][hide]")
 	}
 	catch (const std::exception& e)
 	{
-		fmt::print("exception {}\n", e.what());
+		std__print("exception {}\n", e.what());
 	}
 }

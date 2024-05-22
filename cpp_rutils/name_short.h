@@ -1,11 +1,15 @@
 #pragma once
 
 // compile time type name
-
+#include "cpp_rutils/config.h"
 #include "name.h"
 #include <string>
-#include <fmt/format.h>
 #include <memory>
+
+#if !defined(HAVE_CXX20_STD_FORMAT)
+#include <fmt/format.h>
+#endif
+
 
 // forward declare std stuff
 namespace std
@@ -129,14 +133,40 @@ std::ostream& operator<<(std::ostream& os, const detail::String<N> s)
   return os;
 }
 
-template <size_t N>
+#if defined(HAVE_CXX20_STD_FORMAT)
+namespace std
+{
+  template <size_t N>
+  struct formatter<::detail::String<N>> : formatter<std::string>
+  // template < class CharT> struct formatter < Point, CharT>
+  {
+    //template <typename FormatParseContext>
+    //auto parse(FormatParseContext& pc)
+    //{
+    //  // parse formatter args like padding, precision if you support it
+    //  return pc
+    //      .end();  // returns the iterator to the last parsed character in the format string, in this case we just swallow everything
+    //}
+
+    template <typename FormatContext>
+    auto format(::detail::String<N> c, FormatContext& ctx) const
+    {
+      //return std::format_to(fc.out(), "[{}, {}]", p.x, p.y);
+      return formatter<std::string>::format(c.c, ctx);
+    }
+  };
+}  // namespace std
+#else
+template < size_t N>
 struct fmt::formatter<::detail::String<N>> : formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>
-  auto format(::detail::String<N> c, FormatContext& ctx)
+  auto format(::detail::String<N> c, FormatContext& ctx) const
   {
     static std::string formatString("%Y-%m-%dT%T%Z");
     return formatter<std::string>::format(c.c, ctx);
   }
 };
+#endif
+

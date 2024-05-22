@@ -2,7 +2,7 @@
 // tentative portable date
 // will use either chrono or date
 
-#include "cpp_rutils_config.h"
+#include "cpp_rutils/config.h"
 #include <chrono>
 
 #if MSVC_DATE_IS_FAST  // defined(HAVE_CXX20_CHRONO_DURATION) && !defined(__MING32__)
@@ -16,7 +16,7 @@
 
 #include "secure_deprecate.h"
 #include "to_.h"
-#include <fmt/chrono.h>
+// #include <fmt/chrono.h>
 
 #include <charconv>
 
@@ -129,13 +129,13 @@ inline Date to_<Date>::_(const time_t& d)
 
 // formatter
 template <>
-struct fmt::formatter<Date> : formatter<std::string>
+struct std__formatter<Date> : formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>
   auto format(Date c, FormatContext& ctx) const
   {
-    auto res = fmt::format("{:04}-{:02}-{:02}", (int)c.year(), (unsigned int)(c.month()),
+    auto res = std__format("{:04}-{:02}-{:02}", (int)c.year(), (unsigned int)(c.month()),
                            (unsigned int)c.day());
     return formatter<std::string>::format(res, ctx);
   }
