@@ -35,6 +35,7 @@ if (${MINGW})
 add_compile_definitions(BOOST_STACKTRACE_USE_NOOP)
 endif()
 boost_header_only_package(stacktrace stacktrace.hpp)
+boost_header_only_package(utility identity_type.hpp)
 if (${UNIX})
 add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
 #sorry but stacktrace misses a config so we run into that line at each configure

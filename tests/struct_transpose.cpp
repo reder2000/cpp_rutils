@@ -1,4 +1,3 @@
-#include <numeric>
 #include <catch2/catch_test_macros.hpp>
 #include <struct_transpose.h>
 #include <boost/utility/identity_type.hpp>
