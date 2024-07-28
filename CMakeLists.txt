@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.20)
+cmake_minimum_required(VERSION 3.30)
 
 project("cpp_rutils" VERSION 1.0.1
              DESCRIPTION "some basic cpp framework"
