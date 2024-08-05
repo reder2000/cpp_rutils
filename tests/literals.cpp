@@ -1,7 +1,6 @@
-#include <catch2/catch_test_macros.hpp>
 #include <literals.h>
 
-TEST_CASE("literals", "[name][hide]")
+TEST(cpp_rutils,literals)
 {
-    CHECK(1_MB == 1024 * 1024);
+    EXPECT_TRUE(1_MB == 1024 * 1024);
 }

@@ -1,12 +1,11 @@
-#include <catch2/catch_test_macros.hpp>
 #include <wstring.h>
 
-TEST_CASE("wstring", "[is_strictly_sorted][hide]")
+TEST(cpp_rutils,wstring)
 {
 	std::wstring wfoo(L"foo");
 	std::string foo("foo");
-	CHECK( foo == to_strings(wfoo));
-	CHECK( foo == to_strings(foo));
-	CHECK(to_wstrings(foo) == wfoo);
-	CHECK(to_wstrings(wfoo) == wfoo);
+	EXPECT_TRUE( foo == to_strings(wfoo));
+	EXPECT_TRUE( foo == to_strings(foo));
+	EXPECT_TRUE(to_wstrings(foo) == wfoo);
+	EXPECT_TRUE(to_wstrings(wfoo) == wfoo);
 }

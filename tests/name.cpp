@@ -1,9 +1,8 @@
-#include <catch2/catch_test_macros.hpp>
 #include <name.h>
 
 
-TEST_CASE("name", "[name][hide]")
+TEST(cpp_rutils,name)
 {
-    CHECK(type_name<double>() == "double");
+    EXPECT_TRUE(type_name<double>() == "double");
 }
 

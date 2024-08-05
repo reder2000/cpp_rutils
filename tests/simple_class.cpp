@@ -1,4 +1,3 @@
-#include <catch2/catch_test_macros.hpp>
 #include <simple_class.h>
 #include <string_literal.h>
 #include <always_false.h>
@@ -13,10 +12,10 @@ struct SimpleClass
 };
 
 
-TEST_CASE("SimpleClass", "[enum][hide]")
+TEST(cpp_rutils,SimpleClass)
 {
 	SimpleClass sc;
-	CHECK(sc._d == 2.);
+	EXPECT_TRUE(sc._d == 2.);
 	sc._i = 12;
 	sc._d = 3.14;
 }

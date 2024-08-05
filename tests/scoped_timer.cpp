@@ -1,4 +1,3 @@
-#include <catch2/catch_test_macros.hpp>
 #include <scoped_timer.h>
 
 #include <thread>
@@ -9,7 +8,7 @@ int sleep_for(int ms)
 	return ms;
 }
 
-TEST_CASE("scoped timer", "[enum][hide]")
+TEST(cpp_rutils,scoped_timer)
 {
 	{
 		ScopedTimer sc("test0");

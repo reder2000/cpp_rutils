@@ -1,6 +1,5 @@
 #include "always_false.h"
 
-#include <catch2/catch_test_macros.hpp>
 
 struct never_false {};
 
@@ -11,7 +10,7 @@ struct always_false< never_false>
 };
 
 
-TEST_CASE("always_false", "[mem][hide]") {
+TEST(cpp_rutils,always_false) {
 static_assert(!always_false<int>::value);
 static_assert(always_false<never_false>::value);
 static_assert(!always_false_v<int>);

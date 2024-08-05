@@ -1,6 +1,5 @@
 #include "fpu_seh.h"
 
-#include <catch2/catch_test_macros.hpp>
 
 #if defined(HAVE_SET_SE_TRANSLATOR)  // && ! defined(__clang__)
   #include <eh.h>
@@ -288,7 +287,7 @@ SExceptionTranslator::~SExceptionTranslator() {}
 
 #if ! defined(__clang__)
 
-TEST_CASE("fpu_seh", "[mem][hide]")
+TEST(cpp_rutils,fpu_seh)
 //int maine()
 {
   SExceptionTranslator set(true);
@@ -305,8 +304,8 @@ TEST_CASE("fpu_seh", "[mem][hide]")
     double a = 0.;
     return 1. / a;
   };
-  CHECK_THROWS(h());
-  CHECK_THROWS(g());
+  EXPECT_ANY_THROW(h());
+  EXPECT_ANY_THROW(g());
   auto f = []()
   {
     void (*fun)() = nullptr;
@@ -314,15 +313,15 @@ TEST_CASE("fpu_seh", "[mem][hide]")
     double a = 0.;
     return 1. / a;
   };
-  CHECK_THROWS(f());
+  EXPECT_ANY_THROW(f());
   auto i = []()
   {
     int* i = reinterpret_cast<int*>(14);
     *i     = 14;
   };
-  CHECK_THROWS(i());
+  EXPECT_ANY_THROW(i());
   auto j = []() { int i = *reinterpret_cast<int*>(14); };
-  CHECK_THROWS(j());
+  EXPECT_ANY_THROW(j());
   auto tt = [](auto&& fun)
   {
     try
@@ -349,7 +348,7 @@ int filterException(int /*code*/, PEXCEPTION_POINTERS ex)
   return EXCEPTION_EXECUTE_HANDLER;
 }
 
-TEST_CASE("fpu_seh_clang", "[mem][hide]")
+TEST(cpp_rutils,fpu_seh_clang)
 {
   SExceptionTranslator::set_fp();
   auto h = []()

@@ -1,21 +1,20 @@
-#include <catch2/catch_test_macros.hpp>
 #include <sort.h>
 
 #include <vector>
 
-TEST_CASE("sort", "[sort][hide]")
+TEST(cpp_rutils,sort)
 {
     std::vector<double> v{ 1.,2.,3.,4. };
     std::vector<double> w{ 4.,2.,1.,3. };
 
-    CHECK(sort(std::move(w)) == v);
+    EXPECT_TRUE(sort(std::move(w)) == v);
 }
 
-TEST_CASE("sort2", "[sort][hide]")
+TEST(cpp_rutils,sort2)
 {
     std::vector<double> v{ 4.,3.,2.,1. };
     std::vector<double> w{ 4.,2.,1.,3. };
 
-    CHECK(sort(std::move(w),std::greater<>()) == v);
+    EXPECT_TRUE(sort(std::move(w),std::greater<>()) == v);
 }
 

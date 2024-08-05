@@ -1,7 +1,6 @@
-#include <catch2/catch_test_macros.hpp>
 #include <data_frame.h>
 
-TEST_CASE("dataframe", "[name][hide]")
+TEST(cpp_rutils,dataframe)
 {
   LightMatrix<double>      data(3, 2);
   std::vector<int>         index(3);
@@ -9,13 +8,13 @@ TEST_CASE("dataframe", "[name][hide]")
 
   auto             lm = make_LightDataFrame(data, index, columns);
   std::vector<int> bad_index(2);
-  CHECK_THROWS([&]() { auto blm = make_LightDataFrame(data, bad_index, columns); }());
+  EXPECT_ANY_THROW([&]() { auto blm = make_LightDataFrame(data, bad_index, columns); }());
   std::vector<std::string> bad_columns(3);
-  CHECK_THROWS([&]() { auto blm = make_LightDataFrame(data, index, bad_columns); }());
+  EXPECT_ANY_THROW([&]() { auto blm = make_LightDataFrame(data, index, bad_columns); }());
 }
 
 
-TEST_CASE("dataframe_dropna", "[name][hide]")
+TEST(cpp_rutils,dataframe_dropna)
 {
   std::vector v{std::vector{1., 2., 3.}, std::vector{11., 12., 13.}, std::vector{21., 22., 23.},
                 std::vector{31., 32., 33.}};
@@ -32,10 +31,10 @@ TEST_CASE("dataframe_dropna", "[name][hide]")
   auto data2 = data;
   data2.assign_row(2, empty_row);
   auto ldf2 = make_LightDataFrame(data2, index, columns).dropna(Axis::index);
-  CHECK(ldf2._index == std::vector<int>{1, 2, 4});
+  EXPECT_TRUE((ldf2._index == std::vector<int>{1, 2, 4}));
 
   auto data3 = data;
   data3.assign_col(2, empty_col);
   auto ldf3 = make_LightDataFrame(data3, index, columns).dropna(Axis::column);
-  CHECK(ldf3._columns == std::vector<std::string>{"A", "B"});
+  EXPECT_TRUE((ldf3._columns == std::vector<std::string>{"A", "B"}));
 }

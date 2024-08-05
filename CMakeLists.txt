@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.30)
 project("cpp_rutils" VERSION 1.0.1
              DESCRIPTION "some basic cpp framework"
              HOMEPAGE_URL "https://github.com/reder2000/cpp_rutils")
+include(CTest)
 
 message("Configuring cpp_rutils ...")
 
@@ -31,7 +32,7 @@ if (${MINGW})
 add_compile_definitions(BOOST_STACKTRACE_USE_NOOP)
 endif()
 boost_header_only_package(stacktrace stacktrace.hpp)
-boost_header_only_package(utility identity_type.hpp)
+boost_header_only_package(utility utility/identity_type.hpp)
 if (${UNIX})
     if (${CMAKE_CXX_COMPILER_ID} STREQUAL  "GNU")
         if (${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS  14)
@@ -165,7 +166,7 @@ install(DIRECTORY cpp_rutils/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cpp_rutils
 
 if (NOT "${cpp_rutils_BUILD_TESTS}" STREQUAL "OFF")
     add_subdirectory(tests)
-    enable_testing()
+    #enable_testing()
 endif()
 
 message("... done cpp_rutils Configuring")

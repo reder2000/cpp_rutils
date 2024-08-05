@@ -1,10 +1,9 @@
-#include <catch2/catch_test_macros.hpp>
 
 #include <expected.h>
 
 
 
-TEST_CASE("expected", "[enum][hide]")
+TEST(cpp_rutils,expected)
 {
   auto f = []() { MEXPECTED(false); };
   std__print("unexpected : {}\n", f());
@@ -21,18 +20,18 @@ TEST_CASE("expected", "[enum][hide]")
   auto success          = []() -> expected_s<bool> { return expected_s<bool>(true); };
   auto failure          = []() -> expected_s<bool> { return unexpected_s("failure"); };
   auto require_expected = [](expected_s<bool> e) { REQUIRE_EXPECTED(e); };
-  CHECK_NOTHROW(require_expected(success()));
-  CHECK_THROWS(require_expected(failure()));
+  EXPECT_NO_THROW(require_expected(success()));
+  EXPECT_ANY_THROW(require_expected(failure()));
   auto expected_or_fail_failure = [&]()
   {
     EXPECTED_OR_FAIL(var, failure());
     return var;
   };
-  CHECK_THROWS(expected_or_fail_failure());
+  EXPECT_ANY_THROW(expected_or_fail_failure());
   auto expected_or_fail_success = [&]()
   {
     EXPECTED_OR_FAIL(var, success());
     return var;
   };
-  CHECK(expected_or_fail_success() == true);
+  EXPECT_TRUE(expected_or_fail_success() == true);
 }

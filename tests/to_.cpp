@@ -1,5 +1,4 @@
 #include <to_.h>
-#include <catch2/catch_test_macros.hpp>
 
 struct To {
 	int a;
@@ -10,10 +9,10 @@ struct From {
 	operator To() const { return To{ a }; }
 };
 
-TEST_CASE("to_", "[require][hide]")
+TEST(cpp_rutils,to)
 {
 	const From from{ 1 };
 	const To to = to_<To>::_(from);
-	REQUIRE(to.a == 1);
+	EXPECT_TRUE(to.a == 1);
 	//	 to_<From>::_(to);
 }

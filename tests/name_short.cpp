@@ -1,12 +1,10 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/catch_test_macros.hpp>
 #include <name_short.h>
 
 #include <unordered_map>
 #include <iostream>
 
 
-TEST_CASE("short_name_vector", "[name][hide]")
+TEST(cpp_rutils,short_name_vector)
 {
   const std::vector<int> toto;
   std::cout << type_name_short<decltype(toto)>() << std::endl;

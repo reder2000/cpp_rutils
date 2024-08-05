@@ -1,7 +1,5 @@
-#include <catch2/catch_test_macros.hpp>
 #include <to_string.h>
 
-#include <catch.hpp>
 #include <iostream>
 
 enum class toto {
@@ -38,16 +36,16 @@ std::string_view at_most_n_lines(std::string_view sv, size_t n)
 }
 
 
-TEST_CASE("to_string", "[to_string][hide]")
+TEST(cpp_rutils,to_string)
 {
     int i = 10;
-    CHECK(to_string(i) == "10");
+    EXPECT_TRUE(to_string(i) == "10");
     void* v = (void*)0xF010;
-    CHECK(to_string(v) == "0xf010");
+    EXPECT_TRUE(to_string(v) == "0xf010");
     std::variant<int, const char*> vic = 12;
-    CHECK(to_string(vic) == "12");
+    EXPECT_TRUE(to_string(vic) == "12");
     vic = "abcd";
-    CHECK(to_string(vic) == "abcd");
-    CHECK(to_string(toto::red) == "red");
-    CHECK(to_string(A()) == "A");
+    EXPECT_TRUE(to_string(vic) == "abcd");
+    EXPECT_TRUE(to_string(toto::red) == "red");
+    EXPECT_TRUE(to_string(A()) == "A");
 }

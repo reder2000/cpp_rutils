@@ -1,4 +1,3 @@
-#include <catch2/catch_test_macros.hpp>
 #include <string_literal.h>
 #include <optional>
 #include <array>
@@ -50,7 +49,7 @@ void toto::create<"tutu">()
 }
 
 
-TEST_CASE("string literal", "[enum][hide]")
+TEST(cpp_rutils,string_literal)
 {
   using tu = tuple_sl<"toto", "tata">;
   static_assert(tuple_sl_index<"tata", tu> == 1);
@@ -63,11 +62,11 @@ TEST_CASE("string literal", "[enum][hide]")
   [[maybe_unused]] auto t  = tuple_sl_array<tu>;
   auto                  tt = type_name_short<decltype(t)>();
   std::cout << "XXXXXXXXXXXXXX " << tt << "\n";
-  CHECK(tuple_sl_get_i<tu>(1) == "tata");
-  CHECK(tuple_sl_index_s<tu>("tata") == 1);
+  EXPECT_TRUE(tuple_sl_get_i<tu>(1) == "tata");
+  EXPECT_TRUE(tuple_sl_index_s<tu>("tata") == 1);
 }
 
-TEST_CASE("string literal ctor")
+TEST(cpp_rutils,string_literal_ctor)
 {
   // fails
   //auto t = toto::create<"titi">();

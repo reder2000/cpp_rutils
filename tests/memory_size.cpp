@@ -1,7 +1,6 @@
 #include "memory_size.h"
 
 #define CATCH_CONFIG_ALL_PARTS
-#include <catch2/catch_test_macros.hpp>
 
 #include <iostream>
 #include <cpp_rutils/name_short.h>
@@ -34,7 +33,7 @@ struct D
 //template <>
 size_t size_impl(const D& d, memory::record& mc) { return memory_sizes(mc, d.value1, d.value2); }
 
-TEST_CASE("mem_size", "[mem][hide]") {
+TEST(cpp_rutils,mem_size) {
     auto pr = [](auto&& a) {
         using T = std::decay_t<decltype(a)>;
         auto sz = memory_size(a);

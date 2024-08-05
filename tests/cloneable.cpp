@@ -1,7 +1,6 @@
 #include "cloneable.h"
 #include "shared_ptr.h"
 
-#include <catch2/catch_test_macros.hpp>
 
 class u_concrete : public UniquePtrCloneableBase<u_concrete>
 {
@@ -15,7 +14,7 @@ class s_concrete : public SharedPtrCloneableBase<s_concrete>
   virtual s_concrete *clone_impl() const { return new s_concrete; }
 };
 
-TEST_CASE("cloneable", "[mem][hide]")
+TEST(cpp_rutils,cloneable)
 {
   u_concrete object;
   auto       u_cloned = object.clone();
