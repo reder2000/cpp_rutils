@@ -158,7 +158,7 @@ namespace std
 }  // namespace std
 #else
 template < size_t N>
-struct fmt::formatter<::detail::String<N>> : formatter<std::string>
+struct std__formatter<::detail::String<N>> : formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>

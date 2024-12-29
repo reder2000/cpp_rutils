@@ -26,7 +26,7 @@ add_executable(cpp_rutils_tests ${srcs})
 
 MESSAGE("additional_libraries  ${additional_libraries} ")
 
-target_link_libraries(cpp_rutils_tests PRIVATE date::date date::date-tz
+target_link_libraries(cpp_rutils_tests PRIVATE # date::date date::date-tz
 		GTest::gtest GTest::gtest_main ${additional_libraries} ) # GTest::gmock GTest::gmock_main Catch2::Catch2WithMain  )
 
 #add_test(cpp_rutils cpp_rutils_tests)

@@ -58,7 +58,7 @@ check_cxx_source_compiles(
          HAVE_SET_SE_TRANSLATOR)
 check_cxx_source_compiles(
         "#include <chrono>
-         using test = std::chrono::duration;
+         using test = std::chrono::duration<size_t>;
          int main(){ return 0; }"
          HAVE_CXX20_CHRONO_DURATION)
 check_cxx_source_compiles(
@@ -103,10 +103,16 @@ if (NOT HAVE_CXX20_STD_FORMAT)
     set (additional_libraries ${additional_libraries}  fmt::fmt fmt::fmt-header-only )
 endif()
 
-if (MSVC)
-find_vcpkg_install_missing(date)
-else ()
+if (NOT MSVC AND NOT HAVE_CXX20_CHRONO_TIME_ZONE)
 find_vcpkg_install_missing(date date[remote-api])
+endif()
+
+if (MSVC)
+    find_vcpkg_install_missing(date)
+    set (additional_libraries ${additional_libraries}  date::date date::date-tz)
+elseif (NOT HAVE_CXX20_CHRONO_DURATION)
+ find_vcpkg_install_missing(date date[remote-api])
+ set (additional_libraries ${additional_libraries}  date::date date::date-tz)
 endif()
 
 if (NOT HAVE_CXX23_EXPECTED)
@@ -123,7 +129,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 add_library(cpp_rutils INTERFACE ${all_sources} README.md)
 add_library(cpp_rutils::cpp_rutils ALIAS cpp_rutils)
 
-target_link_libraries(cpp_rutils INTERFACE date::date date::date-tz ${additional_libraries})
+target_link_libraries(cpp_rutils INTERFACE ${additional_libraries})
 #target_link_libraries(cpp_rutils INTERFACE "$<BUILD_INTERFACE:date>")
 
 target_include_directories(
