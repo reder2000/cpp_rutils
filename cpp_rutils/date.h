@@ -8,9 +8,12 @@
 #if MSVC_DATE_IS_FAST || (! defined(_MSVC_LANG) && defined(HAVE_CXX20_CHRONO_TIME_ZONE) && ! defined(__MING32__))
   #define std__chrono std::chrono
 #else
+#define USING_HH_DATE
 #include <date/date.h>
 #include <date/tz.h>
 #define std__chrono date
+#include "format.h"
+#include <sstream>
 #endif
 
 
@@ -206,3 +209,36 @@ inline Date add_days(Date dt, int nb_days)
   auto res = Date(std__chrono::sys_days(dt) + std__chrono::days(nb_days));
   return res;
 }
+
+
+#if defined(USING_HH_DATE)
+
+// formatter
+template <>
+struct std__formatter<date::month> : formatter<std::chrono::month>
+{
+  // parse is inherited from formatter<string_view>.
+  template <typename FormatContext>
+  auto format(date::month c, FormatContext& ctx) const
+  {
+    std::chrono::month m{static_cast<unsigned>(c)};
+    return formatter<std::chrono::month>::format(m, ctx);
+    //std::stringstream ss;  
+    //ss << c;
+    //auto res = std__format("{}", ss.view());
+    //return formatter<std::string>::format(res, ctx);
+  }
+};
+
+template <class _Rep, class _Period>
+struct std__formatter<std::chrono::duration<_Rep, _Period>> : formatter<_Rep>
+{
+  // parse is inherited from formatter<string_view>.
+  template <typename FormatContext>
+  auto format(std::chrono::duration<_Rep, _Period> c, FormatContext& ctx) const
+  {
+    return formatter<_Rep>::format(c.count(), ctx);
+  }
+};
+
+#endif
