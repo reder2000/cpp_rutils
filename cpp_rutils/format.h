@@ -11,10 +11,10 @@
   #define std__formatter std::formatter
   #define std__format_context std::format_context
   #if defined(HAVE_CXX23_STD_PRINT)
-  #define std__print std::print
+    #define std__print std::print
   #else
-  #include <cstdio>
-    #define std__print(...) printf("%s",std__format(__VA_ARGS__).c_str())
+    #include <cstdio>
+    #define std__print(...) printf("%s", std__format(__VA_ARGS__).c_str())
   #endif
 
 #else
@@ -31,33 +31,33 @@
 #endif
 
 template <class R, class V, class S>
-auto format_join( R r,  std::vector<V> v, S sep)
+auto format_join(R r, std::vector<V> v, S sep)
 {
-#if defined(HAVE_CXX20_STD_FORMAT) 
-    auto b = v.begin();
-    auto e = v.end();
-    if (b == e) return std::string{};
-    std::string res = std__vformat(r, std::make_format_args(*b));
-    b++;
-    for (; b != e; ++b)
-    {
-      res += sep;
-      res += std__vformat(r, std::make_format_args(*b));
-    }
-    return res;
+#if defined(HAVE_CXX20_STD_FORMAT)
+  auto b = v.begin();
+  auto e = v.end();
+  if (b == e) return std::string{};
+  std::string res = std__vformat(r, std::make_format_args(*b));
+  b++;
+  for (; b != e; ++b)
+  {
+    res += sep;
+    res += std__vformat(r, std::make_format_args(*b));
+  }
+  return res;
 #else
   return fmt::format(r, fmt::join(v, sep));
 #endif
 }
 
-template <class R, class ...Args, class S>
-auto format_join(R r, std::tuple<Args...> const &t, S sep)
+template <class R, class... Args, class S>
+auto format_join(R r, std::tuple<Args...> const& t, S sep)
 {
 #if defined(HAVE_CXX20_STD_FORMAT)
   std::stringstream ss;
   ss << "[";
   std::apply([&](auto&&... args) { ((ss << std__vformat(r, std::make_format_args(args)) << sep), ...); }, t);
-  ss.seekp(-std::size(std::string(sep)), ss.cur);
+  ss.seekp(- static_cast<int>(std::size(std::string(sep))), ss.cur);
   ss << "]";
   return ss.str();
 #else
@@ -72,7 +72,7 @@ template <class V>
 struct std::formatter<std::vector<V>> : formatter<std::string>
 {
   template <typename FormatContext>
-  auto format(const std::vector<V> &v, FormatContext& ctx) const
+  auto format(const std::vector<V>& v, FormatContext& ctx) const
   {
     auto res = format_join("{}", v, ",");
     return formatter<std::string>::format(res, ctx);
@@ -86,7 +86,25 @@ std::string std__streamed(T v)
   ss << v;
   return ss.str();
 }
-  
+
+
+template <class V>
+struct std::formatter<std::optional<V>> : formatter<std::string>
+{
+  template <typename FormatContext>
+  auto format(const std::optional<V>& v, FormatContext& ctx) const
+  {
+    if (v.has_value())
+    {
+      auto res = std__format("{}", v.value());
+      return formatter<std::string>::format(res, ctx);
+    }
+    else
+    {
+      return formatter<std::string>::format("{nullptr}", ctx);
+    }
+  }
+};
 
 #endif
 
