@@ -5,6 +5,9 @@
 
 #if defined(HAVE_CXX20_STD_FORMAT)
   #include <format>
+  #include <optional>
+  #include <sstream>
+  #include <tuple>
 
   #define std__format std::format
   #define std__vformat std::vformat
