@@ -1,8 +1,16 @@
 #pragma once
 // tentative portable date
 // will use either chrono or date
-
 #include "cpp_rutils/config.h"
+
+#if ! defined(HAVE_CXX20_STD_FORMAT)
+  #include <chrono>
+  #include <fmt/chrono.h>
+  #include <fmt/format.h>
+#endif
+
+
+
 #include <chrono>
 
 #if MSVC_DATE_IS_FAST || (! defined(_MSVC_LANG) && defined(HAVE_CXX20_CHRONO_TIME_ZONE) && ! defined(__MING32__))
@@ -19,7 +27,7 @@
 
 #include "secure_deprecate.h"
 #include "to_.h"
-// #include <fmt/chrono.h>
+
 
 #include <charconv>
 
@@ -213,32 +221,63 @@ inline Date add_days(Date dt, int nb_days)
 
 #if defined(USING_HH_DATE)
 
-// formatter
+  // formatter
+  #if ! defined(HAVE_CXX20_STD_FORMAT)
 template <>
-struct std__formatter<date::month> : formatter<std::chrono::month>
+//struct std__formatter<date::month> : std__formatter<std::chrono::month>
+struct std__formatter<date::month> : formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>
   auto format(date::month c, FormatContext& ctx) const
   {
-    std::chrono::month m{static_cast<unsigned>(c)};
-    return formatter<std::chrono::month>::format(m, ctx);
-    //std::stringstream ss;  
-    //ss << c;
-    //auto res = std__format("{}", ss.view());
-    //return formatter<std::string>::format(res, ctx);
+    //std::chrono::month m{static_cast<unsigned>(c)};
+    //return std__formatter<std::chrono::month>::format(m, ctx);
+    return formatter<std::string>::format(std__format("{:02}", static_cast<unsigned>(c)), ctx);
   }
 };
-
-template <class _Rep, class _Period>
-struct std__formatter<std::chrono::duration<_Rep, _Period>> : formatter<_Rep>
+#else
+template <>
+struct std__formatter<date::month> : formatter<std::string>
 {
   // parse is inherited from formatter<string_view>.
   template <typename FormatContext>
-  auto format(std::chrono::duration<_Rep, _Period> c, FormatContext& ctx) const
+  auto format(date::month c, FormatContext& ctx) const
   {
-    return formatter<_Rep>::format(c.count(), ctx);
-  }
-};
+    std::stringstream ss;  
+      ss << c;
+      auto res = std__format("{}", ss.view());
+      return formatter<std::string>::format(res, ctx);
+    }
+  };
+  #endif
+  
+  template <class _Rep, class _Period>
+  struct std__formatter<std::chrono::duration<_Rep, _Period>> : formatter<_Rep>
+  {
+    // parse is inherited from formatter<string_view>.
+    template <typename FormatContext>
+    auto format(std::chrono::duration<_Rep, _Period> c, FormatContext& ctx) const
+    {
+      return formatter<_Rep>::format(c.count(), ctx);
+    }
+  };
+
+  // #endif
+#endif
+
+#if !HAVE_CXX20_YEAR_LITERAL
+
+constexpr
+inline std__chrono::day operator"" _d(unsigned long long d) noexcept
+{
+  return std__chrono::day{static_cast<unsigned>(d)};
+}
+
+constexpr
+inline std__chrono::year operator"" _y(unsigned long long y) noexcept
+{
+  return std__chrono::year(static_cast<int>(y));
+}
 
 #endif

@@ -13,6 +13,7 @@
   #define std__vformat std::vformat
   #define std__formatter std::formatter
   #define std__format_context std::format_context
+  #define std__format_string std::format_string
   #if defined(HAVE_CXX23_STD_PRINT)
     #define std__print std::print
   #else
@@ -30,17 +31,18 @@
   #define std__vformat fmt::vformat
   #define std__print fmt::print
   #define std__format_context fmt::format_context
+  #define std__format_string fmt::format_string
   #define std__streamed fmt::streamed
 #endif
 
-template <class R, class V, class S>
-auto format_join(R r, std::vector<V> v, S sep)
-{
 #if defined(HAVE_CXX20_STD_FORMAT)
+template <class R, class T, class S>
+auto format_join(R r, std::vector<T> v, S sep)
+{
   auto b = v.begin();
   auto e = v.end();
   if (b == e) return std::string{};
-  std::string res = std__vformat(r, std::make_format_args(*b));
+   std::string res = std__vformat(r, std::make_format_args(*b));
   b++;
   for (; b != e; ++b)
   {
@@ -48,25 +50,35 @@ auto format_join(R r, std::vector<V> v, S sep)
     res += std__vformat(r, std::make_format_args(*b));
   }
   return res;
-#else
-  return fmt::format(r, fmt::join(v, sep));
-#endif
 }
 
 template <class R, class... Args, class S>
 auto format_join(R r, std::tuple<Args...> const& t, S sep)
 {
-#if defined(HAVE_CXX20_STD_FORMAT)
   std::stringstream ss;
   ss << "[";
   std::apply([&](auto&&... args) { ((ss << std__vformat(r, std::make_format_args(args)) << sep), ...); }, t);
-  ss.seekp(- static_cast<int>(std::size(std::string(sep))), ss.cur);
+  ss.seekp(-static_cast<int>(std::size(std::string(sep))), ss.cur);
   ss << "]";
   return ss.str();
-#else
-  return fmt::format(r, fmt::join(v, sep));
-#endif
 }
+
+#else
+
+//  template <class T, class S>
+//  auto format_join(std__format_string<std::vector<T>> r, std::vector<T> v, S sep)
+//  {
+//    return fmt::format(r, fmt::join(v, sep));
+//  }
+#define format_join(r,v,sep) fmt::format(r, fmt::join(v, sep));
+
+//template <class... Args, class S>
+//  auto format_join(std__format_string<std::tuple<Args...>> r, std::tuple<Args...> const& t, S sep) {
+//  return fmt::format(
+//      r, fmt::join(t, sep));
+//}
+
+  #endif
 
 
 

@@ -63,6 +63,13 @@ check_cxx_source_compiles(
          HAVE_CXX20_CHRONO_DURATION)
 check_cxx_source_compiles(
         "#include <chrono>
+         using namespace std::chrono_literals;
+         int main(){ 
+            auto y = 2012_y;    
+         return 0; }"
+         HAVE_CXX20_YEAR_LITERAL)
+check_cxx_source_compiles(
+        "#include <chrono>
          using test = std::chrono::time_zone;
          int main(){ return 0; }"
          HAVE_CXX20_CHRONO_TIME_ZONE)
@@ -110,7 +117,7 @@ endif()
 if (MSVC)
     find_vcpkg_install_missing(date)
     set (additional_libraries ${additional_libraries}  date::date date::date-tz)
-elseif (NOT HAVE_CXX20_CHRONO_DURATION)
+elseif (NOT HAVE_CXX20_CHRONO_TIME_ZONE)
  find_vcpkg_install_missing(date date[remote-api])
  set (additional_libraries ${additional_libraries}  date::date date::date-tz)
 endif()

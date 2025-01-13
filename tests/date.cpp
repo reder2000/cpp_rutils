@@ -15,5 +15,7 @@ TEST(cpp_rutils,date)
 	auto missed = try_parse_date("totalbs");
 	EXPECT_TRUE(!missed.has_value());
 	[[maybe_unused]] auto tz = std__chrono::locate_zone("Zulu");
+        [[maybe_unused]] auto y2012 = 2012_y;
+        [[maybe_unused]] auto d10 = 10_d;
 }
 
