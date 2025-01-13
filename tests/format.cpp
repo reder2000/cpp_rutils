@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <format.h>
 #include <date.h>
 #include <vector>
@@ -35,10 +36,10 @@ TEST(cpp_rutils, format_optional)
   {
     std::optional<int> v = 1;
     auto               r = std__format("{}", v);
-    fmt::print(r);
+    fmt::print("{}", r);
     EXPECT_TRUE(r == "1");
     std::optional<int> v2;
     auto               r2 = std__format("{}", v2);
-    fmt::print(r2);
+    fmt::print("{}",r2);
     EXPECT_TRUE(r2 == "{nullptr}");
   }

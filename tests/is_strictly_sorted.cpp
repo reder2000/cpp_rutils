@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <is_strictly_sorted.h>
 #include <throwing/is_strictly_sorted.h>
 #include <vector>

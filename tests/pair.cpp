@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <pair.h>
 
 TEST(cpp_rutils,hash_a_pair)

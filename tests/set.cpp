@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <set.h>
 
 TEST(cpp_rutils,set)

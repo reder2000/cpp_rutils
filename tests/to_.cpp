@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <to_.h>
 
 struct To {

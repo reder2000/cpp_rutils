@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <name_short.h>
 
 #include <unordered_map>

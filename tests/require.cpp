@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <require.h>
 #include <vector>
 #include <iostream>

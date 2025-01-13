@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <shared_shared_ptr.h>
 #include <shared_ptr.h>
 

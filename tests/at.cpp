@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <throwing/at.h>
 #include <map>
 #include <unordered_map>

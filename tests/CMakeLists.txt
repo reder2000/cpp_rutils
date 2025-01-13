@@ -34,11 +34,11 @@ target_link_libraries(cpp_rutils_tests PRIVATE # date::date date::date-tz
 #gtest_discover_tests(cpp_rutils_tests)
 gtest_add_tests(TARGET cpp_rutils_tests)
 
-#if (MSVC)
+if (MSVC)
 message("using Precompiled Headers")
 #set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP  0)
 target_precompile_headers(cpp_rutils_tests  PUBLIC    stdafx.h)
 add_compile_definitions(USING_PCH)
-#endif ()
+endif ()
 
 message("... done cpp_rutils/tests Configuring")

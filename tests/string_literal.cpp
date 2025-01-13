@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <string_literal.h>
 #include <optional>
 #include <array>

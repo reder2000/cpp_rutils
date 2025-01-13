@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <struct_transpose.h>
 #include <boost/utility/identity_type.hpp>
 

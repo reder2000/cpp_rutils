@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <enum.h>
 #include <string_literal.h>
 #include <require.h>

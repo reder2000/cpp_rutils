@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <intersection.h>
 #include <gtest/gtest-matchers.h>
 

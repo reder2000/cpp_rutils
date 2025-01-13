@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <data_frame.h>
 
 TEST(cpp_rutils,dataframe)

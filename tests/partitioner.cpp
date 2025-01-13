@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <partitioner.h>
 #include <transform.h>
 

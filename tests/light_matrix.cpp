@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <light_matrix.h>
 
 

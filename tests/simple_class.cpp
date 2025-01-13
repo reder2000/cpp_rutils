@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <simple_class.h>
 #include <string_literal.h>
 #include <always_false.h>

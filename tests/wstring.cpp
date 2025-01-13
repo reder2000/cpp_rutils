@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <wstring.h>
 
 TEST(cpp_rutils,wstring)

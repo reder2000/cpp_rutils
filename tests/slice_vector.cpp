@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <slice_vector.h>
 
 TEST(cpp_rutils,slice_vector)

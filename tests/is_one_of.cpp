@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <is_one_of.h>
 
 TEST(cpp_rutils,is_one_of)

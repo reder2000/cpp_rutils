@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <scoped_timer.h>
 
 #include <thread>

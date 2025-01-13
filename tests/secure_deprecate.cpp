@@ -1,3 +1,4 @@
+#include "stdafx.h"
 
 #pragma warning(1: 4996)
 

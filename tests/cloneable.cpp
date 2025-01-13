@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "cloneable.h"
 #include "shared_ptr.h"
 

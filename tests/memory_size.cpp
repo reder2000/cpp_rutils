@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "memory_size.h"
 
 #define CATCH_CONFIG_ALL_PARTS

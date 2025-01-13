@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <sort.h>
 
 #include <vector>

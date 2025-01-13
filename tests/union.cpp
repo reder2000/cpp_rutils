@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <union.h>
 
 TEST(cpp_rutils,union)

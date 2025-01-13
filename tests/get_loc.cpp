@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <get_loc.h>
 #include <vector_range.h>
 

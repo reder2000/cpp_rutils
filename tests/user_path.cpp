@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "user_path.h"
 
 #include "format.h"

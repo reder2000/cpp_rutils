@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <linalg.h>
 
 TEST(cpp_rutils,linalg)
