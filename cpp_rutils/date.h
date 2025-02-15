@@ -16,12 +16,12 @@
 #if MSVC_DATE_IS_FAST || (! defined(_MSVC_LANG) && defined(HAVE_CXX20_CHRONO_TIME_ZONE) && ! defined(__MING32__))
   #define std__chrono std::chrono
 #else
-#define USING_HH_DATE
-#include <date/date.h>
-#include <date/tz.h>
-#define std__chrono date
-#include "format.h"
-#include <sstream>
+  #define USING_HH_DATE
+  #include <date/date.h>
+  #include <date/tz.h>
+  #define std__chrono date
+  #include "format.h"
+  #include <sstream>
 #endif
 
 
@@ -90,13 +90,19 @@ template <>
 template <>
 inline struct_tm to_<struct_tm>::_(const Date& d)
 {
-  struct tm res
-  {
-    0, 0, 0, (int)d.day().operator unsigned int(), (int)d.month().operator unsigned int() - 1,
-        (int)d.year() - 1900, 0, 0, 1
+  struct tm res{0,
+                0,
+                0,
+                (int)d.day().operator unsigned int(),
+                (int)d.month().operator unsigned int() - 1,
+                (int)d.year() - 1900,
+                0,
+                0,
+                1
 #if defined(__GNUC__) && defined(__USE_MISC)
-        ,
-        0, nullptr
+                ,
+                0,
+                nullptr
 #endif
   };
   return res;
@@ -133,8 +139,8 @@ template <>
 inline Date to_<Date>::_(const time_t& d)
 {
   struct tm ttm = to_<struct tm>::_(d);
-  Date      res = Date(std__chrono::year(ttm.tm_year + 1900), std__chrono::month(ttm.tm_mon + 1),
-                       std__chrono::day(ttm.tm_mday));
+  Date      res =
+      Date(std__chrono::year(ttm.tm_year + 1900), std__chrono::month(ttm.tm_mon + 1), std__chrono::day(ttm.tm_mday));
   return res;
 }
 
@@ -146,8 +152,7 @@ struct std__formatter<Date> : formatter<std::string>
   template <typename FormatContext>
   auto format(Date c, FormatContext& ctx) const
   {
-    auto res = std__format("{:04}-{:02}-{:02}", (int)c.year(), (unsigned int)(c.month()),
-                           (unsigned int)c.day());
+    auto res = std__format("{:04}-{:02}-{:02}", (int)c.year(), (unsigned int)(c.month()), (unsigned int)c.day());
     return formatter<std::string>::format(res, ctx);
   }
 };
@@ -236,7 +241,7 @@ struct std__formatter<date::month> : formatter<std::string>
     return formatter<std::string>::format(std__format("{:02}", static_cast<unsigned>(c)), ctx);
   }
 };
-#else
+  #else
 template <>
 struct std__formatter<date::month> : formatter<std::string>
 {
@@ -244,40 +249,43 @@ struct std__formatter<date::month> : formatter<std::string>
   template <typename FormatContext>
   auto format(date::month c, FormatContext& ctx) const
   {
-    std::stringstream ss;  
-      ss << c;
-      auto res = std__format("{}", ss.view());
-      return formatter<std::string>::format(res, ctx);
-    }
-  };
+    std::stringstream ss;
+    ss << c;
+    auto res = std__format("{}", ss.view());
+    return formatter<std::string>::format(res, ctx);
+  }
+};
   #endif
-  
-  template <class _Rep, class _Period>
-  struct std__formatter<std::chrono::duration<_Rep, _Period>> : formatter<_Rep>
-  {
-    // parse is inherited from formatter<string_view>.
-    template <typename FormatContext>
-    auto format(std::chrono::duration<_Rep, _Period> c, FormatContext& ctx) const
-    {
-      return formatter<_Rep>::format(c.count(), ctx);
-    }
-  };
 
-  // #endif
+template <class _Rep, class _Period>
+struct std__formatter<std::chrono::duration<_Rep, _Period>> : formatter<_Rep>
+{
+  // parse is inherited from formatter<string_view>.
+  template <typename FormatContext>
+  auto format(std::chrono::duration<_Rep, _Period> c, FormatContext& ctx) const
+  {
+    return formatter<_Rep>::format(c.count(), ctx);
+  }
+};
+
+// #endif
 #endif
 
-#if !HAVE_CXX20_YEAR_LITERAL
+#if ! HAVE_CXX20_YEAR_LITERAL
+  #if ! defined(USING_HH_DATE)
 
-constexpr
-inline std__chrono::day operator"" _d(unsigned long long d) noexcept
+constexpr inline std__chrono::day operator"" _d(unsigned long long d) noexcept
 {
   return std__chrono::day{static_cast<unsigned>(d)};
 }
 
-constexpr
-inline std__chrono::year operator"" _y(unsigned long long y) noexcept
+constexpr inline std__chrono::year operator"" _y(unsigned long long y) noexcept
 {
   return std__chrono::year(static_cast<int>(y));
 }
-
+  #else
+using namespace date::literals;
+  #endif
+#else
+using namespace std::chrono_literals;
 #endif
